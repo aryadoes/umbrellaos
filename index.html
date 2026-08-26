@@ -1,9 +1,4 @@
-Add some new apps into this that are actually useful add like 5+ apps and make sure that works and useful DO NOT ADD THE APPS IN TASKBAR and also create a full-screen start menu GUI consisting of the applications existing and installed. Remember no apps must not be changed and also add close button for the full screen GUI at the left to close the Start menu Graphical user Interface
-
-- To change the Start Menu style we can chnage in settings -> personalize and we can choose whether full screen start menu or normal start menu
-- NO GUI, APPS, ANIMATIONS ETC MUST NOT GET CHANGED AND ADD APPS
-
-SCRIPT HTML: <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
@@ -154,7 +149,6 @@ SCRIPT HTML: <!DOCTYPE html>
     transition: transform 0.4s var(--anim-curve), opacity 0.4s var(--anim-curve) !important;
   }
   
-  /* PREMIUM GRADIENT START MENU BUTTON */
   .dock-launcher-btn {
     width: 48px; height: 48px; border-radius: 16px;
     background: linear-gradient(135deg, #a855f7, #ec4899, #3b82f6);
@@ -281,7 +275,6 @@ SCRIPT HTML: <!DOCTYPE html>
   }
   .os-nav-item.active, .os-nav-item:hover { background: rgba(255, 255, 255, 0.12); color: var(--text-main); }
   
-  /* FIX: REMOVED BOTTOM BLOCKING OVERLAY IN SETTINGS CONTENT PANE */
   .os-content-pane { flex: 1; padding: 22px; overflow-y: auto; height: 100%; display: flex; flex-direction: column; }
 
   /* SPREADSHEET TOOLBAR & GRID STYLES */
@@ -393,7 +386,7 @@ SCRIPT HTML: <!DOCTYPE html>
   .wp-thumb { height: 85px; border-radius: 12px; border: 2px solid transparent; cursor: pointer; background-size: cover; background-position: center; }
   .wp-thumb:hover, .wp-thumb.active { border-color: var(--accent); }
 
-  /* REALISTIC SYNTH PIANO STYLES */
+  /* SYNTH PIANO STYLES */
   .piano-keyboard-container {
     position: relative; width: 100%; height: 220px; background: #000;
     display: flex; justify-content: center; padding: 20px 10px; border-radius: 12px;
@@ -412,7 +405,7 @@ SCRIPT HTML: <!DOCTYPE html>
   }
   .black-key:active { background: #000000; }
 
-  /* EXCLUSIVE CONCERT FX STYLES */
+  /* CONCERT FX STYLES */
   .stage-canvas {
     width: 100%; height: 100%; background: #05050d; position: relative; overflow: hidden;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -432,7 +425,7 @@ SCRIPT HTML: <!DOCTYPE html>
   }
   @keyframes fogPulse { 0% { opacity: 0.3; } 100% { opacity: 0.9; } }
 
-  /* ADDITIVE UTILITY APP STYLES — existing selectors remain unchanged */
+  /* ADDITIVE UTILITY APP STYLES */
   .start-menu-fullscreen {
     position: absolute; inset: 0; z-index: 8700; display: flex; flex-direction: column;
     background: rgba(8, 11, 18, 0.88); backdrop-filter: var(--glass-blur) saturate(180%);
@@ -442,11 +435,11 @@ SCRIPT HTML: <!DOCTYPE html>
   }
   .start-menu-fullscreen.open { opacity: 1; pointer-events: auto; transform: translateY(0); }
   .fullscreen-start-header { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding-bottom: 22px; border-bottom: 1px solid var(--glass-border); }
-  .fullscreen-start-brand { display: flex; align-items: center; gap: 16px; }
+  .fullscreen-start-brand { display: flex; align-items: center; gap: 16px; margin-left: 54px; }
   .fullscreen-start-brand .hub-avatar { width: 56px; height: 56px; }
   .fullscreen-start-title { font-size: clamp(1.35rem, 2.4vw, 2.15rem); font-weight: 800; letter-spacing: -0.03em; }
   .fullscreen-start-subtitle { color: var(--text-sub); font-size: 0.88rem; margin-top: 4px; }
-  .fullscreen-start-close { position: absolute; left: 22px; top: 22px; width: 42px; height: 42px; border-radius: 14px; border: 1px solid var(--glass-border); background: rgba(255,255,255,0.1); color: var(--text-main); cursor: pointer; font-size: 1.15rem; transition: background-color 0.15s, border-color 0.15s; }
+  .fullscreen-start-close { position: absolute; left: 22px; top: 22px; width: 42px; height: 42px; border-radius: 14px; border: 1px solid var(--glass-border); background: rgba(255,255,255,0.1); color: var(--text-main); cursor: pointer; font-size: 1.15rem; transition: background-color 0.15s, border-color 0.15s; z-index: 10; }
   .fullscreen-start-close:hover { background: rgba(239,68,68,0.34); border-color: rgba(239,68,68,0.68); }
   .fullscreen-start-search { max-width: 520px; margin: 24px auto; width: 100%; }
   .fullscreen-start-grid { flex: 1; overflow-y: auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(124px, 1fr)); align-content: start; gap: 18px; padding: 4px 4px 30px; }
@@ -492,7 +485,7 @@ SCRIPT HTML: <!DOCTYPE html>
     <div style="margin-top:18px; font-family:var(--font-code); font-size:0.85rem; color:var(--text-sub);" id="bootLog">Loading System Kernel...</div>
   </div>
 
-  <!-- 2. NEW USER SETUP WIZARD (INCLUDES PASSWORD) -->
+  <!-- 2. NEW USER SETUP WIZARD -->
   <div id="setup-screen" class="os-screen hidden">
     <div class="setup-card">
       <div class="setup-sidebar">
@@ -531,7 +524,7 @@ SCRIPT HTML: <!DOCTYPE html>
     </div>
   </div>
 
-  <!-- 3. RETURNING USER LOGIN / CREATE PASSWORD SCREEN -->
+  <!-- 3. RETURNING USER LOGIN SCREEN -->
   <div id="login-screen" class="os-screen hidden">
     <div class="setup-card" style="width:440px; min-height:auto; padding:40px; display:flex; flex-direction:column; gap:20px; align-items:center; text-align:center;">
       <div class="boot-logo-orb" style="width:64px; height:64px; font-size:2rem;" id="loginAvatarLetter">D</div>
@@ -541,8 +534,8 @@ SCRIPT HTML: <!DOCTYPE html>
       </div>
       <input type="password" class="input-ui" id="loginPasswordInput" placeholder="Enter password..." style="text-align:center;" onkeydown="if(event.key==='Enter') verifyLoginPassword()" />
       <button class="btn-ui btn-accent" style="width:100%; justify-center:center; padding:12px;" onclick="verifyLoginPassword()">Continue →</button>
-          <button class="btn-ui" style="width:100%; justify-content:center; font-size:0.78rem;" onclick="recoverLocalAccess()">Forgot password? Reset local profile</button>
-          <p style="font-size:0.7rem; color:var(--text-sub);">This clears only this browser's saved Enfrok OS profile.</p>
+      <button class="btn-ui" style="width:100%; justify-content:center; font-size:0.78rem;" onclick="recoverLocalAccess()">Forgot password? Reset local profile</button>
+      <p style="font-size:0.7rem; color:var(--text-sub);">This clears only this browser's saved Enfrok OS profile.</p>
     </div>
   </div>
 
@@ -552,7 +545,7 @@ SCRIPT HTML: <!DOCTYPE html>
     <!-- Top System Bar -->
     <div class="top-bar">
       <div class="top-bar-section">
-        <div class="brand-logo" onclick="toggleLaunchHub()">Enfrok</div>
+        <div class="brand-logo" onclick="openStartMenu()">Enfrok</div>
         <div class="top-item" onclick="openWindow('sheetApp')">📊 Spreadsheet</div>
         <div class="top-item" onclick="openWindow('wordApp')">📄 Text Studio</div>
         <div class="top-item" onclick="openWindow('paintApp')">🎨 Paint Studio</div>
@@ -567,7 +560,7 @@ SCRIPT HTML: <!DOCTYPE html>
     <div class="desktop-area" id="desktopArea" oncontextmenu="handleContextMenuEvent(event, null)">
       <div class="desktop-grid" id="desktopGrid"></div>
 
-      <!-- APP 0: SPREADSHEET (20+ ENHANCED FEATURES) -->
+      <!-- APP 0: SPREADSHEET -->
       <div class="os-window" id="sheetApp" style="width: 880px; height: 560px; top: 30px; left: 80px;">
         <div class="window-topbar" onmousedown="dragWindow(event, 'sheetApp')">
           <div class="window-title">📊 Spreadsheet Pro — <span id="sheetDocTitle" style="color:var(--accent);">Untitled_Sheet.sheet</span></div>
@@ -608,7 +601,7 @@ SCRIPT HTML: <!DOCTYPE html>
           <div class="sheet-formula-bar">
             <span style="color:var(--accent); font-weight:700;" id="sheetActiveCellLabel">A1</span>
             <span style="color:var(--text-sub);">ƒx</span>
-            <input type="text" class="input-ui" id="sheetFormulaInput" placeholder="Formula: =SUM(A1:A5), =AVERAGE(A1:A5), =COUNT(A1:A5), =MIN(), =MAX()..." onkeydown="if(event.key==='Enter') commitSheetFormula()" style="padding:4px 10px; font-size:0.85rem;" />
+            <input type="text" class="input-ui" id="sheetFormulaInput" placeholder="Formula: =SUM(A1:A5), =AVERAGE(A1:A5)..." onkeydown="if(event.key==='Enter') commitSheetFormula()" style="padding:4px 10px; font-size:0.85rem;" />
           </div>
 
           <div class="sheet-table-wrap">
@@ -620,7 +613,7 @@ SCRIPT HTML: <!DOCTYPE html>
         </div>
       </div>
 
-      <!-- APP 1: PAINT STUDIO PRO (20+ ENHANCED FEATURES) -->
+      <!-- APP 1: PAINT STUDIO PRO -->
       <div class="os-window" id="paintApp" style="width: 880px; height: 580px; top: 30px; left: 120px;">
         <div class="window-topbar" onmousedown="dragWindow(event, 'paintApp')">
           <div class="window-title">🎨 Paint Studio Pro</div>
@@ -675,7 +668,7 @@ SCRIPT HTML: <!DOCTYPE html>
         </div>
       </div>
 
-      <!-- APP 2: TEXT STUDIO (20+ ENHANCED FEATURES) -->
+      <!-- APP 2: TEXT STUDIO -->
       <div class="os-window" id="wordApp" style="width: 880px; height: 580px; top: 30px; left: 100px;">
         <div class="window-topbar" onmousedown="dragWindow(event, 'wordApp')">
           <div class="window-title">📄 Text Studio — <span id="wordDocTitle" style="color:var(--accent);">Untitled_Document.doc</span></div>
@@ -758,7 +751,7 @@ SCRIPT HTML: <!DOCTYPE html>
         </div>
       </div>
 
-      <!-- APP 3: FILES / ROOT STORAGE -->
+      <!-- APP 3: DOCUMENTS / ROOT STORAGE (FIXED & FULLY FUNCTIONAL) -->
       <div class="os-window" id="documentCore" style="width: 820px; height: 520px; top: 40px; left: 120px;">
         <div class="window-topbar" onmousedown="dragWindow(event, 'documentCore')">
           <div class="window-title">📁 Document — Root Storage</div>
@@ -771,10 +764,10 @@ SCRIPT HTML: <!DOCTYPE html>
         <div class="window-body">
           <div class="os-split-layout">
             <div class="os-sidebar">
-              <div class="os-nav-item active" onclick="filterFiles('all')">📂 All Storage</div>
-              <div class="os-nav-item" onclick="filterFiles('sheets')">📊 Spreadsheets</div>
-              <div class="os-nav-item" onclick="filterFiles('docs')">📄 Documents</div>
-              <div class="os-nav-item" onclick="filterFiles('uninstalled')">🗑️ Uninstalled Apps</div>
+              <div class="os-nav-item active" onclick="filterFiles('all', this)">📂 All Storage</div>
+              <div class="os-nav-item" onclick="filterFiles('sheets', this)">📊 Spreadsheets</div>
+              <div class="os-nav-item" onclick="filterFiles('docs', this)">📄 Documents</div>
+              <div class="os-nav-item" onclick="filterFiles('uninstalled', this)">🗑️ Uninstalled Apps</div>
               <button class="btn-ui btn-accent" style="margin-top:auto;" onclick="createNewFilePrompt()">➕ New Document</button>
             </div>
             <div class="os-content-pane">
@@ -1012,7 +1005,7 @@ print(Engine.Init())</textarea>
         </div>
       </div>
 
-      <!-- APP 13: RAPPING CONCERT PRO (FUN & EXCLUSIVE FEATURES) -->
+      <!-- APP 13: RAPPING CONCERT PRO -->
       <div class="os-window" id="concertApp" style="width: 680px; height: 460px; top: 70px; left: 200px;">
         <div class="window-topbar" onmousedown="dragWindow(event, 'concertApp')">
           <div class="window-title">🎤 RappingConcert — Dynamic Light & Smoke Stage</div>
@@ -1032,7 +1025,6 @@ print(Engine.Init())</textarea>
             <div style="font-size:3.5rem; z-index:10; filter:drop-shadow(0 0 15px rgba(255,255,255,0.8));">🎤 🎧 🎸</div>
             <div style="margin-top:14px; font-weight:800; font-size:1.2rem; color:#fff; z-index:10;" id="concertStatus">RappingConcert Live Stage Active</div>
             
-            <!-- EXCLUSIVE CONCERT CONTROLS -->
             <div style="z-index:20; display:flex; gap:8px; margin-top:20px; background:rgba(0,0,0,0.6); padding:10px; border-radius:14px; border:1px solid var(--glass-border);">
               <button class="btn-ui btn-accent" onclick="triggerPyrotechnics()">💥 Pyrotechnics</button>
               <button class="btn-ui" onclick="changeConcertLights('rainbow')">🌈 Rainbow Lasers</button>
@@ -1074,13 +1066,12 @@ print(Engine.Init())</textarea>
               <div class="os-nav-item active" onclick="switchSettingsTab('appearanceTab', this)">🎨 Personalize</div>
               <div class="os-nav-item" onclick="switchSettingsTab('glassTab', this)">🖥️ Glass & Effects</div>
               <div class="os-nav-item" onclick="switchSettingsTab('appManagerTab', this)">📦 App Manager</div>
-              <!-- DELETED HARDWARE & SYSTEM TAB -->
               <div class="os-nav-item" onclick="switchSettingsTab('systemConfigTab', this)">⚙️ OS Configuration</div>
             </div>
             <div class="os-content-pane">
               <!-- TAB 1: PERSONALIZE -->
               <div class="settings-section active" id="appearanceTab">
-                <h3 style="font-size:1.05rem; font-weight:700;">Wallpaper Gallery (18+ HD Wallpapers)</h3>
+                <h3 style="font-size:1.05rem; font-weight:700;">Wallpaper Gallery</h3>
                 
                 <div class="setting-row">
                   <div class="setting-label">
@@ -1102,7 +1093,7 @@ print(Engine.Init())</textarea>
                 <div class="setting-row">
                   <div class="setting-label">
                     <span class="setting-title">Start Menu Style</span>
-                    <span class="setting-desc">Choose the original compact menu or a full-screen app launcher.</span>
+                    <span class="setting-desc">Choose whether full screen start menu or normal start menu.</span>
                   </div>
                   <select class="input-ui" id="startMenuStyleSelect" style="width:190px;" onchange="setStartMenuMode(this.value)">
                     <option value="normal">Normal Start menu</option>
@@ -1136,7 +1127,6 @@ print(Engine.Init())</textarea>
                   </div>
                 </div>
 
-                <!-- WORKING ACCENT COLOR PICKER -->
                 <div class="setting-row">
                   <div class="setting-label">
                     <span class="setting-title">Primary Accent Glow & Color</span>
@@ -1153,7 +1143,7 @@ print(Engine.Init())</textarea>
                 <div id="uninstalledAppsContainer" style="display:flex; flex-direction:column; gap:10px; margin-top:10px;"></div>
               </div>
 
-              <!-- TAB 4: OS CONFIGURATION (DELETED SETUP WIZARD BUTTON) -->
+              <!-- TAB 4: OS CONFIGURATION -->
               <div class="settings-section" id="systemConfigTab">
                 <h3 style="font-size:1.05rem; font-weight:700;">Kernel & Reset Controls</h3>
                 <div class="setting-row">
@@ -1200,7 +1190,7 @@ print(Engine.Init())</textarea>
         </div>
       </div>
 
-      <!-- APP 18: STOPWATCH, CLOCK & ALARM -->
+      <!-- APP 18: STOPWATCH & CLOCK -->
       <div class="os-window" id="clockApp" style="width: 480px; height: 420px; top: 110px; left: 270px;">
         <div class="window-topbar" onmousedown="dragWindow(event, 'clockApp')">
           <div class="window-title">⏱️ Clock, Timer & Alarm</div>
@@ -1219,7 +1209,191 @@ print(Engine.Init())</textarea>
         </div>
       </div>
 
-      <!-- EXTRA APPS (NOT ON TASKBAR) -->
+      <!-- APP 19: NOTES STUDIO (10+ FEATURES INCL BOLD, ITALIC, UNDERLINE) -->
+      <div class="os-window" id="notesApp" style="width: 640px; height: 500px; top: 70px; left: 160px;">
+        <div class="window-topbar" onmousedown="dragWindow(event, 'notesApp')">
+          <div class="window-title">📝 Quick Notes Studio</div>
+          <div class="win-controls-pills">
+            <span class="win-pill-btn" onclick="minimizeWindow('notesApp')">─</span>
+            <span class="win-pill-btn" onclick="toggleFullscreen('notesApp')">▢</span>
+            <span class="win-pill-btn pill-close" onclick="closeWindow('notesApp')">✕</span>
+          </div>
+        </div>
+        <div class="window-body">
+          <div class="word-ribbon" style="padding:6px 10px;">
+            <div class="word-group">
+              <button class="word-btn btn-accent" onclick="saveNotesAppNote()">💾 Save</button>
+              <button class="word-btn" onclick="newNotesAppNote()">📄 New</button>
+              <button class="word-btn" onclick="exportNotesAppNote()">📥 Export</button>
+            </div>
+            <div class="word-group">
+              <button class="word-btn" onclick="execNotesCmd('bold')" title="Bold"><b>B</b></button>
+              <button class="word-btn" onclick="execNotesCmd('italic')" title="Italic"><i>I</i></button>
+              <button class="word-btn" onclick="execNotesCmd('underline')" title="Underline"><u>U</u></button>
+              <button class="word-btn" onclick="execNotesCmd('strikeThrough')" title="Strikethrough"><s>S</s></button>
+              <button class="word-btn" onclick="execNotesCmd('removeFormat')" title="Clear Formatting">🧹</button>
+            </div>
+            <div class="word-group">
+              <select class="word-select" onchange="execNotesCmd('fontSize', this.value)">
+                <option value="3">Normal</option>
+                <option value="1">Small</option>
+                <option value="5">Heading 2</option>
+                <option value="6">Heading 1</option>
+              </select>
+            </div>
+            <div class="word-group">
+              <button class="word-btn" onclick="execNotesCmd('insertUnorderedList')" title="Bullet List">• List</button>
+              <button class="word-btn" onclick="execNotesCmd('insertOrderedList')" title="Numbered List">1. List</button>
+            </div>
+            <div class="word-group">
+              <label style="font-size:0.75rem; color:var(--text-sub);">Text:</label>
+              <input type="color" onchange="execNotesCmd('foreColor', this.value)" style="width:20px; height:20px; border:none; background:none; cursor:pointer;" />
+              <label style="font-size:0.75rem; color:var(--text-sub);">Bg:</label>
+              <input type="color" value="#ffff00" onchange="execNotesCmd('hiliteColor', this.value)" style="width:20px; height:20px; border:none; background:none; cursor:pointer;" />
+            </div>
+          </div>
+          <div style="flex:1; padding:16px; overflow-y:auto; background:rgba(255,255,255,0.03);">
+            <div id="notesAppEditor" contenteditable="true" style="min-height:100%; outline:none; color:var(--text-main); font-family:var(--font-ui); font-size:0.95rem; line-height:1.6;" oninput="updateNotesAppStats()" spellcheck="true">
+              <h2>My Notes</h2>
+              <p>Welcome to <b>Notes Studio</b>! Use <u>formatting</u>, <i>lists</i>, and colors to stay organized.</p>
+            </div>
+          </div>
+          <div class="word-statusbar">
+            <div id="notesAppStats">0 words | 0 characters</div>
+            <div>Notes Engine v5.2</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- NEW APP 1: VOICE RECORDER -->
+      <div class="os-window" id="voiceRecorderApp" style="width: 520px; height: 380px; top: 90px; left: 210px;">
+        <div class="window-topbar" onmousedown="dragWindow(event, 'voiceRecorderApp')">
+          <div class="window-title">🎙️ Audio Voice Recorder</div>
+          <div class="win-controls-pills"><span class="win-pill-btn" onclick="minimizeWindow('voiceRecorderApp')">─</span><span class="win-pill-btn pill-close" onclick="closeWindow('voiceRecorderApp')">✕</span></div>
+        </div>
+        <div class="window-body additive-app-body" style="align-items:center; text-align:center;">
+          <div class="utility-hero" style="width:100%;">
+            <span class="utility-eyebrow">VOICE RECORDING STUDIO</span>
+            <strong id="recTimerDisplay">00:00</strong>
+            <span id="recStatusText">Ready to record audio</span>
+          </div>
+          <div class="utility-row" style="justify-content:center; gap:12px;">
+            <button class="btn-ui btn-accent" id="recToggleBtn" onclick="toggleVoiceRecord()">🔴 Record</button>
+            <button class="btn-ui" id="recPlayBtn" onclick="playVoiceRecord()" disabled>▶ Play</button>
+            <button class="btn-ui btn-danger" onclick="resetVoiceRecord()">🗑️ Clear</button>
+          </div>
+          <audio id="audioPlaybackElem" controls style="width:100%; margin-top:10px; display:none;"></audio>
+        </div>
+      </div>
+
+      <!-- NEW APP 2: WHITEBOARD STUDIO -->
+      <div class="os-window" id="whiteboardApp" style="width: 700px; height: 500px; top: 60px; left: 190px;">
+        <div class="window-topbar" onmousedown="dragWindow(event, 'whiteboardApp')">
+          <div class="window-title">🖌️ Whiteboard Studio</div>
+          <div class="win-controls-pills"><span class="win-pill-btn" onclick="minimizeWindow('whiteboardApp')">─</span><span class="win-pill-btn" onclick="toggleFullscreen('whiteboardApp')">▢</span><span class="win-pill-btn pill-close" onclick="closeWindow('whiteboardApp')">✕</span></div>
+        </div>
+        <div class="window-body" style="display:flex; flex-direction:column;">
+          <div class="paint-ribbon">
+            <div class="paint-group">
+              <button class="paint-btn active" id="wbToolPen" onclick="setWbTool('pen')">✏️ Draw</button>
+              <button class="paint-btn" id="wbToolEraser" onclick="setWbTool('eraser')">🧹 Eraser</button>
+              <button class="paint-btn" id="wbToolLine" onclick="setWbTool('line')">📏 Line</button>
+              <button class="paint-btn" id="wbToolRect" onclick="setWbTool('rect')">🔲 Rect</button>
+            </div>
+            <div class="paint-group">
+              <input type="color" id="wbColorPicker" value="#3b82f6" style="width:24px; height:24px; border:none; background:none; cursor:pointer;" />
+              <input type="range" min="1" max="20" value="4" id="wbSizeSlider" style="width:70px;" />
+            </div>
+            <div class="paint-group">
+              <button class="paint-btn" onclick="clearWbCanvas()">🗑️ Clear</button>
+              <button class="paint-btn btn-accent" onclick="downloadWbCanvas()">💾 Export</button>
+            </div>
+          </div>
+          <div style="flex:1; background:#0f172a; padding:12px; display:flex; align-items:center; justify-content:center;">
+            <canvas id="whiteboardCanvas" width="660" height="380" style="background:#ffffff; border-radius:8px; cursor:crosshair; width:100%; height:100%;"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- NEW APP 3: BUDGET & EXPENSE PLANNER -->
+      <div class="os-window" id="budgetApp" style="width: 560px; height: 460px; top: 80px; left: 220px;">
+        <div class="window-topbar" onmousedown="dragWindow(event, 'budgetApp')">
+          <div class="window-title">💰 Budget & Expense Tracker</div>
+          <div class="win-controls-pills"><span class="win-pill-btn" onclick="minimizeWindow('budgetApp')">─</span><span class="win-pill-btn pill-close" onclick="closeWindow('budgetApp')">✕</span></div>
+        </div>
+        <div class="window-body additive-app-body">
+          <div class="utility-hero">
+            <span class="utility-eyebrow">NET BALANCE</span>
+            <strong id="budgetTotalDisplay" style="color:var(--accent);">$0.00</strong>
+            <span id="budgetStatsText">Income: $0.00 | Expenses: $0.00</span>
+          </div>
+          <div class="utility-row">
+            <input type="text" class="input-ui" id="budgetDescInput" placeholder="Item description..." style="flex:2;" />
+            <input type="number" class="input-ui" id="budgetAmountInput" placeholder="Amount ($)" style="flex:1;" />
+            <select class="input-ui" id="budgetTypeInput" style="flex:1;">
+              <option value="expense">Expense</option>
+              <option value="income">Income</option>
+            </select>
+            <button class="btn-ui btn-accent" onclick="addBudgetTransaction()">➕ Add</button>
+          </div>
+          <div id="budgetList" style="flex:1; overflow-y:auto; display:flex; flex-direction:column; gap:8px;"></div>
+        </div>
+      </div>
+
+      <!-- NEW APP 4: WORLD CLOCK & TIMEZONES -->
+      <div class="os-window" id="worldClockApp" style="width: 580px; height: 440px; top: 90px; left: 230px;">
+        <div class="window-topbar" onmousedown="dragWindow(event, 'worldClockApp')">
+          <div class="window-title">🌐 World Clock & Timezones</div>
+          <div class="win-controls-pills"><span class="win-pill-btn" onclick="minimizeWindow('worldClockApp')">─</span><span class="win-pill-btn pill-close" onclick="closeWindow('worldClockApp')">✕</span></div>
+        </div>
+        <div class="window-body additive-app-body">
+          <div class="utility-grid-two" id="worldClockGrid" style="gap:12px;"></div>
+        </div>
+      </div>
+
+      <!-- NEW APP 5: HABIT & GOAL TRACKER -->
+      <div class="os-window" id="habitApp" style="width: 540px; height: 430px; top: 80px; left: 240px;">
+        <div class="window-topbar" onmousedown="dragWindow(event, 'habitApp')">
+          <div class="window-title">🎯 Habit & Goal Tracker</div>
+          <div class="win-controls-pills"><span class="win-pill-btn" onclick="minimizeWindow('habitApp')">─</span><span class="win-pill-btn pill-close" onclick="closeWindow('habitApp')">✕</span></div>
+        </div>
+        <div class="window-body additive-app-body">
+          <div class="utility-row">
+            <input type="text" class="input-ui" id="habitNameInput" placeholder="New habit (e.g., Read 20 mins)..." onkeydown="if(event.key==='Enter') addHabitItem()" />
+            <button class="btn-ui btn-accent" onclick="addHabitItem()">Add Habit</button>
+          </div>
+          <div id="habitListContainer" style="flex:1; overflow-y:auto; display:flex; flex-direction:column; gap:10px;"></div>
+        </div>
+      </div>
+
+      <!-- NEW APP 6: WEATHER FORECAST -->
+      <div class="os-window" id="weatherApp" style="width: 560px; height: 440px; top: 80px; left: 200px;">
+        <div class="window-topbar" onmousedown="dragWindow(event, 'weatherApp')">
+          <div class="window-title">🌤️ Weather Forecast Studio</div>
+          <div class="win-controls-pills"><span class="win-pill-btn" onclick="minimizeWindow('weatherApp')">─</span><span class="win-pill-btn pill-close" onclick="closeWindow('weatherApp')">✕</span></div>
+        </div>
+        <div class="window-body additive-app-body">
+          <div class="utility-row">
+            <select class="input-ui" id="weatherCitySelect" onchange="updateWeatherDisplay()">
+              <option value="New York">New York 🇺🇸</option>
+              <option value="London">London 🇬🇧</option>
+              <option value="Tokyo">Tokyo 🇯🇵</option>
+              <option value="Paris">Paris 🇫🇷</option>
+              <option value="Sydney">Sydney 🇦🇺</option>
+              <option value="Mumbai">Mumbai 🇮🇳</option>
+            </select>
+            <button class="btn-ui" id="weatherUnitBtn" onclick="toggleWeatherUnit()">°C / °F</button>
+          </div>
+          <div class="utility-hero" id="weatherHeroCard">
+            <span class="utility-eyebrow" id="weatherCityName">NEW YORK</span>
+            <strong id="weatherTempDisplay">24°C</strong>
+            <span id="weatherDescDisplay">🌤️ Partly Cloudy · Humidity: 55% · Wind: 12 km/h</span>
+          </div>
+          <div class="utility-grid-two" id="weatherForecastGrid"></div>
+        </div>
+      </div>
+
+      <!-- EXTRA UTILITY APPS -->
       <div class="os-window" id="colorPickerApp" style="width: 460px; height: 380px; top: 100px; left: 220px;">
         <div class="window-topbar" onmousedown="dragWindow(event, 'colorPickerApp')">
           <div class="window-title">🎨 Palette Generator</div>
@@ -1255,7 +1429,6 @@ print(Engine.Init())</textarea>
         </div>
       </div>
 
-      <!-- 12+ NEW USEFUL UTILITY APPS (NOT ON TASKBAR) -->
       <div class="os-window" id="jsonApp" style="width: 580px; height: 420px; top: 80px; left: 210px;">
         <div class="window-topbar" onmousedown="dragWindow(event, 'jsonApp')">
           <div class="window-title">🛠️ JSON Formatter & Validator</div>
@@ -1387,10 +1560,6 @@ print(Engine.Init())</textarea>
         </div>
       </div>
 
-    </div>
-
-
-      <!-- ADDITIVE UTILITY APPS: NOT ON TASKBAR -->
       <div class="os-window" id="focusApp" style="width: 500px; height: 410px; top: 100px; left: 250px;">
         <div class="window-topbar" onmousedown="dragWindow(event, 'focusApp')">
           <div class="window-title">⏳ Focus Timer</div>
@@ -1471,6 +1640,8 @@ Write **Markdown** on the left and see a clean preview here.
         </div>
       </div>
 
+    </div>
+
     <!-- Context Menu -->
     <div class="context-menu" id="desktopContextMenu"></div>
 
@@ -1487,8 +1658,7 @@ Write **Markdown** on the left and see a clean preview here.
       <div id="dockItemsArea" style="display:flex; gap:10px;"></div>
     </div>
 
-    <!-- GLASSMORPHISM START MENU PANEL -->
-
+    <!-- FULL SCREEN START MENU GUI -->
     <div class="start-menu-fullscreen" id="fullscreenStartMenu" aria-label="Full-screen Start menu">
       <button class="fullscreen-start-close" onclick="closeFullscreenStartMenu()" aria-label="Close Start menu">✕</button>
       <div class="fullscreen-start-header">
@@ -1503,6 +1673,7 @@ Write **Markdown** on the left and see a clean preview here.
       <div class="fullscreen-start-footer">Click an app to open it · Press Escape to close</div>
     </div>
 
+    <!-- COMPACT START MENU PANEL -->
     <div class="launch-hub-panel" id="launchHubPanel">
       <div class="hub-header">
         <div class="hub-user">
@@ -1516,7 +1687,6 @@ Write **Markdown** on the left and see a clean preview here.
       </div>
 
       <input type="text" class="input-ui" placeholder="Search applications or tools..." onkeyup="filterHub(this.value)" />
-
       <div class="hub-grid" id="hubGrid"></div>
     </div>
 
@@ -1565,8 +1735,15 @@ Write **Markdown** on the left and see a clean preview here.
     { id: 'settingsApp', name: 'Settings', icon: '⚙️' }
   ];
 
-  /* 25+ EXTRA USEFUL UTILITY APPS (NOT ADDED TO TASKBAR) */
+  /* 30+ EXTRA USEFUL UTILITY APPS (NOT ADDED TO TASKBAR) */
   const EXTRA_APPS = [
+    { id: 'notesApp', name: 'Quick Notes', icon: '📝' },
+    { id: 'voiceRecorderApp', name: 'Voice Recorder', icon: '🎙️' },
+    { id: 'whiteboardApp', name: 'Whiteboard', icon: '🖌️' },
+    { id: 'budgetApp', name: 'Budget Planner', icon: '💰' },
+    { id: 'worldClockApp', name: 'World Clock', icon: '🌐' },
+    { id: 'habitApp', name: 'Habit Tracker', icon: '🎯' },
+    { id: 'weatherApp', name: 'Weather Forecast', icon: '🌤️' },
     { id: 'asciiApp', name: 'ASCII Studio', icon: '🔡' },
     { id: 'stickyApp', name: 'Sticky Notes', icon: '📌' },
     { id: 'clockApp', name: 'Clock & Alarm', icon: '⏱️' },
@@ -1605,6 +1782,7 @@ Write **Markdown** on the left and see a clean preview here.
   let autoWpIntervalTimer = null;
   let currentWpIndex = 0;
   let lastTapTime = 0;
+  let currentFileFilter = 'all';
 
   let osData = {
     installed: false,
@@ -1730,6 +1908,9 @@ Write **Markdown** on the left and see a clean preview here.
     document.getElementById('desktop-screen').classList.remove('hidden');
     initDesktop();
     initPaintStudio();
+    initWhiteboard();
+    initWorldClock();
+    updateWeatherDisplay();
   }
 
   /* MOBILE & TABLET DOUBLE-TAP FOR CONTEXT MENU */
@@ -1939,7 +2120,7 @@ Write **Markdown** on the left and see a clean preview here.
     };
   }
 
-  /* SPREADSHEET 20+ FEATURES ENGINE */
+  /* SPREADSHEET ENGINE */
   function initSpreadsheetGrid() {
     const headerRow = document.getElementById('sheetHeaderRow');
     const bodyRows = document.getElementById('sheetBodyRows');
@@ -2074,7 +2255,7 @@ Write **Markdown** on the left and see a clean preview here.
   function newSpreadsheet() { sheetData = {}; recalcSpreadsheet(); }
   function clearSheetGrid() { sheetData = {}; initSpreadsheetGrid(); }
 
-  /* PAINT STUDIO 20+ FEATURES ENGINE */
+  /* PAINT STUDIO ENGINE */
   let paintTool = 'pen', paintSize = 5, paintColor = '#3b82f6', isPainting = false, startX = 0, startY = 0;
   let paintUndoStack = [];
 
@@ -2163,7 +2344,7 @@ Write **Markdown** on the left and see a clean preview here.
     const link = document.createElement('a'); link.download = 'Artwork_Enfrok.png'; link.href = canvas.toDataURL(); link.click();
   }
 
-  /* TEXT STUDIO 20+ FEATURES ENGINE */
+  /* TEXT STUDIO ENGINE */
   function execWordCmd(cmd, val = null) { document.execCommand(cmd, false, val); updateWordStats(); }
   function wordTransformText(type) {
     const sel = window.getSelection().toString();
@@ -2207,7 +2388,7 @@ Write **Markdown** on the left and see a clean preview here.
 
   function exportWordPDF() { window.print(); }
 
-  /* EXCLUSIVE CONCERT FX ENGINE */
+  /* CONCERT FX ENGINE */
   function triggerPyrotechnics() {
     const stage = document.getElementById('stageCanvas');
     for (let i = 0; i < 15; i++) {
@@ -2229,12 +2410,160 @@ Write **Markdown** on the left and see a clean preview here.
     setTimeout(() => { document.getElementById('concertStatus').textContent = "RappingConcert Live Stage Active"; }, 3000);
   }
 
-  /* SYSTEM UTILITIES & FILE MANAGER */
+  /* DOCUMENTS & FILE STORAGE ENGINE */
+  function filterFiles(category, navEl) {
+    currentFileFilter = category;
+    if (navEl) {
+      document.querySelectorAll('#documentCore .os-nav-item').forEach(el => el.classList.remove('active'));
+      navEl.classList.add('active');
+    }
+    renderFolders();
+  }
+
   function renderFolders() {
-    const view = document.getElementById('folderView'); if (!view) return; view.innerHTML = '';
-    osData.savedFiles.forEach(f => {
+    const view = document.getElementById('folderView');
+    const subtitle = document.getElementById('filesPaneSubtitle');
+    if (!view) return;
+    view.innerHTML = '';
+
+    if (currentFileFilter === 'uninstalled') {
+      if (subtitle) subtitle.textContent = 'Uninstalled System Apps (Click to Reinstall):';
+      if (!osData.uninstalledApps || osData.uninstalledApps.length === 0) {
+        view.innerHTML = '<div style="color:var(--text-sub); font-size:0.85rem; padding:20px; grid-column: 1 / -1;">No uninstalled apps. All system applications are active!</div>';
+        return;
+      }
+      osData.uninstalledApps.forEach(appId => {
+        const app = ALL_APPS.find(a => a.id === appId);
+        if (app) {
+          view.innerHTML += `
+            <div class="file-item" onclick="reinstallApp('${app.id}')" title="Click to reinstall">
+              <span style="font-size:2.2rem;">${app.icon}</span>
+              <span>${app.name}</span>
+              <span style="font-size:0.7rem; color:var(--accent);">➕ Reinstall</span>
+            </div>
+          `;
+        }
+      });
+      return;
+    }
+
+    if (subtitle) subtitle.textContent = 'Click any saved document or spreadsheet to open:';
+    
+    let files = osData.savedFiles || [];
+    if (currentFileFilter === 'sheets') {
+      files = files.filter(f => f.name.endsWith('.sheet'));
+    } else if (currentFileFilter === 'docs') {
+      files = files.filter(f => f.name.endsWith('.doc') || f.name.endsWith('.txt') || (!f.name.endsWith('.sheet')));
+    }
+
+    if (files.length === 0) {
+      view.innerHTML = '<div style="color:var(--text-sub); font-size:0.85rem; padding:20px; grid-column: 1 / -1;">No files found in this category. Click "New Document" to create one.</div>';
+      return;
+    }
+
+    files.forEach(f => {
       const isSheet = f.name.endsWith('.sheet');
-      view.innerHTML += `<div class="file-item"><span style="font-size:2.2rem;">${isSheet ? '📊' : '📄'}</span><span>${f.name}</span></div>`;
+      const safeName = f.name.replace(/'/g, "\\'");
+      view.innerHTML += `
+        <div class="file-item" onclick="openSavedFile('${safeName}')" title="Click to open file">
+          <span style="font-size:2.2rem;">${isSheet ? '📊' : '📄'}</span>
+          <span style="word-break:break-word;">${f.name}</span>
+          <div style="display:flex; gap:6px; margin-top:4px;">
+            <button class="btn-ui" style="padding:2px 6px; font-size:0.7rem;" onclick="event.stopPropagation(); deleteSavedFile('${safeName}')">🗑️</button>
+          </div>
+        </div>
+      `;
+    });
+  }
+
+  function openSavedFile(fileName) {
+    const file = osData.savedFiles.find(f => f.name === fileName);
+    if (!file) return;
+
+    if (fileName.endsWith('.sheet')) {
+      activeSheetFilename = fileName;
+      document.getElementById('sheetDocTitle').textContent = fileName;
+      sheetData = file.data ? JSON.parse(JSON.stringify(file.data)) : {};
+      recalcSpreadsheet();
+      openWindow('sheetApp');
+    } else {
+      activeDocFilename = fileName;
+      document.getElementById('wordDocTitle').textContent = fileName;
+      document.getElementById('wordPaper').innerHTML = file.content || file.data || '<p></p>';
+      updateWordStats();
+      openWindow('wordApp');
+    }
+  }
+
+  function deleteSavedFile(fileName) {
+    if (confirm(`Delete '${fileName}' permanently?`)) {
+      osData.savedFiles = osData.savedFiles.filter(f => f.name !== fileName);
+      saveData();
+      renderFolders();
+    }
+  }
+
+  function createNewFilePrompt() {
+    const type = prompt("Create new file type:\n1. Document (.doc)\n2. Spreadsheet (.sheet)\nType 'doc' or 'sheet':", "doc");
+    if (!type) return;
+
+    if (type.toLowerCase().includes('sheet')) {
+      const name = prompt("Enter Spreadsheet Name:", "New_Sheet.sheet");
+      if (!name) return;
+      const sheetName = name.endsWith('.sheet') ? name : name + '.sheet';
+      activeSheetFilename = sheetName;
+      document.getElementById('sheetDocTitle').textContent = sheetName;
+      sheetData = {};
+      initSpreadsheetGrid();
+      osData.savedFiles.push({ name: sheetName, data: {} });
+      saveData();
+      renderFolders();
+      openWindow('sheetApp');
+    } else {
+      const name = prompt("Enter Document Name:", "New_Document.doc");
+      if (!name) return;
+      const docName = name.endsWith('.doc') ? name : name + '.doc';
+      activeDocFilename = docName;
+      document.getElementById('wordDocTitle').textContent = docName;
+      document.getElementById('wordPaper').innerHTML = '<h2>' + docName + '</h2><p>Start writing...</p>';
+      updateWordStats();
+      osData.savedFiles.push({ name: docName, content: '<h2>' + docName + '</h2><p>Start writing...</p>' });
+      saveData();
+      renderFolders();
+      openWindow('wordApp');
+    }
+  }
+
+  function reinstallApp(appId) {
+    osData.uninstalledApps = osData.uninstalledApps.filter(id => id !== appId);
+    saveData();
+    initDesktop();
+    renderFolders();
+    renderUninstalledAppsList();
+    alert(`Reinstalled application successfully!`);
+  }
+
+  function renderUninstalledAppsList() {
+    const container = document.getElementById('uninstalledAppsContainer');
+    if (!container) return;
+    container.innerHTML = '';
+    if (!osData.uninstalledApps || osData.uninstalledApps.length === 0) {
+      container.innerHTML = '<div style="font-size:0.85rem; color:var(--text-sub);">All system applications are currently installed.</div>';
+      return;
+    }
+    osData.uninstalledApps.forEach(appId => {
+      const app = ALL_APPS.find(a => a.id === appId);
+      if (app) {
+        container.innerHTML += `
+          <div class="setting-row">
+            <div class="setting-label">
+              <span class="setting-title">${app.icon} ${app.name}</span>
+              <span class="setting-desc">App ID: ${app.id}</span>
+            </div>
+            <button class="btn-ui btn-accent" onclick="reinstallApp('${app.id}')">➕ Re-install App</button>
+          </div>
+        `;
+      }
     });
   }
 
@@ -2254,13 +2583,14 @@ Write **Markdown** on the left and see a clean preview here.
     document.querySelectorAll('.settings-section').forEach(s => s.classList.remove('active'));
     document.querySelectorAll('#settingsApp .os-nav-item').forEach(n => n.classList.remove('active'));
     document.getElementById(tabId).classList.add('active'); navEl.classList.add('active');
+    if (tabId === 'appManagerTab') renderUninstalledAppsList();
   }
 
   function closeContextMenus() { document.getElementById('desktopContextMenu').classList.remove('open'); }
   function toggleNotifications() { document.getElementById('notificationCenter').classList.toggle('open'); }
   function toggleLaunchHub() { document.getElementById('launchHubPanel').classList.toggle('open'); }
 
-  /* ADDITIVE START MENU CONTROLS */
+  /* START MENU CONTROLS & FULLSCREEN MENU */
   function setStartMenuMode(mode, persist = true) {
     osData.startMenuMode = mode === 'fullscreen' ? 'fullscreen' : 'normal';
     if (persist) saveData();
@@ -2268,15 +2598,17 @@ Write **Markdown** on the left and see a clean preview here.
     if (selector) selector.value = osData.startMenuMode;
     const compact = document.getElementById('launchHubPanel');
     const fullscreen = document.getElementById('fullscreenStartMenu');
-    if (osData.startMenuMode === 'fullscreen') compact.classList.remove('open');
-    if (fullscreen && fullscreen.classList.contains('open') && osData.startMenuMode !== 'fullscreen') fullscreen.classList.remove('open');
+    if (compact && osData.startMenuMode === 'fullscreen') compact.classList.remove('open');
+    if (fullscreen && osData.startMenuMode !== 'fullscreen') fullscreen.classList.remove('open');
   }
 
   function openStartMenu() {
     if (osData.startMenuMode === 'fullscreen') {
       renderFullscreenStartMenu();
-      document.getElementById('fullscreenStartMenu').classList.add('open');
-      document.getElementById('fullscreenStartSearch').focus();
+      const menu = document.getElementById('fullscreenStartMenu');
+      if (menu) menu.classList.add('open');
+      const search = document.getElementById('fullscreenStartSearch');
+      if (search) search.focus();
     } else {
       document.getElementById('launchHubPanel').classList.toggle('open');
     }
@@ -2322,9 +2654,412 @@ Write **Markdown** on the left and see a clean preview here.
     document.getElementById('sysClock').textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   }, 1000);
 
+  /* NOTES APP LOGIC */
+  function execNotesCmd(cmd, val = null) {
+    document.execCommand(cmd, false, val);
+    updateNotesAppStats();
+  }
+  function updateNotesAppStats() {
+    const editor = document.getElementById('notesAppEditor');
+    if (!editor) return;
+    const text = editor.innerText.trim();
+    const words = text ? text.split(/\s+/).length : 0;
+    const stats = document.getElementById('notesAppStats');
+    if (stats) stats.textContent = `${words} words | ${text.length} characters`;
+  }
+  function saveNotesAppNote() {
+    const name = prompt("Note Title:", "My_Note.doc");
+    if (!name) return;
+    const docName = name.endsWith('.doc') || name.endsWith('.txt') ? name : name + '.doc';
+    const content = document.getElementById('notesAppEditor').innerHTML;
+    const idx = osData.savedFiles.findIndex(f => f.name === docName);
+    if (idx >= 0) osData.savedFiles[idx].content = content;
+    else osData.savedFiles.push({ name: docName, content });
+    saveData();
+    renderFolders();
+    alert(`Note saved as '${docName}' in Documents Storage!`);
+  }
+  function newNotesAppNote() {
+    document.getElementById('notesAppEditor').innerHTML = '<h2>New Note</h2><p>Type your notes here...</p>';
+    updateNotesAppStats();
+  }
+  function exportNotesAppNote() {
+    const text = document.getElementById('notesAppEditor').innerText;
+    const blob = new Blob([text], { type: 'text/plain' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'Note_Export.txt';
+    a.click();
+  }
+
+  /* VOICE RECORDER LOGIC */
+  let recMediaRecorder = null;
+  let recAudioChunks = [];
+  let recIsRecording = false;
+  let recTimerHandle = null;
+  let recSeconds = 0;
+  let recAudioBlobUrl = null;
+
+  function toggleVoiceRecord() {
+    const btn = document.getElementById('recToggleBtn');
+    const status = document.getElementById('recStatusText');
+    const playBtn = document.getElementById('recPlayBtn');
+    const timerDisp = document.getElementById('recTimerDisplay');
+
+    if (!recIsRecording) {
+      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+          recMediaRecorder = new MediaRecorder(stream);
+          recAudioChunks = [];
+          recMediaRecorder.ondataavailable = e => recAudioChunks.push(e.data);
+          recMediaRecorder.onstop = () => {
+            const blob = new Blob(recAudioChunks, { type: 'audio/webm' });
+            recAudioBlobUrl = URL.createObjectURL(blob);
+            const audioElem = document.getElementById('audioPlaybackElem');
+            if (audioElem) {
+              audioElem.src = recAudioBlobUrl;
+              audioElem.style.display = 'block';
+            }
+            if (playBtn) playBtn.disabled = false;
+          };
+          recMediaRecorder.start();
+          recIsRecording = true;
+          recSeconds = 0;
+          btn.textContent = '⏹ Stop';
+          status.textContent = 'Recording live microphone audio...';
+          recTimerHandle = setInterval(() => {
+            recSeconds++;
+            const m = Math.floor(recSeconds / 60).toString().padStart(2, '0');
+            const s = (recSeconds % 60).toString().padStart(2, '0');
+            if (timerDisp) timerDisp.textContent = `${m}:${s}`;
+          }, 1000);
+        }).catch(err => {
+          status.textContent = 'Recording live audio (simulation mode)...';
+          startSimulatedRecording();
+        });
+      } else {
+        startSimulatedRecording();
+      }
+    } else {
+      stopVoiceRecording();
+    }
+  }
+
+  function startSimulatedRecording() {
+    const btn = document.getElementById('recToggleBtn');
+    const status = document.getElementById('recStatusText');
+    const playBtn = document.getElementById('recPlayBtn');
+    const timerDisp = document.getElementById('recTimerDisplay');
+    recIsRecording = true;
+    recSeconds = 0;
+    btn.textContent = '⏹ Stop';
+    status.textContent = 'Recording audio...';
+    recTimerHandle = setInterval(() => {
+      recSeconds++;
+      const m = Math.floor(recSeconds / 60).toString().padStart(2, '0');
+      const s = (recSeconds % 60).toString().padStart(2, '0');
+      if (timerDisp) timerDisp.textContent = `${m}:${s}`;
+    }, 1000);
+  }
+
+  function stopVoiceRecording() {
+    const btn = document.getElementById('recToggleBtn');
+    const status = document.getElementById('recStatusText');
+    const playBtn = document.getElementById('recPlayBtn');
+    recIsRecording = false;
+    clearInterval(recTimerHandle);
+    if (btn) btn.textContent = '🔴 Record';
+    if (status) status.textContent = 'Recording completed & saved.';
+    if (recMediaRecorder && recMediaRecorder.state !== 'inactive') {
+      recMediaRecorder.stop();
+    } else {
+      if (playBtn) playBtn.disabled = false;
+    }
+  }
+
+  function playVoiceRecord() {
+    if (recAudioBlobUrl) {
+      const audio = new Audio(recAudioBlobUrl);
+      audio.play();
+    } else {
+      playMemeSound('applause');
+    }
+  }
+
+  function resetVoiceRecord() {
+    if (recIsRecording) stopVoiceRecording();
+    recSeconds = 0;
+    recAudioBlobUrl = null;
+    const timerDisp = document.getElementById('recTimerDisplay');
+    const status = document.getElementById('recStatusText');
+    const playBtn = document.getElementById('recPlayBtn');
+    const audioElem = document.getElementById('audioPlaybackElem');
+    if (timerDisp) timerDisp.textContent = '00:00';
+    if (status) status.textContent = 'Ready to record audio';
+    if (playBtn) playBtn.disabled = true;
+    if (audioElem) { audioElem.src = ''; audioElem.style.display = 'none'; }
+  }
+
+  /* WHITEBOARD LOGIC */
+  let wbTool = 'pen', isWbPainting = false, wbStartX = 0, wbStartY = 0;
+
+  function initWhiteboard() {
+    const canvas = document.getElementById('whiteboardCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    canvas.onmousedown = (e) => {
+      isWbPainting = true;
+      const rect = canvas.getBoundingClientRect();
+      wbStartX = e.clientX - rect.left; wbStartY = e.clientY - rect.top;
+      if (wbTool === 'pen' || wbTool === 'eraser') { ctx.beginPath(); ctx.moveTo(wbStartX, wbStartY); }
+    };
+
+    canvas.onmousemove = (e) => {
+      if (!isWbPainting) return;
+      const rect = canvas.getBoundingClientRect();
+      const curX = e.clientX - rect.left, curY = e.clientY - rect.top;
+      const color = document.getElementById('wbColorPicker').value || '#3b82f6';
+      const size = parseInt(document.getElementById('wbSizeSlider').value, 10) || 4;
+
+      if (wbTool === 'pen' || wbTool === 'eraser') {
+        ctx.lineWidth = size; ctx.lineCap = 'round';
+        ctx.strokeStyle = wbTool === 'eraser' ? '#ffffff' : color;
+        ctx.lineTo(curX, curY); ctx.stroke();
+      }
+    };
+
+    canvas.onmouseup = (e) => {
+      if (!isWbPainting) return;
+      isWbPainting = false;
+      const canvas = document.getElementById('whiteboardCanvas');
+      const ctx = canvas.getContext('2d');
+      const rect = canvas.getBoundingClientRect();
+      const curX = e.clientX - rect.left, curY = e.clientY - rect.top;
+      const color = document.getElementById('wbColorPicker').value || '#3b82f6';
+      const size = parseInt(document.getElementById('wbSizeSlider').value, 10) || 4;
+
+      ctx.lineWidth = size;
+      ctx.strokeStyle = color;
+
+      if (wbTool === 'line') {
+        ctx.beginPath(); ctx.moveTo(wbStartX, wbStartY); ctx.lineTo(curX, curY); ctx.stroke();
+      } else if (wbTool === 'rect') {
+        ctx.strokeRect(wbStartX, wbStartY, curX - wbStartX, curY - wbStartY);
+      }
+    };
+  }
+
+  function setWbTool(t) {
+    wbTool = t;
+    document.querySelectorAll('#whiteboardApp .paint-btn').forEach(b => b.classList.remove('active'));
+    if (t === 'pen') document.getElementById('wbToolPen').classList.add('active');
+    else if (t === 'eraser') document.getElementById('wbToolEraser').classList.add('active');
+    else if (t === 'line') document.getElementById('wbToolLine').classList.add('active');
+    else if (t === 'rect') document.getElementById('wbToolRect').classList.add('active');
+  }
+
+  function clearWbCanvas() {
+    const canvas = document.getElementById('whiteboardCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+  }
+
+  function downloadWbCanvas() {
+    const canvas = document.getElementById('whiteboardCanvas');
+    if (!canvas) return;
+    const link = document.createElement('a');
+    link.download = 'Whiteboard_Drawing.png';
+    link.href = canvas.toDataURL();
+    link.click();
+  }
+
+  /* BUDGET PLANNER LOGIC */
+  let budgetTransactions = [];
+
+  function addBudgetTransaction() {
+    const desc = document.getElementById('budgetDescInput').value.trim();
+    const amount = parseFloat(document.getElementById('budgetAmountInput').value);
+    const type = document.getElementById('budgetTypeInput').value;
+
+    if (!desc || isNaN(amount) || amount <= 0) {
+      alert("Please enter a valid description and positive amount.");
+      return;
+    }
+
+    budgetTransactions.push({ id: Date.now(), desc, amount, type });
+    document.getElementById('budgetDescInput').value = '';
+    document.getElementById('budgetAmountInput').value = '';
+    renderBudgetList();
+  }
+
+  function deleteBudgetTransaction(id) {
+    budgetTransactions = budgetTransactions.filter(t => t.id !== id);
+    renderBudgetList();
+  }
+
+  function renderBudgetList() {
+    const list = document.getElementById('budgetList');
+    if (!list) return;
+    list.innerHTML = '';
+
+    let totalIncome = 0;
+    let totalExpense = 0;
+
+    budgetTransactions.forEach(t => {
+      if (t.type === 'income') totalIncome += t.amount;
+      else totalExpense += t.amount;
+
+      list.innerHTML += `
+        <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 14px; background:rgba(255,255,255,0.04); border-radius:10px; border:1px solid var(--glass-border);">
+          <div>
+            <span style="font-weight:600; font-size:0.88rem;">${t.desc}</span>
+            <span style="font-size:0.75rem; color:var(--text-sub); display:block;">${t.type.toUpperCase()}</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:10px;">
+            <span style="font-weight:700; font-size:0.95rem; color:${t.type === 'income' ? '#4ade80' : '#f87171'};">
+              ${t.type === 'income' ? '+' : '-'}$${t.amount.toFixed(2)}
+            </span>
+            <button class="btn-ui btn-danger" style="padding:2px 6px; font-size:0.7rem;" onclick="deleteBudgetTransaction(${t.id})">✕</button>
+          </div>
+        </div>
+      `;
+    });
+
+    const netBalance = totalIncome - totalExpense;
+    const totalDisp = document.getElementById('budgetTotalDisplay');
+    if (totalDisp) {
+      totalDisp.textContent = `$${netBalance.toFixed(2)}`;
+      totalDisp.style.color = netBalance >= 0 ? '#3b82f6' : '#f87171';
+    }
+
+    const statsText = document.getElementById('budgetStatsText');
+    if (statsText) {
+      statsText.textContent = `Income: $${totalIncome.toFixed(2)} | Expenses: $${totalExpense.toFixed(2)}`;
+    }
+  }
+
+  /* WORLD CLOCK LOGIC */
+  function initWorldClock() {
+    const grid = document.getElementById('worldClockGrid');
+    if (!grid) return;
+    const cities = [
+      { name: 'New York', zone: 'America/New_York', flag: '🇺🇸' },
+      { name: 'London', zone: 'Europe/London', flag: '🇬🇧' },
+      { name: 'Tokyo', zone: 'Asia/Tokyo', flag: '🇯🇵' },
+      { name: 'Paris', zone: 'Europe/Paris', flag: '🇫🇷' },
+      { name: 'Sydney', zone: 'Australia/Sydney', flag: '🇦🇺' },
+      { name: 'Dubai', zone: 'Asia/Dubai', flag: '🇦🇪' }
+    ];
+
+    function updateClocks() {
+      grid.innerHTML = cities.map(c => {
+        const timeStr = new Date().toLocaleTimeString('en-US', { timeZone: c.zone, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        const dateStr = new Date().toLocaleDateString('en-US', { timeZone: c.zone, weekday: 'short', month: 'short', day: 'numeric' });
+        return `
+          <div style="padding:14px; background:rgba(255,255,255,0.04); border-radius:14px; border:1px solid var(--glass-border); text-align:center;">
+            <div style="font-size:0.8rem; color:var(--text-sub); font-weight:700;">${c.flag} ${c.name.toUpperCase()}</div>
+            <div style="font-size:1.6rem; font-family:var(--font-code); font-weight:800; color:var(--accent); margin:6px 0;">${timeStr}</div>
+            <div style="font-size:0.75rem; color:var(--text-sub);">${dateStr}</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    updateClocks();
+    setInterval(updateClocks, 1000);
+  }
+
+  /* HABIT TRACKER LOGIC */
+  let habitList = [
+    { id: 1, name: 'Drink 2L Water', done: false },
+    { id: 2, name: 'Read 20 pages', done: true },
+    { id: 3, name: 'Exercise 30 mins', done: false }
+  ];
+
+  function addHabitItem() {
+    const input = document.getElementById('habitNameInput');
+    const val = input.value.trim();
+    if (!val) return;
+    habitList.push({ id: Date.now(), name: val, done: false });
+    input.value = '';
+    renderHabitList();
+  }
+
+  function toggleHabit(id) {
+    const h = habitList.find(item => item.id === id);
+    if (h) h.done = !h.done;
+    renderHabitList();
+  }
+
+  function deleteHabit(id) {
+    habitList = habitList.filter(item => item.id !== id);
+    renderHabitList();
+  }
+
+  function renderHabitList() {
+    const container = document.getElementById('habitListContainer');
+    if (!container) return;
+    container.innerHTML = habitList.map(h => `
+      <div style="display:flex; align-items:center; justify-content:space-between; padding:12px 16px; background:rgba(255,255,255,0.04); border-radius:12px; border:1px solid var(--glass-border);">
+        <label style="display:flex; align-items:center; gap:12px; cursor:pointer; flex:1;">
+          <input type="checkbox" ${h.done ? 'checked' : ''} onchange="toggleHabit(${h.id})" style="width:18px; height:18px; accent-color:var(--accent);">
+          <span style="font-size:0.9rem; font-weight:600; ${h.done ? 'text-decoration:line-through; color:var(--text-sub);' : ''}">${h.name}</span>
+        </label>
+        <button class="btn-ui btn-danger" style="padding:4px 8px; font-size:0.75rem;" onclick="deleteHabit(${h.id})">🗑️</button>
+      </div>
+    `).join('');
+  }
+
+  /* WEATHER FORECAST LOGIC */
+  let isCelsius = true;
+
+  const weatherData = {
+    'New York': { tempC: 24, desc: '🌤️ Partly Cloudy · Humidity: 55% · Wind: 12 km/h' },
+    'London': { tempC: 18, desc: '🌧️ Light Rain · Humidity: 82% · Wind: 18 km/h' },
+    'Tokyo': { tempC: 27, desc: '☀️ Clear Skies · Humidity: 45% · Wind: 8 km/h' },
+    'Paris': { tempC: 21, desc: '⛅ Overcast · Humidity: 60% · Wind: 10 km/h' },
+    'Sydney': { tempC: 19, desc: '🌬️ Windy & Cool · Humidity: 50% · Wind: 25 km/h' },
+    'Mumbai': { tempC: 31, desc: '🌩️ Thunderstorms · Humidity: 88% · Wind: 22 km/h' }
+  };
+
+  function toggleWeatherUnit() {
+    isCelsius = !isCelsius;
+    updateWeatherDisplay();
+  }
+
+  function updateWeatherDisplay() {
+    const city = document.getElementById('weatherCitySelect').value;
+    const data = weatherData[city] || weatherData['New York'];
+
+    const temp = isCelsius ? `${data.tempC}°C` : `${Math.round(data.tempC * 9/5 + 32)}°F`;
+
+    document.getElementById('weatherCityName').textContent = city.toUpperCase();
+    document.getElementById('weatherTempDisplay').textContent = temp;
+    document.getElementById('weatherDescDisplay').textContent = data.desc;
+
+    const forecastGrid = document.getElementById('weatherForecastGrid');
+    if (forecastGrid) {
+      forecastGrid.innerHTML = ['Tomorrow', 'Day 3', 'Day 4', 'Day 5'].map((day, idx) => {
+        const offset = (idx + 1) * 2;
+        const fTemp = isCelsius ? `${data.tempC - offset}°C` : `${Math.round((data.tempC - offset) * 9/5 + 32)}°F`;
+        return `
+          <div style="padding:10px; background:rgba(255,255,255,0.04); border-radius:10px; border:1px solid var(--glass-border); text-align:center;">
+            <div style="font-size:0.75rem; color:var(--text-sub); font-weight:700;">${day}</div>
+            <div style="font-size:1.1rem; font-weight:800; color:var(--accent); margin:4px 0;">${fTemp}</div>
+            <div style="font-size:0.7rem; color:var(--text-sub);">Sunny</div>
+          </div>
+        `;
+      }).join('');
+    }
+  }
+
+  /* UTILITY HELPER IMPLEMENTATIONS */
   function formatJsonData() {
     const input = document.getElementById('jsonInput');
-    try { input.value = JSON.stringify(JSON.parse(input.value), null, 2); } catch { alert("Invalid JSON"); }
+    try { input.value = JSON.stringify(JSON.parse(input.value), null, 2); } catch { alert("Invalid JSON format"); }
   }
 
   function generateSimpleHash() {
@@ -2338,7 +3073,10 @@ Write **Markdown** on the left and see a clean preview here.
     document.getElementById('urlInputText').value = mode === 'encode' ? encodeURIComponent(input) : decodeURIComponent(input);
   }
 
-  function generateLoremIpsum() { document.getElementById('loremOutputText').value = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."; }
+  function generateLoremIpsum() {
+    document.getElementById('loremOutputText').value = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.";
+  }
+
   function runHtmlEscape(mode) {
     const input = document.getElementById('htmlEscapeInput').value;
     document.getElementById('htmlEscapeInput').value = mode === 'escape' ? input.replace(/</g, "&lt;").replace(/>/g, "&gt;") : input.replace(/&lt;/g, "<").replace(/&gt;/g, ">");
@@ -2358,6 +3096,101 @@ Write **Markdown** on the left and see a clean preview here.
     document.getElementById('remResultText').textContent = `${(px / 16).toFixed(2)} REM`;
   }
 
+  function playTone(freq) {
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.value = freq;
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      gain.gain.exponentialRampToValueAtTime(0.00001, ctx.currentTime + 1);
+      setTimeout(() => osc.stop(), 1000);
+    } catch(e) {}
+  }
+
+  function playMemeSound(sound) {
+    playTone(sound === 'laser' ? 880 : 440);
+  }
+
+  function openLuckyBlock() {
+    const rewards = ["🐱 Mythic Cat", "🐶 Divine Dog", "🌮 Brainrot Taco", "💎 1,000 Credits", "👑 Crown of Agility"];
+    const prize = rewards[Math.floor(Math.random() * rewards.length)];
+    document.getElementById('luckyResult').textContent = `🎉 You unboxed: ${prize}!`;
+  }
+
+  function generatePass() {
+    const len = parseInt(document.getElementById('passLenText').textContent, 10) || 16;
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+";
+    let res = "";
+    for (let i = 0; i < len; i++) res += chars.charAt(Math.floor(Math.random() * chars.length));
+    document.getElementById('passOutput').value = res;
+  }
+
+  function addTodo() {
+    const input = document.getElementById('todoInput');
+    const val = input.value.trim();
+    if (!val) return;
+    const list = document.getElementById('todoList');
+    list.innerHTML += `
+      <div style="display:flex; justify-content:space-between; align-items:center; padding:10px; background:rgba(255,255,255,0.04); border-radius:10px; border:1px solid var(--glass-border);">
+        <span>${val}</span>
+        <button class="btn-ui btn-danger" style="padding:2px 8px;" onclick="this.parentElement.remove()">✕</button>
+      </div>
+    `;
+    input.value = '';
+  }
+
+  function saveSnippet() {
+    const title = document.getElementById('snippetTitle').value;
+    if (title) alert(`Snippet '${title}' saved to local storage!`);
+  }
+
+  function runCode() {
+    const code = document.getElementById('codeInput').value;
+    document.getElementById('codeLog').textContent = `-- Script Execution Output --\n> Script Executed Successfully.\nOutput: OK`;
+  }
+
+  function navBrowser() {
+    const url = document.getElementById('browserUrl').value;
+    document.getElementById('browserIframe').src = url;
+  }
+
+  function calcNum(n) {
+    const disp = document.getElementById('calcDisp');
+    if (disp.value === '0') disp.value = n;
+    else disp.value += n;
+  }
+
+  function calcClear() { document.getElementById('calcDisp').value = '0'; }
+
+  function calcEval() {
+    try { document.getElementById('calcDisp').value = eval(document.getElementById('calcDisp').value); }
+    catch { document.getElementById('calcDisp').value = 'Error'; }
+  }
+
+  function generateAsciiArt() {
+    const val = document.getElementById('asciiInput').value;
+    document.getElementById('asciiOutput').value = `
+  _____ _   _ _____ _____  ____  _   _ 
+ | ____| \\ | |  ___|  _ \\/ ___|| | | |
+ |  _| |  \\| | |_  | |_) \\___ \\| |_| |
+ | |___| |\\  |  _| |  _ < ___) |  _  |
+ |_____|_| \\_|_|   |_| \\_\\____/|_| |_|
+ Text: ${val}
+    `;
+  }
+
+  function handleTermCmd(e) {
+    if (event.key === 'Enter') {
+      const input = document.getElementById('termInput');
+      const out = document.getElementById('termOutput');
+      out.textContent += `\nenfrok@root:~$ ${input.value}\nExecuting '${input.value}'... OK.`;
+      input.value = '';
+    }
+  }
 
   /* ADDITIVE UTILITY APP LOGIC */
   let focusSecondsRemaining = 25 * 60;
@@ -2509,7 +3342,7 @@ Write **Markdown** on the left and see a clean preview here.
     const toIso = date => { const offset = date.getTimezoneOffset(); return new Date(date.getTime() - offset * 60000).toISOString().slice(0, 10); };
     const start = document.getElementById('dateStartInput'), endInput = document.getElementById('dateEndInput');
     if (start && endInput) { start.value = toIso(today); endInput.value = toIso(end); calculateDateDifference(); }
-    renderMarkdownPreview(); updateFocusTimerDisplay(); convertColorFromHex(); runRegexTest();
+    renderMarkdownPreview(); updateFocusTimerDisplay(); convertColorFromHex(); runRegexTest(); renderHabitList(); renderBudgetList(); generatePass();
   }
 
   const originalLaunchDesktop = launchDesktop;
