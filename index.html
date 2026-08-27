@@ -14,24 +14,24 @@
     --accent-glow: rgba(59, 130, 246, 0.4);
     --bg-wallpaper: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=1920&auto=format&fit=crop');
     
-    --glass-blur-val: 38px;
-    --glass-opacity-val: 0.62;
+    --glass-blur-val: 20px;
+    --glass-opacity-val: 0.75;
     --glass-blur: blur(var(--glass-blur-val));
     
-    --glass-topbar: rgba(10, 14, 24, 0.65);
+    --glass-topbar: rgba(10, 14, 24, 0.75);
     --glass-dock: rgba(12, 16, 28, var(--glass-opacity-val));
     --glass-window: rgba(12, 16, 26, var(--glass-opacity-val));
-    --glass-window-unfocused: rgba(8, 11, 18, 0.75);
+    --glass-window-unfocused: rgba(8, 11, 18, 0.85);
     --glass-menu: rgba(14, 18, 30, 0.95);
-    --glass-dialog: rgba(16, 20, 34, 0.92);
+    --glass-dialog: rgba(16, 20, 34, 0.95);
     --glass-border: rgba(255, 255, 255, 0.16);
     --glass-border-focused: rgba(59, 130, 246, 0.6);
-    --glass-shadow: 0 30px 80px rgba(0, 0, 0, 0.85);
+    --glass-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
     
     --text-main: #f8fafc;
     --text-sub: #94a3b8;
-    --radius-window: 20px;
-    --radius-dock: 26px;
+    --radius-window: 18px;
+    --radius-dock: 24px;
     --font-ui: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
     --font-code: 'JetBrains Mono', monospace;
     --anim-curve: cubic-bezier(0.16, 1, 0.3, 1);
@@ -58,6 +58,7 @@
     border: 1px solid var(--glass-border); background: rgba(255, 255, 255, 0.08); color: var(--text-main);
     cursor: pointer; display: inline-flex; align-items: center; gap: 6px;
     transition: background-color 0.15s, border-color 0.15s;
+    will-change: background-color, border-color;
   }
   .btn-ui:hover { background: rgba(255, 255, 255, 0.18); border-color: var(--accent); }
   .btn-ui.active { background: rgba(59, 130, 246, 0.25); border-color: var(--accent); }
@@ -72,7 +73,7 @@
     width: 100%; padding: 10px 14px; border-radius: 10px;
     background: rgba(0, 0, 0, 0.55); border: 1px solid var(--glass-border);
     color: var(--text-main); font-family: var(--font-ui); font-size: 0.88rem; outline: none;
-    transition: border-color 0.2s var(--anim-curve);
+    transition: border-color 0.15s ease;
   }
   .input-ui:focus { border-color: var(--accent); }
 
@@ -90,7 +91,7 @@
   .setup-card {
     width: 620px; min-height: 420px; background: var(--glass-dialog); backdrop-filter: var(--glass-blur);
     border: 1px solid var(--glass-border); border-radius: 26px; box-shadow: var(--glass-shadow);
-    display: flex; overflow: hidden;
+    display: flex; overflow: hidden; contain: content;
   }
   .setup-sidebar {
     width: 200px; background: rgba(0, 0, 0, 0.5); border-right: 1px solid var(--glass-border);
@@ -116,7 +117,8 @@
     width: 100%; height: 42px; background: var(--glass-topbar); backdrop-filter: var(--glass-blur);
     border-bottom: 1px solid var(--glass-border); display: flex; align-items: center; justify-content: space-between;
     padding: 0 20px; z-index: 8000;
-    transition: transform 0.4s var(--anim-curve), opacity 0.4s var(--anim-curve);
+    transition: transform 0.3s var(--anim-curve), opacity 0.3s var(--anim-curve);
+    will-change: transform, opacity;
   }
   .top-bar-section { display: flex; align-items: center; gap: 18px; }
   .brand-logo { font-weight: 800; font-size: 0.92rem; display: flex; align-items: center; gap: 10px; cursor: pointer; letter-spacing: 0.08em; }
@@ -132,12 +134,14 @@
   }
   .d-icon {
     width: 90px; display: flex; flex-direction: column; align-items: center; gap: 6px;
-    cursor: pointer; font-size: 0.78rem; text-align: center; text-shadow: 0 2px 6px rgba(0,0,0,0.9);
+    cursor: grab; font-size: 0.78rem; text-align: center; text-shadow: 0 2px 6px rgba(0,0,0,0.9);
     padding: 8px; border-radius: 14px; border: 1px solid transparent; font-weight: 500;
+    will-change: transform, background-color;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
   }
   .d-icon:hover { background: rgba(255, 255, 255, 0.12); border-color: rgba(255, 255, 255, 0.25); }
   .d-icon.selected { background: rgba(59, 130, 246, 0.2); border-color: var(--accent); }
-  .d-icon-box { font-size: 2.3rem; filter: drop-shadow(0 6px 12px rgba(0,0,0,0.5)); }
+  .d-icon-box { font-size: 2.3rem; filter: drop-shadow(0 6px 12px rgba(0,0,0,0.5)); pointer-events: none; }
 
   /* TASKBAR (DOCK) */
   .dock-wrapper {
@@ -146,7 +150,12 @@
     border: 1px solid var(--glass-border); border-radius: var(--radius-dock);
     padding: 8px 16px; display: flex; align-items: center; gap: 10px; z-index: 8500;
     box-shadow: var(--glass-shadow);
-    transition: transform 0.4s var(--anim-curve), opacity 0.4s var(--anim-curve) !important;
+    transition: transform 0.3s var(--anim-curve), opacity 0.3s var(--anim-curve) !important;
+    will-change: transform, opacity;
+  }
+  .dock-wrapper.drag-over {
+    border-color: var(--accent);
+    background: rgba(59, 130, 246, 0.25);
   }
   
   .dock-launcher-btn {
@@ -158,6 +167,7 @@
     font-size: 1.4rem; font-weight: 800; color: #ffffff; cursor: pointer;
     box-shadow: 0 0 25px rgba(236, 72, 153, 0.5);
     transition: transform 0.2s var(--anim-curve);
+    will-change: transform;
   }
   .dock-launcher-btn:hover { transform: scale(1.08); }
 
@@ -173,7 +183,8 @@
     width: 46px; height: 46px; border-radius: 14px; background: rgba(255,255,255,0.06);
     border: 1px solid rgba(255,255,255,0.12); display: flex; align-items: center; justify-content: center;
     font-size: 1.4rem; cursor: pointer; position: relative;
-    transition: transform 0.2s var(--anim-curve), background-color 0.2s, border-color 0.2s;
+    transition: transform 0.15s var(--anim-curve), background-color 0.15s, border-color 0.15s;
+    will-change: transform;
   }
   .dock-item:hover { border-color: var(--accent); background: rgba(255,255,255,0.18); transform: translateY(-4px); }
 
@@ -189,7 +200,8 @@
     box-shadow: 0 30px 80px rgba(0, 0, 0, 0.85), inset 0 1px 0 rgba(255, 255, 255, 0.2);
     display: flex; flex-direction: column; gap: 18px; z-index: 8600;
     opacity: 0; pointer-events: none;
-    transition: opacity 0.25s var(--anim-curve), transform 0.25s var(--anim-curve);
+    transition: opacity 0.2s var(--anim-curve), transform 0.2s var(--anim-curve);
+    will-change: transform, opacity;
   }
   .launch-hub-panel.open { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(0) scale(1); }
 
@@ -208,7 +220,8 @@
     border: 1px solid var(--glass-border); border-radius: 16px; padding: 8px;
     box-shadow: 0 20px 40px rgba(0,0,0,0.65); z-index: 9900; display: flex; flex-direction: column; gap: 4px;
     opacity: 0; pointer-events: none; transform: scale(0.92);
-    transition: opacity 0.2s var(--anim-curve), transform 0.2s var(--anim-curve);
+    transition: opacity 0.15s var(--anim-curve), transform 0.15s var(--anim-curve);
+    will-change: transform, opacity;
   }
   .context-menu.open { opacity: 1; pointer-events: auto; transform: scale(1); }
   .context-item {
@@ -224,7 +237,8 @@
     background: var(--glass-menu); backdrop-filter: var(--glass-blur);
     border-left: 1px solid var(--glass-border); padding: 24px; display: flex; flex-direction: column; gap: 20px;
     z-index: 8400; box-shadow: -15px 0 40px rgba(0,0,0,0.6);
-    transition: right 0.3s var(--anim-curve);
+    transition: right 0.25s var(--anim-curve);
+    will-change: right;
   }
   .notification-center.open { right: 0; }
 
@@ -233,11 +247,12 @@
     position: absolute; background: var(--glass-window); backdrop-filter: var(--glass-blur);
     border: 1px solid var(--glass-border); border-radius: var(--radius-window);
     box-shadow: var(--glass-shadow); display: flex; flex-direction: column; overflow: hidden;
-    min-width: 520px; min-height: 360px;
-    opacity: 0; pointer-events: none; transform: scale(0.92) translateY(15px);
-    transition: top 0.35s var(--anim-curve), left 0.35s var(--anim-curve), width 0.35s var(--anim-curve), height 0.35s var(--anim-curve), border-radius 0.35s var(--anim-curve), opacity 0.25s var(--anim-curve), transform 0.25s var(--anim-curve), border-color 0.2s ease;
+    min-width: 520px; min-height: 360px; contain: layout style;
+    opacity: 0; pointer-events: none; transform: scale(0.94) translateY(10px);
+    transition: top 0.25s var(--anim-curve), left 0.25s var(--anim-curve), width 0.25s var(--anim-curve), height 0.25s var(--anim-curve), opacity 0.2s var(--anim-curve), transform 0.2s var(--anim-curve), border-color 0.15s ease;
+    will-change: transform, opacity, top, left, width, height;
   }
-  .os-window.dragging { transition: none !important; }
+  .os-window.dragging { transition: none !important; will-change: top, left; }
   .os-window.open-active { opacity: 1; pointer-events: auto; transform: scale(1) translateY(0); }
   .os-window.unfocused { background: var(--glass-window-unfocused); border-color: rgba(255,255,255,0.08); }
   .os-window.focused { border-color: var(--glass-border-focused); box-shadow: 0 35px 90px rgba(0,0,0,0.85); }
@@ -370,11 +385,6 @@
   .term-row { display: flex; gap: 10px; align-items: center; }
   .term-input { flex: 1; background: transparent; border: none; outline: none; color: #fff; font-family: var(--font-code); font-size: 0.88rem; }
 
-  .code-wrap { display: flex; flex-direction: column; height: 100%; flex: 1; }
-  .code-toolbar { padding: 10px 16px; background: rgba(0,0,0,0.35); border-bottom: 1px solid var(--glass-border); display: flex; gap: 12px; }
-  .code-area { flex: 1; background: rgba(2, 3, 5, 0.75); border: none; outline: none; color: #f0f6fc; font-family: var(--font-code); font-size: 0.9rem; padding: 18px; resize: none; line-height: 1.5; }
-  .code-console { height: 110px; background: rgba(0,0,0,0.95); border-top: 1px solid var(--glass-border); padding: 10px 14px; font-family: var(--font-code); font-size: 0.8rem; color: var(--accent); overflow-y: auto; }
-
   .browser-bar { padding: 8px 14px; background: rgba(0,0,0,0.35); border-bottom: 1px solid var(--glass-border); display: flex; gap: 10px; }
 
   .calc-wrap { display: flex; flex-direction: column; height: 100%; padding: 20px; gap: 14px; flex: 1; }
@@ -432,6 +442,7 @@
     -webkit-backdrop-filter: var(--glass-blur) saturate(180%); opacity: 0; pointer-events: none;
     transform: translateY(12px); transition: opacity 0.25s var(--anim-curve), transform 0.25s var(--anim-curve);
     padding: 46px 7vw 54px;
+    will-change: transform, opacity;
   }
   .start-menu-fullscreen.open { opacity: 1; pointer-events: auto; transform: translateY(0); }
   .fullscreen-start-header { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding-bottom: 22px; border-bottom: 1px solid var(--glass-border); }
@@ -462,18 +473,26 @@
   .markdown-preview p, .markdown-preview ul, .markdown-preview pre { margin: 0 0 14px; }
   .markdown-preview code { font-family: var(--font-code); background: #e2e8f0; padding: 2px 5px; border-radius: 4px; }
   .markdown-preview blockquote { border-left: 3px solid var(--accent); padding-left: 12px; color: #475569; }
-  .color-convert-preview { height: 86px; border-radius: 16px; border: 1px solid var(--glass-border); box-shadow: inset 0 1px 0 rgba(255,255,255,0.2); }
-  .color-picker-large { width: 100%; height: 44px; border: 0; background: transparent; cursor: pointer; }
   .date-result, .regex-result { padding: 18px; border-radius: 14px; background: rgba(59,130,246,0.12); border: 1px solid rgba(59,130,246,0.28); color: var(--text-main); min-height: 58px; }
   .regex-test-text { flex: 1; min-height: 130px; user-select: text; }
   .regex-match { background: rgba(59,130,246,0.35); color: #fff; border-radius: 4px; padding: 1px 3px; }
   .utility-check { flex: 0 0 auto; flex-direction: row; align-items: center; gap: 8px; }
+
+  /* MESSAGES APP STYLES */
+  .msg-container { display: flex; height: 100%; width: 100%; flex: 1; overflow: hidden; }
+  .msg-sidebar { width: 220px; background: rgba(0,0,0,0.4); border-right: 1px solid var(--glass-border); padding: 12px; display: flex; flex-direction: column; gap: 10px; }
+  .msg-chat-area { flex: 1; display: flex; flex-direction: column; height: 100%; background: rgba(0,0,0,0.2); }
+  .msg-list { flex: 1; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 8px; }
+  .msg-bubble { max-width: 75%; padding: 8px 12px; border-radius: 12px; font-size: 0.85rem; line-height: 1.4; word-break: break-word; }
+  .msg-sent { align-self: flex-end; background: var(--accent); color: #fff; }
+  .msg-recv { align-self: flex-start; background: rgba(255,255,255,0.1); color: var(--text-main); }
+  .msg-input-bar { padding: 10px; border-top: 1px solid var(--glass-border); display: flex; gap: 8px; background: rgba(10,14,24,0.6); }
+
   @media (max-width: 760px) {
     .start-menu-fullscreen { padding: 54px 18px 30px; }
     .fullscreen-start-header { align-items: flex-start; flex-direction: column; }
     .markdown-layout, .utility-grid-two { grid-template-columns: 1fr; }
   }
-
 </style>
 </head>
 <body>
@@ -502,12 +521,12 @@
               <input type="text" class="input-ui" id="setupUsername" value="Developer" style="margin-top:4px;" />
             </div>
             <div>
-              <label style="font-size:0.85rem; color:var(--text-sub);">Set Account Password</label>
+              <label style="font-size:0.85rem; color:var(--text-sub);">Set Account Password (Required)</label>
               <input type="password" class="input-ui" id="setupPassword" placeholder="Create password..." style="margin-top:4px;" />
             </div>
           </div>
           <div style="display:flex; justify-content:flex-end; margin-top:20px;">
-            <button class="btn-ui btn-accent" onclick="navSetup(2); startInstallation();">Deploy System →</button>
+            <button class="btn-ui btn-accent" onclick="startInstallation()">Deploy System →</button>
           </div>
         </div>
         <div class="setup-page" id="page2">
@@ -533,8 +552,8 @@
         <p style="font-size:0.85rem; color:var(--text-sub);" id="loginSubText">Enter password to unlock Enfrok OS</p>
       </div>
       <input type="password" class="input-ui" id="loginPasswordInput" placeholder="Enter password..." style="text-align:center;" onkeydown="if(event.key==='Enter') verifyLoginPassword()" />
-      <button class="btn-ui btn-accent" style="width:100%; justify-center:center; padding:12px;" onclick="verifyLoginPassword()">Continue →</button>
-      <button class="btn-ui" style="width:100%; justify-content:center; font-size:0.78rem;" onclick="recoverLocalAccess()">Forgot password? Reset local profile</button>
+      <button class="btn-ui btn-accent" style="width:100%; justify-content:center; padding:12px;" onclick="verifyLoginPassword()">Continue →</button>
+      <button class="btn-ui" id="forgotPassBtn" style="width:100%; justify-content:center; font-size:0.78rem;" onclick="recoverLocalAccess()">Forgot password? Reset local profile</button>
       <p style="font-size:0.7rem; color:var(--text-sub);">This clears only this browser's saved Enfrok OS profile.</p>
     </div>
   </div>
@@ -557,8 +576,47 @@
     </div>
 
     <!-- Main Desktop Canvas -->
-    <div class="desktop-area" id="desktopArea" oncontextmenu="handleContextMenuEvent(event, null)">
+    <div class="desktop-area" id="desktopArea" oncontextmenu="handleContextMenuEvent(event, null)" ondragover="event.preventDefault()" ondrop="handleDesktopDrop(event)">
       <div class="desktop-grid" id="desktopGrid"></div>
+
+      <!-- APP: MESSAGES (NEW) -->
+      <div class="os-window" id="messagesApp" style="width: 720px; height: 480px; top: 50px; left: 150px;">
+        <div class="window-topbar" onmousedown="dragWindow(event, 'messagesApp')">
+          <div class="window-title">💬 Messages</div>
+          <div class="win-controls-pills">
+            <span class="win-pill-btn" onclick="minimizeWindow('messagesApp')">─</span>
+            <span class="win-pill-btn" onclick="toggleFullscreen('messagesApp')">▢</span>
+            <span class="win-pill-btn pill-close" onclick="closeWindow('messagesApp')">✕</span>
+          </div>
+        </div>
+        <div class="window-body">
+          <div id="msgAuthView" class="additive-app-body" style="display:flex; justify-content:center; align-items:center; height:100%;">
+            <div style="width:320px; display:flex; flex-direction:column; gap:12px; text-align:center;">
+              <h3>Create Messages Account</h3>
+              <input type="text" class="input-ui" id="msgRegName" placeholder="Full Name" />
+              <input type="text" class="input-ui" id="msgRegUsername" placeholder="Unique Username" />
+              <button class="btn-ui btn-accent" onclick="registerMessagesUser()">Create Account</button>
+            </div>
+          </div>
+          <div id="msgMainView" class="msg-container" style="display:none;">
+            <div class="msg-sidebar">
+              <div style="font-weight:700; font-size:0.85rem;" id="msgCurrentProfile">@user</div>
+              <input type="text" class="input-ui" id="msgSearchInput" placeholder="Search @username..." style="font-size:0.75rem;" onkeydown="if(event.key==='Enter') searchMessagesUser()" />
+              <button class="btn-ui btn-accent" style="font-size:0.75rem; justify-content:center;" onclick="searchMessagesUser()">Search User</button>
+              <div style="font-size:0.75rem; color:var(--text-sub); margin-top:6px;">Contacts & Requests</div>
+              <div id="msgContactsList" style="display:flex; flex-direction:column; gap:6px; overflow-y:auto; flex:1;"></div>
+            </div>
+            <div class="msg-chat-area">
+              <div style="padding:10px 14px; border-bottom:1px solid var(--glass-border); font-weight:700; font-size:0.9rem;" id="msgChatHeader">Select a conversation</div>
+              <div class="msg-list" id="msgList"></div>
+              <div class="msg-input-bar">
+                <input type="text" class="input-ui" id="msgTextInput" placeholder="Type a message..." onkeydown="if(event.key==='Enter') sendChatMessage()" />
+                <button class="btn-ui btn-accent" onclick="sendChatMessage()">Send</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <!-- APP 0: SPREADSHEET -->
       <div class="os-window" id="sheetApp" style="width: 880px; height: 560px; top: 30px; left: 80px;">
@@ -751,7 +809,7 @@
         </div>
       </div>
 
-      <!-- APP 3: DOCUMENTS / ROOT STORAGE (FIXED & FULLY FUNCTIONAL) -->
+      <!-- APP 3: DOCUMENTS / ROOT STORAGE -->
       <div class="os-window" id="documentCore" style="width: 820px; height: 520px; top: 40px; left: 120px;">
         <div class="window-topbar" onmousedown="dragWindow(event, 'documentCore')">
           <div class="window-title">📁 Document — Root Storage</div>
@@ -799,37 +857,6 @@ Type 'help' to view available system commands.</div>
               <span style="color:var(--accent); font-weight:600;">enfrok@root:~$</span>
               <input type="text" class="term-input" id="termInput" onkeydown="handleTermCmd(event)" />
             </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- APP 5: CODE STUDIO -->
-      <div class="os-window" id="codeStudio" style="width: 760px; height: 500px; top: 50px; left: 220px;">
-        <div class="window-topbar" onmousedown="dragWindow(event, 'codeStudio')">
-          <div class="window-title">👨‍💻 Studio Code Editor</div>
-          <div class="win-controls-pills">
-            <span class="win-pill-btn" onclick="minimizeWindow('codeStudio')">─</span>
-            <span class="win-pill-btn" onclick="toggleFullscreen('codeStudio')">▢</span>
-            <span class="win-pill-btn pill-close" onclick="closeWindow('codeStudio')">✕</span>
-          </div>
-        </div>
-        <div class="window-body">
-          <div class="code-wrap">
-            <div class="code-toolbar">
-              <button class="btn-ui btn-accent" style="padding:5px 14px; font-size:0.8rem;" onclick="runCode()">▶ Run Script</button>
-              <span style="font-size:0.82rem; color:var(--text-sub); align-self:center;">Script_Main.luau</span>
-            </div>
-            <textarea class="code-area" id="codeInput">-- Enfrok OS Luau Environment
-local Engine = {}
-Engine.Version = 5.2
-
-function Engine.Init()
-    print("[ENFROK CORE]: Engine active with Dynamic Accents & Laser Concert FX.")
-    return "Status: Optimal"
-end
-
-print(Engine.Init())</textarea>
-            <div class="code-console" id="codeLog">-- Output Console --</div>
           </div>
         </div>
       </div>
@@ -1111,8 +1138,8 @@ print(Engine.Init())</textarea>
                     <span class="setting-desc">Adjust backdrop blur filter across all open windows and panels.</span>
                   </div>
                   <div style="display:flex; align-items:center; gap:10px;">
-                    <input type="range" min="0" max="60" value="38" id="sliderBlur" oninput="updateGlassEffects()" />
-                    <span id="valBlur" style="font-family:var(--font-code); font-size:0.85rem;">38px</span>
+                    <input type="range" min="0" max="60" value="20" id="sliderBlur" oninput="updateGlassEffects()" />
+                    <span id="valBlur" style="font-family:var(--font-code); font-size:0.85rem;">20px</span>
                   </div>
                 </div>
 
@@ -1122,8 +1149,8 @@ print(Engine.Init())</textarea>
                     <span class="setting-desc">Control backdrop transparency for windows, taskbar, and menus.</span>
                   </div>
                   <div style="display:flex; align-items:center; gap:10px;">
-                    <input type="range" min="30" max="100" value="62" id="sliderOpacity" oninput="updateGlassEffects()" />
-                    <span id="valOpacity" style="font-family:var(--font-code); font-size:0.85rem;">62%</span>
+                    <input type="range" min="30" max="100" value="75" id="sliderOpacity" oninput="updateGlassEffects()" />
+                    <span id="valOpacity" style="font-family:var(--font-code); font-size:0.85rem;">75%</span>
                   </div>
                 </div>
 
@@ -1190,26 +1217,7 @@ print(Engine.Init())</textarea>
         </div>
       </div>
 
-      <!-- APP 18: STOPWATCH & CLOCK -->
-      <div class="os-window" id="clockApp" style="width: 480px; height: 420px; top: 110px; left: 270px;">
-        <div class="window-topbar" onmousedown="dragWindow(event, 'clockApp')">
-          <div class="window-title">⏱️ Clock, Timer & Alarm</div>
-          <div class="win-controls-pills">
-            <span class="win-pill-btn" onclick="minimizeWindow('clockApp')">─</span>
-            <span class="win-pill-btn pill-close" onclick="closeWindow('clockApp')">✕</span>
-          </div>
-        </div>
-        <div class="window-body" style="padding:22px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px;">
-          <div style="font-size:2.8rem; font-family:var(--font-code); font-weight:700;" id="stopwatchDisp">00:00:00</div>
-          <div style="display:flex; gap:10px;">
-            <button class="btn-ui btn-accent" onclick="startStopwatch()">Start</button>
-            <button class="btn-ui" onclick="pauseStopwatch()">Pause</button>
-            <button class="btn-ui btn-danger" onclick="resetStopwatch()">Reset</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- APP 19: NOTES STUDIO (10+ FEATURES INCL BOLD, ITALIC, UNDERLINE) -->
+      <!-- APP 19: NOTES STUDIO -->
       <div class="os-window" id="notesApp" style="width: 640px; height: 500px; top: 70px; left: 160px;">
         <div class="window-topbar" onmousedown="dragWindow(event, 'notesApp')">
           <div class="window-title">📝 Quick Notes Studio</div>
@@ -1265,7 +1273,7 @@ print(Engine.Init())</textarea>
         </div>
       </div>
 
-      <!-- NEW APP 1: VOICE RECORDER -->
+      <!-- VOICE RECORDER -->
       <div class="os-window" id="voiceRecorderApp" style="width: 520px; height: 380px; top: 90px; left: 210px;">
         <div class="window-topbar" onmousedown="dragWindow(event, 'voiceRecorderApp')">
           <div class="window-title">🎙️ Audio Voice Recorder</div>
@@ -1286,7 +1294,7 @@ print(Engine.Init())</textarea>
         </div>
       </div>
 
-      <!-- NEW APP 2: WHITEBOARD STUDIO -->
+      <!-- WHITEBOARD STUDIO -->
       <div class="os-window" id="whiteboardApp" style="width: 700px; height: 500px; top: 60px; left: 190px;">
         <div class="window-topbar" onmousedown="dragWindow(event, 'whiteboardApp')">
           <div class="window-title">🖌️ Whiteboard Studio</div>
@@ -1315,7 +1323,7 @@ print(Engine.Init())</textarea>
         </div>
       </div>
 
-      <!-- NEW APP 3: BUDGET & EXPENSE PLANNER -->
+      <!-- BUDGET & EXPENSE PLANNER -->
       <div class="os-window" id="budgetApp" style="width: 560px; height: 460px; top: 80px; left: 220px;">
         <div class="window-topbar" onmousedown="dragWindow(event, 'budgetApp')">
           <div class="window-title">💰 Budget & Expense Tracker</div>
@@ -1340,7 +1348,7 @@ print(Engine.Init())</textarea>
         </div>
       </div>
 
-      <!-- NEW APP 4: WORLD CLOCK & TIMEZONES -->
+      <!-- WORLD CLOCK -->
       <div class="os-window" id="worldClockApp" style="width: 580px; height: 440px; top: 90px; left: 230px;">
         <div class="window-topbar" onmousedown="dragWindow(event, 'worldClockApp')">
           <div class="window-title">🌐 World Clock & Timezones</div>
@@ -1351,7 +1359,7 @@ print(Engine.Init())</textarea>
         </div>
       </div>
 
-      <!-- NEW APP 5: HABIT & GOAL TRACKER -->
+      <!-- HABIT TRACKER -->
       <div class="os-window" id="habitApp" style="width: 540px; height: 430px; top: 80px; left: 240px;">
         <div class="window-topbar" onmousedown="dragWindow(event, 'habitApp')">
           <div class="window-title">🎯 Habit & Goal Tracker</div>
@@ -1366,7 +1374,7 @@ print(Engine.Init())</textarea>
         </div>
       </div>
 
-      <!-- NEW APP 6: WEATHER FORECAST -->
+      <!-- WEATHER FORECAST -->
       <div class="os-window" id="weatherApp" style="width: 560px; height: 440px; top: 80px; left: 200px;">
         <div class="window-topbar" onmousedown="dragWindow(event, 'weatherApp')">
           <div class="window-title">🌤️ Weather Forecast Studio</div>
@@ -1451,17 +1459,6 @@ print(Engine.Init())</textarea>
         </div>
       </div>
 
-      <div class="os-window" id="gradGenApp" style="width: 540px; height: 380px; top: 100px; left: 250px;">
-        <div class="window-topbar" onmousedown="dragWindow(event, 'gradGenApp')">
-          <div class="window-title">🎨 CSS Gradient Generator</div>
-          <div class="win-controls-pills"><span class="win-pill-btn pill-close" onclick="closeWindow('gradGenApp')">✕</span></div>
-        </div>
-        <div class="window-body" style="padding:20px; display:flex; flex-direction:column; gap:12px; align-items:center;">
-          <div id="gradPreview" style="width:100%; height:100px; border-radius:10px; background:linear-gradient(135deg, #3b82f6, #ec4899);"></div>
-          <input type="text" class="input-ui" id="gradCssOutput" readonly value="background: linear-gradient(135deg, #3b82f6, #ec4899);" />
-        </div>
-      </div>
-
       <div class="os-window" id="hashGenApp" style="width: 520px; height: 360px; top: 90px; left: 220px;">
         <div class="window-topbar" onmousedown="dragWindow(event, 'hashGenApp')">
           <div class="window-title">🔑 Hash Generator</div>
@@ -1538,28 +1535,6 @@ print(Engine.Init())</textarea>
         </div>
       </div>
 
-      <div class="os-window" id="diffCheckerApp" style="width: 560px; height: 400px; top: 90px; left: 220px;">
-        <div class="window-topbar" onmousedown="dragWindow(event, 'diffCheckerApp')">
-          <div class="window-title">⚖️ Text Diff Checker</div>
-          <div class="win-controls-pills"><span class="win-pill-btn pill-close" onclick="closeWindow('diffCheckerApp')">✕</span></div>
-        </div>
-        <div class="window-body" style="padding:20px; display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-          <textarea class="input-ui" placeholder="Original Text..."></textarea>
-          <textarea class="input-ui" placeholder="Modified Text..."></textarea>
-        </div>
-      </div>
-
-      <div class="os-window" id="pxConverterApp" style="width: 480px; height: 360px; top: 100px; left: 240px;">
-        <div class="window-topbar" onmousedown="dragWindow(event, 'pxConverterApp')">
-          <div class="window-title">📐 PX to REM Converter</div>
-          <div class="win-controls-pills"><span class="win-pill-btn pill-close" onclick="closeWindow('pxConverterApp')">✕</span></div>
-        </div>
-        <div class="window-body" style="padding:20px; display:flex; flex-direction:column; gap:12px;">
-          <input type="number" class="input-ui" id="pxInputVal" value="16" oninput="convertPxToRem()" />
-          <div id="remResultText" style="font-size:1.2rem; color:var(--accent); text-align:center;">1.00 REM</div>
-        </div>
-      </div>
-
       <div class="os-window" id="focusApp" style="width: 500px; height: 410px; top: 100px; left: 250px;">
         <div class="window-topbar" onmousedown="dragWindow(event, 'focusApp')">
           <div class="window-title">⏳ Focus Timer</div>
@@ -1602,19 +1577,6 @@ Write **Markdown** on the left and see a clean preview here.
         </div>
       </div>
 
-      <div class="os-window" id="colorConvertApp" style="width: 520px; height: 430px; top: 90px; left: 240px;">
-        <div class="window-topbar" onmousedown="dragWindow(event, 'colorConvertApp')">
-          <div class="window-title">🎨 Color Converter</div>
-          <div class="win-controls-pills"><span class="win-pill-btn" onclick="minimizeWindow('colorConvertApp')">─</span><span class="win-pill-btn pill-close" onclick="closeWindow('colorConvertApp')">✕</span></div>
-        </div>
-        <div class="window-body additive-app-body">
-          <div class="color-convert-preview" id="colorConvertPreview"></div>
-          <label class="utility-label">HEX <input class="input-ui" id="colorHexInput" value="#3B82F6" oninput="convertColorFromHex()"></label>
-          <div class="utility-grid-two"><label class="utility-label">RGB <input class="input-ui" id="colorRgbOutput" readonly></label><label class="utility-label">HSL <input class="input-ui" id="colorHslOutput" readonly></label></div>
-          <input type="color" id="colorPickerInput" value="#3b82f6" onchange="syncColorPicker(this.value)" class="color-picker-large">
-        </div>
-      </div>
-
       <div class="os-window" id="dateDiffApp" style="width: 560px; height: 440px; top: 90px; left: 230px;">
         <div class="window-topbar" onmousedown="dragWindow(event, 'dateDiffApp')">
           <div class="window-title">📅 Date Calculator</div>
@@ -1648,11 +1610,11 @@ Write **Markdown** on the left and see a clean preview here.
     <!-- Notification Center -->
     <div class="notification-center" id="notificationCenter">
       <h3 style="font-size:1rem; font-weight:700;">Notifications & System Control</h3>
-      <div style="font-size:0.85rem; color:var(--text-sub); border-bottom:1px solid var(--glass-border); padding-bottom:14px;">Enfrok OS 5.2 loaded with enhanced mobile gestures, extra wallpapers & studio tools.</div>
+      <div style="font-size:0.85rem; color:var(--text-sub); border-bottom:1px solid var(--glass-border); padding-bottom:14px;">Enfrok OS 5.2 loaded with enhanced performance, desktop drag-and-drop & Messages suite.</div>
     </div>
 
     <!-- TASKBAR (DOCK) -->
-    <div class="dock-wrapper" id="dockWrapper">
+    <div class="dock-wrapper" id="dockWrapper" ondragover="event.preventDefault(); this.classList.add('drag-over');" ondragleave="this.classList.remove('drag-over');" ondrop="handleDockDrop(event)">
       <button class="dock-launcher-btn" onclick="openStartMenu()" title="Open Glass Start Menu">E</button>
       <div class="dock-divider"></div>
       <div id="dockItemsArea" style="display:flex; gap:10px;"></div>
@@ -1670,7 +1632,7 @@ Write **Markdown** on the left and see a clean preview here.
       </div>
       <input class="input-ui fullscreen-start-search" id="fullscreenStartSearch" placeholder="Search installed applications..." oninput="filterFullscreenStart(this.value)">
       <div class="fullscreen-start-grid" id="fullscreenStartGrid"></div>
-      <div class="fullscreen-start-footer">Click an app to open it · Press Escape to close</div>
+      <div class="fullscreen-start-footer">Click an app to open it · Drag to Desktop or Taskbar to pin · Press Escape to close</div>
     </div>
 
     <!-- COMPACT START MENU PANEL -->
@@ -1693,7 +1655,7 @@ Write **Markdown** on the left and see a clean preview here.
   </div>
 
 <script>
-  /* 18+ HIGH QUALITY WALLPAPERS */
+  /* WALLPAPERS */
   const WALLPAPERS = [
     'https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=1920',
     'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1920',
@@ -1704,75 +1666,55 @@ Write **Markdown** on the left and see a clean preview here.
     'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=1920',
     'https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=1920',
     'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=1920',
-    'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=1920',
-    'https://images.unsplash.com/photo-1472214103451-9374bd1c798e?q=80&w=1920',
-    'https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=1920',
-    'https://images.unsplash.com/photo-1426604966848-d7adac402bff?q=80&w=1920',
-    'https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?q=80&w=1920',
-    'https://images.unsplash.com/photo-1497436072909-60f360e1d4b1?q=80&w=1920',
-    'https://images.unsplash.com/photo-1511447333015-45b65e60f6d5?q=80&w=1920',
-    'https://images.unsplash.com/photo-1501854140801-50d01698950b?q=80&w=1920',
-    'https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?q=80&w=1920'
+    'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=1920'
   ];
 
-  /* TASKBAR PINNED APPS ONLY */
-  const DOCK_APPS = [
-    { id: 'sheetApp', name: 'Spreadsheet', icon: '📊' },
-    { id: 'wordApp', name: 'Text Studio', icon: '📄' },
-    { id: 'paintApp', name: 'Paint Board', icon: '🎨' },
-    { id: 'documentCore', name: 'Document', icon: '📁' },
-    { id: 'terminalApp', name: 'Terminal', icon: '⚡' },
-    { id: 'codeStudio', name: 'Studio Code', icon: '👨‍💻' },
-    { id: 'browserApp', name: 'Browser', icon: '🌐' },
-    { id: 'calcApp', name: 'Calculator', icon: '🧮' },
-    { id: 'todoApp', name: 'Tasks', icon: '✅' },
-    { id: 'snippetApp', name: 'Snippets', icon: '⚡' },
-    { id: 'soundboardApp', name: 'Funny Sounds', icon: '🔊' },
-    { id: 'converterApp', name: 'Converter', icon: '🔄' },
-    { id: 'passApp', name: 'Passwords', icon: '🔑' },
-    { id: 'concertApp', name: 'Concert', icon: '🎤' },
-    { id: 'luckyApp', name: 'Lucky Block', icon: '📦' },
-    { id: 'settingsApp', name: 'Settings', icon: '⚙️' }
+  /* ALL APPS CLEANED & UPDATED */
+  const ALL_APPS = [
+    { id: 'messagesApp', name: 'Messages', icon: '💬', pinnedDock: true, pinnedDesktop: true },
+    { id: 'sheetApp', name: 'Spreadsheet', icon: '📊', pinnedDock: true, pinnedDesktop: true },
+    { id: 'wordApp', name: 'Text Studio', icon: '📄', pinnedDock: true, pinnedDesktop: true },
+    { id: 'paintApp', name: 'Paint Board', icon: '🎨', pinnedDock: true, pinnedDesktop: true },
+    { id: 'documentCore', name: 'Document', icon: '📁', pinnedDock: true, pinnedDesktop: true },
+    { id: 'terminalApp', name: 'Terminal', icon: '⚡', pinnedDock: true, pinnedDesktop: true },
+    { id: 'browserApp', name: 'Browser', icon: '🌐', pinnedDock: true, pinnedDesktop: true },
+    { id: 'calcApp', name: 'Calculator', icon: '🧮', pinnedDock: true, pinnedDesktop: true },
+    { id: 'todoApp', name: 'Tasks', icon: '✅', pinnedDock: true, pinnedDesktop: true },
+    { id: 'snippetApp', name: 'Snippets', icon: '⚡', pinnedDock: true, pinnedDesktop: true },
+    { id: 'soundboardApp', name: 'Funny Sounds', icon: '🔊', pinnedDock: true, pinnedDesktop: true },
+    { id: 'converterApp', name: 'Converter', icon: '🔄', pinnedDock: true, pinnedDesktop: true },
+    { id: 'passApp', name: 'Passwords', icon: '🔑', pinnedDock: true, pinnedDesktop: true },
+    { id: 'concertApp', name: 'Concert', icon: '🎤', pinnedDock: true, pinnedDesktop: true },
+    { id: 'luckyApp', name: 'Lucky Block', icon: '📦', pinnedDock: true, pinnedDesktop: true },
+    { id: 'settingsApp', name: 'Settings', icon: '⚙️', pinnedDock: true, pinnedDesktop: true },
+    { id: 'notesApp', name: 'Quick Notes', icon: '📝', pinnedDock: false, pinnedDesktop: false },
+    { id: 'voiceRecorderApp', name: 'Voice Recorder', icon: '🎙️', pinnedDock: false, pinnedDesktop: false },
+    { id: 'whiteboardApp', name: 'Whiteboard', icon: '🖌️', pinnedDock: false, pinnedDesktop: false },
+    { id: 'budgetApp', name: 'Budget Planner', icon: '💰', pinnedDock: false, pinnedDesktop: false },
+    { id: 'worldClockApp', name: 'World Clock', icon: '🌐', pinnedDock: false, pinnedDesktop: false },
+    { id: 'habitApp', name: 'Habit Tracker', icon: '🎯', pinnedDock: false, pinnedDesktop: false },
+    { id: 'weatherApp', name: 'Weather Forecast', icon: '🌤️', pinnedDock: false, pinnedDesktop: false },
+    { id: 'asciiApp', name: 'ASCII Studio', icon: '🔡', pinnedDock: false, pinnedDesktop: false },
+    { id: 'stickyApp', name: 'Sticky Notes', icon: '📌', pinnedDock: false, pinnedDesktop: false },
+    { id: 'colorPickerApp', name: 'Color Studio', icon: '🎨', pinnedDock: false, pinnedDesktop: false },
+    { id: 'pianoApp', name: 'Synth Piano', icon: '🎹', pinnedDock: false, pinnedDesktop: false },
+    { id: 'jsonApp', name: 'JSON Formatter', icon: '🛠️', pinnedDock: false, pinnedDesktop: false },
+    { id: 'sysMonApp', name: 'System Monitor', icon: '📊', pinnedDock: false, pinnedDesktop: false },
+    { id: 'hashGenApp', name: 'Hash Generator', icon: '🔑', pinnedDock: false, pinnedDesktop: false },
+    { id: 'urlEncodeApp', name: 'URL Encoder', icon: '🔗', pinnedDock: false, pinnedDesktop: false },
+    { id: 'loremApp', name: 'Lorem Ipsum', icon: '📝', pinnedDock: false, pinnedDesktop: false },
+    { id: 'htmlEscapeApp', name: 'HTML Escaper', icon: '🛡️', pinnedDock: false, pinnedDesktop: false },
+    { id: 'qrGenApp', name: 'QR Code Studio', icon: '📲', pinnedDock: false, pinnedDesktop: false },
+    { id: 'mathLabApp', name: 'Math Lab Studio', icon: '🔬', pinnedDock: false, pinnedDesktop: false },
+    { id: 'contrastApp', name: 'Contrast Checker', icon: '👁️', pinnedDock: false, pinnedDesktop: false },
+    { id: 'focusApp', name: 'Focus Timer', icon: '⏳', pinnedDock: false, pinnedDesktop: false },
+    { id: 'markdownApp', name: 'Markdown Preview', icon: '📝', pinnedDock: false, pinnedDesktop: false },
+    { id: 'base64App', name: 'Base64 Studio', icon: '🔐', pinnedDock: false, pinnedDesktop: false },
+    { id: 'dateDiffApp', name: 'Date Calculator', icon: '📅', pinnedDock: false, pinnedDesktop: false },
+    { id: 'regexApp', name: 'Regex Tester', icon: '🧪', pinnedDock: false, pinnedDesktop: false }
   ];
-
-  /* 30+ EXTRA USEFUL UTILITY APPS (NOT ADDED TO TASKBAR) */
-  const EXTRA_APPS = [
-    { id: 'notesApp', name: 'Quick Notes', icon: '📝' },
-    { id: 'voiceRecorderApp', name: 'Voice Recorder', icon: '🎙️' },
-    { id: 'whiteboardApp', name: 'Whiteboard', icon: '🖌️' },
-    { id: 'budgetApp', name: 'Budget Planner', icon: '💰' },
-    { id: 'worldClockApp', name: 'World Clock', icon: '🌐' },
-    { id: 'habitApp', name: 'Habit Tracker', icon: '🎯' },
-    { id: 'weatherApp', name: 'Weather Forecast', icon: '🌤️' },
-    { id: 'asciiApp', name: 'ASCII Studio', icon: '🔡' },
-    { id: 'stickyApp', name: 'Sticky Notes', icon: '📌' },
-    { id: 'clockApp', name: 'Clock & Alarm', icon: '⏱️' },
-    { id: 'colorPickerApp', name: 'Color Studio', icon: '🎨' },
-    { id: 'pianoApp', name: 'Synth Piano', icon: '🎹' },
-    { id: 'jsonApp', name: 'JSON Formatter', icon: '🛠️' },
-    { id: 'sysMonApp', name: 'System Monitor', icon: '📊' },
-    { id: 'gradGenApp', name: 'CSS Gradient', icon: '🎨' },
-    { id: 'hashGenApp', name: 'Hash Generator', icon: '🔑' },
-    { id: 'urlEncodeApp', name: 'URL Encoder', icon: '🔗' },
-    { id: 'loremApp', name: 'Lorem Ipsum', icon: '📝' },
-    { id: 'htmlEscapeApp', name: 'HTML Escaper', icon: '🛡️' },
-    { id: 'qrGenApp', name: 'QR Code Studio', icon: '📲' },
-    { id: 'mathLabApp', name: 'Math Lab Studio', icon: '🔬' },
-    { id: 'contrastApp', name: 'Contrast Checker', icon: '👁️' },
-    { id: 'diffCheckerApp', name: 'Text Diff', icon: '⚖️' },
-    { id: 'pxConverterApp', name: 'PX to REM', icon: '📐' },
-    { id: 'focusApp', name: 'Focus Timer', icon: '⏳' },
-    { id: 'markdownApp', name: 'Markdown Preview', icon: '📝' },
-    { id: 'base64App', name: 'Base64 Studio', icon: '🔐' },
-    { id: 'colorConvertApp', name: 'Color Converter', icon: '🎨' },
-    { id: 'dateDiffApp', name: 'Date Calculator', icon: '📅' },
-    { id: 'regexApp', name: 'Regex Tester', icon: '🧪' },
-  ];
-
-  const ALL_APPS = [...DOCK_APPS, ...EXTRA_APPS];
 
   let winZIndex = 200;
-  let audioMuted = false;
   let activeSheetFilename = "Untitled_Sheet.sheet";
   let activeDocFilename = "Untitled_Document.doc";
   let sheetCols = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
@@ -1781,8 +1723,13 @@ Write **Markdown** on the left and see a clean preview here.
   let activeCellId = "A1";
   let autoWpIntervalTimer = null;
   let currentWpIndex = 0;
-  let lastTapTime = 0;
   let currentFileFilter = 'all';
+
+  /* MESSAGES APP STATE */
+  let registeredUsers = ['alex', 'jordan', 'sam'];
+  let currentMsgProfile = null;
+  let activeConversation = null;
+  let msgData = {};
 
   let osData = {
     installed: false,
@@ -1791,10 +1738,12 @@ Write **Markdown** on the left and see a clean preview here.
     wallpaper: WALLPAPERS[0],
     accentColor: '#3b82f6',
     wpIntervalSetting: 'off',
-    blurVal: 38,
-    opacityVal: 62,
+    blurVal: 20,
+    opacityVal: 75,
     startMenuMode: 'normal',
     uninstalledApps: [],
+    desktopApps: ['messagesApp', 'sheetApp', 'wordApp', 'paintApp', 'documentCore', 'terminalApp', 'browserApp', 'calcApp', 'todoApp', 'snippetApp', 'soundboardApp', 'converterApp', 'passApp', 'concertApp', 'luckyApp', 'settingsApp'],
+    dockApps: ['messagesApp', 'sheetApp', 'wordApp', 'paintApp', 'documentCore', 'terminalApp', 'browserApp', 'calcApp', 'todoApp', 'snippetApp', 'soundboardApp', 'converterApp', 'passApp', 'concertApp', 'luckyApp', 'settingsApp'],
     savedFiles: [
       { name: 'Welcome_Guide.doc', content: '<h2>Welcome to Enfrok OS 5.2</h2><p>This is your saved document in Files storage.</p>' }
     ]
@@ -1803,7 +1752,7 @@ Write **Markdown** on the left and see a clean preview here.
   function loadData() {
     const saved = localStorage.getItem('enfrok_os_v52_fullsuite');
     if (saved) {
-      try { osData = JSON.parse(saved); } catch(e) {}
+      try { osData = Object.assign(osData, JSON.parse(saved)); } catch(e) {}
     }
   }
 
@@ -1816,29 +1765,17 @@ Write **Markdown** on the left and see a clean preview here.
     location.reload();
   }
 
-  /* ACCENT COLOR ENGINE */
   function setSystemAccent(hexColor) {
     osData.accentColor = hexColor;
     saveData();
-
     document.documentElement.style.setProperty('--accent', hexColor);
     document.documentElement.style.setProperty('--glass-border-focused', hexColor);
-
-    const hex = hexColor.replace('#', '');
-    const r = parseInt(hex.substring(0, 2), 16);
-    const g = parseInt(hex.substring(2, 4), 16);
-    const b = parseInt(hex.substring(4, 6), 16);
-    document.documentElement.style.setProperty('--accent-glow', `rgba(${r}, ${g}, ${b}, 0.5)`);
-
-    const picker = document.getElementById('accentPicker');
-    if (picker) picker.value = hexColor;
   }
 
   window.addEventListener('DOMContentLoaded', () => {
     loadData();
     populateWallpapers();
     initSpreadsheetGrid();
-    setupMobileGestures();
 
     setSystemAccent(osData.accentColor || '#3b82f6');
     setStartMenuMode(osData.startMenuMode || 'normal', false);
@@ -1851,27 +1788,31 @@ Write **Markdown** on the left and see a clean preview here.
         document.getElementById('login-screen').classList.remove('hidden');
         document.getElementById('loginTitleName').textContent = `Welcome, ${osData.username}`;
         document.getElementById('loginAvatarLetter').textContent = osData.username.charAt(0).toUpperCase();
-        if (!osData.password) {
-          document.getElementById('loginSubText').textContent = "Create an account password to continue";
-          document.getElementById('loginPasswordInput').placeholder = "Create password...";
-        } else {
-          document.getElementById('loginSubText').textContent = "Enter password to unlock Enfrok OS";
-          document.getElementById('loginPasswordInput').placeholder = "Enter password...";
-        }
+        document.getElementById('loginSubText').textContent = "Enter password to unlock Enfrok OS";
       }
-    }, 1000);
+    }, 800);
   });
 
-  /* SETUP & PASSWORD LOCK VERIFICATION */
   function startInstallation() {
-    osData.username = document.getElementById('setupUsername').value || "Developer";
-    osData.password = document.getElementById('setupPassword').value || "";
+    const username = document.getElementById('setupUsername').value.trim();
+    const password = document.getElementById('setupPassword').value.trim();
+
+    if (!username || !password) {
+      alert("Both Username and Password are required to create an account.");
+      return;
+    }
+
+    osData.username = username;
+    osData.password = password;
+    
+    navSetup(2);
+    
     let pct = 0;
     const bar = document.getElementById('installBar');
     const txt = document.getElementById('installPct');
 
     const timer = setInterval(() => {
-      pct += 10;
+      pct += 20;
       if (pct > 100) pct = 100;
       bar.style.width = `${pct}%`;
       txt.textContent = `${pct}%`;
@@ -1880,23 +1821,17 @@ Write **Markdown** on the left and see a clean preview here.
         clearInterval(timer);
         osData.installed = true;
         saveData();
-        setTimeout(launchDesktop, 400);
+        setTimeout(launchDesktop, 300);
       }
-    }, 100);
+    }, 80);
   }
 
   function verifyLoginPassword() {
     const inputPass = document.getElementById('loginPasswordInput').value;
-    if (!osData.password) {
-      if (inputPass.trim() !== "") {
-        osData.password = inputPass;
-        saveData();
-        launchDesktop();
-      } else alert("Please create a password.");
+    if (inputPass === osData.password) {
+      launchDesktop();
     } else {
-      if (inputPass === osData.password) {
-        launchDesktop();
-      } else alert("Incorrect Password!");
+      alert("Incorrect Password!");
     }
   }
 
@@ -1913,21 +1848,6 @@ Write **Markdown** on the left and see a clean preview here.
     updateWeatherDisplay();
   }
 
-  /* MOBILE & TABLET DOUBLE-TAP FOR CONTEXT MENU */
-  function setupMobileGestures() {
-    const desk = document.getElementById('desktopArea');
-    desk.addEventListener('touchend', (e) => {
-      const currentTime = new Date().getTime();
-      const tapLength = currentTime - lastTapTime;
-      if (tapLength < 300 && tapLength > 0) {
-        e.preventDefault();
-        const touch = e.changedTouches[0];
-        handleContextMenuEvent({ preventDefault: () => {}, clientX: touch.clientX, clientY: touch.clientY }, null);
-      }
-      lastTapTime = currentTime;
-    });
-  }
-
   function handleContextMenuEvent(e, appId) {
     if (e.preventDefault) e.preventDefault();
     const menu = document.getElementById('desktopContextMenu');
@@ -1936,7 +1856,11 @@ Write **Markdown** on the left and see a clean preview here.
 
     if (appId) {
       const app = ALL_APPS.find(a => a.id === appId);
-      menu.innerHTML = `<div class="context-item" onclick="openWindow('${appId}')">▶ Launch ${app.name}</div>`;
+      menu.innerHTML = `
+        <div class="context-item" onclick="openWindow('${appId}')">▶ Launch ${app.name}</div>
+        <div class="context-item danger" onclick="removeFromDesktop('${appId}')">🗑️ Remove from Desktop</div>
+        <div class="context-item danger" onclick="uninstallApp('${appId}')">⚠️ Uninstall App</div>
+      `;
     } else {
       menu.innerHTML = `
         <div class="context-item" onclick="openWindow('documentCore')">📁 Open Document</div>
@@ -1945,6 +1869,48 @@ Write **Markdown** on the left and see a clean preview here.
       `;
     }
     menu.classList.add('open');
+  }
+
+  function removeFromDesktop(appId) {
+    osData.desktopApps = osData.desktopApps.filter(id => id !== appId);
+    saveData();
+    initDesktop();
+  }
+
+  function uninstallApp(appId) {
+    if (!osData.uninstalledApps.includes(appId)) {
+      osData.uninstalledApps.push(appId);
+      osData.desktopApps = osData.desktopApps.filter(id => id !== appId);
+      osData.dockApps = osData.dockApps.filter(id => id !== appId);
+      saveData();
+      closeWindow(appId);
+      initDesktop();
+    }
+  }
+
+  function handleAppDragStart(e, appId) {
+    e.dataTransfer.setData('text/plain', appId);
+  }
+
+  function handleDesktopDrop(e) {
+    e.preventDefault();
+    const appId = e.dataTransfer.getData('text/plain');
+    if (appId && !osData.desktopApps.includes(appId) && !osData.uninstalledApps.includes(appId)) {
+      osData.desktopApps.push(appId);
+      saveData();
+      initDesktop();
+    }
+  }
+
+  function handleDockDrop(e) {
+    e.preventDefault();
+    document.getElementById('dockWrapper').classList.remove('drag-over');
+    const appId = e.dataTransfer.getData('text/plain');
+    if (appId && !osData.dockApps.includes(appId) && !osData.uninstalledApps.includes(appId)) {
+      osData.dockApps.push(appId);
+      saveData();
+      initDesktop();
+    }
   }
 
   function populateWallpapers() {
@@ -2006,29 +1972,48 @@ Write **Markdown** on the left and see a clean preview here.
     document.getElementById('hubUsername').textContent = uName;
     document.getElementById('hubAvatarLetter').textContent = uName.charAt(0).toUpperCase();
 
-    activeApps.forEach(app => {
-      desktopGrid.innerHTML += `
-        <div class="d-icon" onclick="openWindow('${app.id}')" oncontextmenu="handleContextMenuEvent(event, '${app.id}')">
-          <div class="d-icon-box">${app.icon}</div>
-          <span>${app.name}</span>
-        </div>
-      `;
+    // Render Desktop Apps
+    osData.desktopApps.forEach(appId => {
+      const app = activeApps.find(a => a.id === appId);
+      if (app) {
+        desktopGrid.innerHTML += `
+          <div class="d-icon" onclick="openWindow('${app.id}')" oncontextmenu="handleContextMenuEvent(event, '${app.id}')">
+            <div class="d-icon-box">${app.icon}</div>
+            <span>${app.name}</span>
+          </div>
+        `;
+      }
+    });
 
+    // Render Hub Apps
+    activeApps.forEach(app => {
       hubGrid.innerHTML += `
-        <div class="d-icon" onclick="openWindow('${app.id}'); toggleLaunchHub();">
+        <div class="d-icon" draggable="true" ondragstart="handleAppDragStart(event, '${app.id}')" onclick="openWindow('${app.id}'); toggleLaunchHub();">
           <div class="d-icon-box">${app.icon}</div>
           <span>${app.name}</span>
         </div>
       `;
     });
 
-    DOCK_APPS.filter(a => !osData.uninstalledApps.includes(a.id)).forEach(app => {
-      const dockItem = document.createElement('div');
-      dockItem.className = 'dock-item';
-      dockItem.id = `dock-${app.id}`;
-      dockItem.innerHTML = app.icon;
-      dockItem.onclick = () => toggleWindow(app.id);
-      dockItemsArea.appendChild(dockItem);
+    // Render Dock Items
+    osData.dockApps.forEach(appId => {
+      const app = activeApps.find(a => a.id === appId);
+      if (app) {
+        const dockItem = document.createElement('div');
+        dockItem.className = 'dock-item';
+        dockItem.id = `dock-${app.id}`;
+        dockItem.innerHTML = app.icon;
+        dockItem.onclick = () => toggleWindow(app.id);
+        dockItem.oncontextmenu = (e) => {
+          e.preventDefault();
+          if (confirm(`Remove ${app.name} from Taskbar?`)) {
+            osData.dockApps = osData.dockApps.filter(id => id !== appId);
+            saveData();
+            initDesktop();
+          }
+        };
+        dockItemsArea.appendChild(dockItem);
+      }
     });
 
     renderFolders();
@@ -2087,7 +2072,7 @@ Write **Markdown** on the left and see a clean preview here.
   }
 
   function updateDockState() {
-    DOCK_APPS.forEach(app => {
+    ALL_APPS.forEach(app => {
       const win = document.getElementById(app.id);
       const dockItem = document.getElementById(`dock-${app.id}`);
       if (win && dockItem) {
@@ -2097,27 +2082,181 @@ Write **Markdown** on the left and see a clean preview here.
     });
   }
 
+  /* OPTIMIZED DRAGGING (USES REQUESTANIMATIONFRAME TO REDUCE LAG) */
+  let isDraggingWin = false;
+  let dragTarget = null;
+  let dragShiftX = 0, dragShiftY = 0;
+
   function dragWindow(e, id) {
     const win = document.getElementById(id);
     if (win.classList.contains('fullscreen')) return;
 
     focusWindow(win);
+    isDraggingWin = true;
+    dragTarget = win;
     win.classList.add('dragging');
-    let shiftX = e.clientX - win.getBoundingClientRect().left;
-    let shiftY = e.clientY - win.getBoundingClientRect().top;
+    
+    dragShiftX = e.clientX - win.getBoundingClientRect().left;
+    dragShiftY = e.clientY - win.getBoundingClientRect().top;
 
-    function moveAt(px, py) {
-      win.style.left = px - shiftX + 'px';
-      win.style.top = py - shiftY + 'px';
+    document.addEventListener('mousemove', onMouseMoveWindow);
+    document.addEventListener('mouseup', onMouseUpWindow);
+  }
+
+  function onMouseMoveWindow(e) {
+    if (!isDraggingWin || !dragTarget) return;
+    requestAnimationFrame(() => {
+      if (dragTarget) {
+        dragTarget.style.left = `${e.clientX - dragShiftX}px`;
+        dragTarget.style.top = `${e.clientY - dragShiftY}px`;
+      }
+    });
+  }
+
+  function onMouseUpWindow() {
+    if (dragTarget) dragTarget.classList.remove('dragging');
+    isDraggingWin = false;
+    dragTarget = null;
+    document.removeEventListener('mousemove', onMouseMoveWindow);
+    document.removeEventListener('mouseup', onMouseUpWindow);
+  }
+
+  /* MESSAGES APP LOGIC */
+  function registerMessagesUser() {
+    const name = document.getElementById('msgRegName').value.trim();
+    const username = document.getElementById('msgRegUsername').value.trim().toLowerCase();
+
+    if (!name || !username) {
+      alert("Please provide both name and username.");
+      return;
     }
 
-    function onMouseMove(evt) { moveAt(evt.clientX, evt.clientY); }
-    document.addEventListener('mousemove', onMouseMove);
-    document.onmouseup = function() {
-      win.classList.remove('dragging');
-      document.removeEventListener('mousemove', onMouseMove);
-      document.onmouseup = null;
-    };
+    if (registeredUsers.includes(username)) {
+      alert("Username is already taken! Please choose another.");
+      return;
+    }
+
+    registeredUsers.push(username);
+    currentMsgProfile = { name, username, contacts: [], requests: [] };
+    
+    document.getElementById('msgAuthView').style.display = 'none';
+    document.getElementById('msgMainView').style.display = 'flex';
+    document.getElementById('msgCurrentProfile').textContent = `${name} (@${username})`;
+    renderMsgContacts();
+  }
+
+  function searchMessagesUser() {
+    const query = document.getElementById('msgSearchInput').value.trim().toLowerCase();
+    if (!query) return;
+
+    if (query === currentMsgProfile.username) {
+      alert("You cannot add yourself!");
+      return;
+    }
+
+    if (!registeredUsers.includes(query)) {
+      alert("User not found!");
+      return;
+    }
+
+    if (currentMsgProfile.contacts.includes(query)) {
+      alert("User is already in your contacts!");
+      return;
+    }
+
+    // Simulate sending a request & auto-responding for demo
+    alert(`Friend request sent to @${query}!`);
+    setTimeout(() => {
+      if (!currentMsgProfile.contacts.includes(query)) {
+        currentMsgProfile.requests.push(query);
+        renderMsgContacts();
+      }
+    }, 1000);
+  }
+
+  function acceptMsgRequest(targetUser) {
+    currentMsgProfile.requests = currentMsgProfile.requests.filter(u => u !== targetUser);
+    currentMsgProfile.contacts.push(targetUser);
+    renderMsgContacts();
+    openMsgChat(targetUser);
+  }
+
+  function declineMsgRequest(targetUser) {
+    currentMsgProfile.requests = currentMsgProfile.requests.filter(u => u !== targetUser);
+    renderMsgContacts();
+  }
+
+  function renderMsgContacts() {
+    const list = document.getElementById('msgContactsList');
+    list.innerHTML = '';
+
+    if (currentMsgProfile.requests.length > 0) {
+      list.innerHTML += `<div style="font-size:0.7rem; color:var(--accent); font-weight:700;">Incoming Requests</div>`;
+      currentMsgProfile.requests.forEach(req => {
+        list.innerHTML += `
+          <div style="padding:6px; background:rgba(255,255,255,0.05); border-radius:8px; display:flex; flex-direction:column; gap:4px;">
+            <span style="font-size:0.75rem; font-weight:600;">@${req}</span>
+            <div style="display:flex; gap:4px;">
+              <button class="btn-ui btn-accent" style="padding:2px 6px; font-size:0.65rem;" onclick="acceptMsgRequest('${req}')">Accept</button>
+              <button class="btn-ui btn-danger" style="padding:2px 6px; font-size:0.65rem;" onclick="declineMsgRequest('${req}')">Decline</button>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    list.innerHTML += `<div style="font-size:0.7rem; color:var(--text-sub); font-weight:700; margin-top:4px;">Direct Messages</div>`;
+    currentMsgProfile.contacts.forEach(c => {
+      list.innerHTML += `
+        <div class="os-nav-item" style="padding:6px 10px; font-size:0.8rem;" onclick="openMsgChat('${c}')">
+          👤 @${c}
+        </div>
+      `;
+    });
+  }
+
+  function openMsgChat(user) {
+    activeConversation = user;
+    document.getElementById('msgChatHeader').textContent = `Chat with @${user}`;
+    renderChatMessages();
+  }
+
+  function renderChatMessages() {
+    const container = document.getElementById('msgList');
+    container.innerHTML = '';
+
+    if (!activeConversation) return;
+
+    const key = [currentMsgProfile.username, activeConversation].sort().join('_');
+    const messages = msgData[key] || [];
+
+    messages.forEach(m => {
+      const isMe = m.sender === currentMsgProfile.username;
+      container.innerHTML += `
+        <div class="msg-bubble ${isMe ? 'msg-sent' : 'msg-recv'}">
+          ${m.text}
+        </div>
+      `;
+    });
+  }
+
+  function sendChatMessage() {
+    const input = document.getElementById('msgTextInput');
+    const text = input.value.trim();
+    if (!text || !activeConversation) return;
+
+    const key = [currentMsgProfile.username, activeConversation].sort().join('_');
+    if (!msgData[key]) msgData[key] = [];
+
+    msgData[key].push({ sender: currentMsgProfile.username, text });
+    input.value = '';
+    renderChatMessages();
+
+    // Auto simulated reply
+    setTimeout(() => {
+      msgData[key].push({ sender: activeConversation, text: `Hey! Thanks for messaging. [Simulated Reply]` });
+      renderChatMessages();
+    }, 1200);
   }
 
   /* SPREADSHEET ENGINE */
@@ -2536,6 +2675,7 @@ Write **Markdown** on the left and see a clean preview here.
 
   function reinstallApp(appId) {
     osData.uninstalledApps = osData.uninstalledApps.filter(id => id !== appId);
+    if (!osData.desktopApps.includes(appId)) osData.desktopApps.push(appId);
     saveData();
     initDesktop();
     renderFolders();
@@ -2568,13 +2708,15 @@ Write **Markdown** on the left and see a clean preview here.
   }
 
   function applyGlassSettings() {
-    document.documentElement.style.setProperty('--glass-blur-val', `${osData.blurVal || 38}px`);
-    document.documentElement.style.setProperty('--glass-opacity-val', (osData.opacityVal || 62)/100);
+    document.documentElement.style.setProperty('--glass-blur-val', `${osData.blurVal || 20}px`);
+    document.documentElement.style.setProperty('--glass-opacity-val', (osData.opacityVal || 75)/100);
   }
 
   function updateGlassEffects() {
     osData.blurVal = document.getElementById('sliderBlur').value;
     osData.opacityVal = document.getElementById('sliderOpacity').value;
+    document.getElementById('valBlur').textContent = `${osData.blurVal}px`;
+    document.getElementById('valOpacity').textContent = `${osData.opacityVal}%`;
     saveData(); applyGlassSettings();
   }
 
@@ -2590,7 +2732,6 @@ Write **Markdown** on the left and see a clean preview here.
   function toggleNotifications() { document.getElementById('notificationCenter').classList.toggle('open'); }
   function toggleLaunchHub() { document.getElementById('launchHubPanel').classList.toggle('open'); }
 
-  /* START MENU CONTROLS & FULLSCREEN MENU */
   function setStartMenuMode(mode, persist = true) {
     osData.startMenuMode = mode === 'fullscreen' ? 'fullscreen' : 'normal';
     if (persist) saveData();
@@ -2631,7 +2772,7 @@ Write **Markdown** on the left and see a clean preview here.
     const term = query.trim().toLowerCase();
     const apps = getInstalledApps().filter(app => !term || `${app.name} ${app.id}`.toLowerCase().includes(term));
     grid.innerHTML = apps.map(app => `
-      <div class="d-icon" onclick="openWindow('${app.id}'); closeFullscreenStartMenu();">
+      <div class="d-icon" draggable="true" ondragstart="handleAppDragStart(event, '${app.id}')" onclick="openWindow('${app.id}'); closeFullscreenStartMenu();">
         <div class="d-icon-box">${app.icon}</div><span>${app.name}</span>
       </div>`).join('');
     const subtitle = document.getElementById('fullscreenStartSubtitle');
@@ -2733,7 +2874,7 @@ Write **Markdown** on the left and see a clean preview here.
             const s = (recSeconds % 60).toString().padStart(2, '0');
             if (timerDisp) timerDisp.textContent = `${m}:${s}`;
           }, 1000);
-        }).catch(err => {
+        }).catch(() => {
           status.textContent = 'Recording live audio (simulation mode)...';
           startSimulatedRecording();
         });
@@ -3056,7 +3197,7 @@ Write **Markdown** on the left and see a clean preview here.
     }
   }
 
-  /* UTILITY HELPER IMPLEMENTATIONS */
+  /* UTILITY HELPERS */
   function formatJsonData() {
     const input = document.getElementById('jsonInput');
     try { input.value = JSON.stringify(JSON.parse(input.value), null, 2); } catch { alert("Invalid JSON format"); }
@@ -3089,11 +3230,6 @@ Write **Markdown** on the left and see a clean preview here.
 
   function evalMathLabExpr() {
     try { alert(`Result: ${eval(document.getElementById('mathExprInput').value)}`); } catch { alert("Invalid Math Expression"); }
-  }
-
-  function convertPxToRem() {
-    const px = parseFloat(document.getElementById('pxInputVal').value) || 0;
-    document.getElementById('remResultText').textContent = `${(px / 16).toFixed(2)} REM`;
   }
 
   function playTone(freq) {
@@ -3148,11 +3284,6 @@ Write **Markdown** on the left and see a clean preview here.
     if (title) alert(`Snippet '${title}' saved to local storage!`);
   }
 
-  function runCode() {
-    const code = document.getElementById('codeInput').value;
-    document.getElementById('codeLog').textContent = `-- Script Execution Output --\n> Script Executed Successfully.\nOutput: OK`;
-  }
-
   function navBrowser() {
     const url = document.getElementById('browserUrl').value;
     document.getElementById('browserIframe').src = url;
@@ -3175,10 +3306,10 @@ Write **Markdown** on the left and see a clean preview here.
     const val = document.getElementById('asciiInput').value;
     document.getElementById('asciiOutput').value = `
   _____ _   _ _____ _____  ____  _   _ 
- | ____| \\ | |  ___|  _ \\/ ___|| | | |
- |  _| |  \\| | |_  | |_) \\___ \\| |_| |
- | |___| |\\  |  _| |  _ < ___) |  _  |
- |_____|_| \\_|_|   |_| \\_\\____/|_| |_|
+ | ____| \ | |  ___|  _ \/ ___|| | | |
+ |  _| |  \| | |_  | |_) \___ \| |_| |
+ | |___| |\  |  _| |  _ < ___) |  _  |
+ |_____|_| \_|_|   |_| \_\____/|_| |_|
  Text: ${val}
     `;
   }
@@ -3192,7 +3323,6 @@ Write **Markdown** on the left and see a clean preview here.
     }
   }
 
-  /* ADDITIVE UTILITY APP LOGIC */
   let focusSecondsRemaining = 25 * 60;
   let focusTimerHandle = null;
   let focusIsRunning = false;
@@ -3282,28 +3412,6 @@ Write **Markdown** on the left and see a clean preview here.
     if (status) status.textContent = 'Result copied to clipboard.';
   }
 
-  function normalizeHex(value) {
-    let hex = value.trim().replace(/^#/, '');
-    if (/^[0-9a-f]{3}$/i.test(hex)) hex = hex.split('').map(ch => ch + ch).join('');
-    return /^[0-9a-f]{6}$/i.test(hex) ? `#${hex.toUpperCase()}` : null;
-  }
-  function convertColorFromHex() {
-    const input = document.getElementById('colorHexInput');
-    const hex = normalizeHex(input.value);
-    if (!hex) return;
-    const r = parseInt(hex.slice(1, 3), 16), g = parseInt(hex.slice(3, 5), 16), b = parseInt(hex.slice(5, 7), 16);
-    const max = Math.max(r, g, b) / 255, min = Math.min(r, g, b) / 255, delta = max - min;
-    let h = 0;
-    if (delta) { if (max === r) h = ((g - b) / 255 / delta) % 6; else if (max === g) h = (b - r) / 255 / delta + 2; else h = (r - g) / 255 / delta + 4; h = Math.round(h * 60); if (h < 0) h += 360; }
-    const l = (max + min) / 2, s = delta === 0 ? 0 : delta / (1 - Math.abs(2 * l - 1));
-    document.getElementById('colorHexInput').value = hex;
-    document.getElementById('colorRgbOutput').value = `rgb(${r}, ${g}, ${b})`;
-    document.getElementById('colorHslOutput').value = `hsl(${h}, ${Math.round(s * 100)}%, ${Math.round(l * 100)}%)`;
-    document.getElementById('colorConvertPreview').style.background = hex;
-    document.getElementById('colorPickerInput').value = hex;
-  }
-  function syncColorPicker(value) { document.getElementById('colorHexInput').value = value; convertColorFromHex(); }
-
   function formatLocalDate(date) { return date.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' }); }
   function calculateDateDifference() {
     const start = document.getElementById('dateStartInput').value, end = document.getElementById('dateEndInput').value;
@@ -3342,7 +3450,7 @@ Write **Markdown** on the left and see a clean preview here.
     const toIso = date => { const offset = date.getTimezoneOffset(); return new Date(date.getTime() - offset * 60000).toISOString().slice(0, 10); };
     const start = document.getElementById('dateStartInput'), endInput = document.getElementById('dateEndInput');
     if (start && endInput) { start.value = toIso(today); endInput.value = toIso(end); calculateDateDifference(); }
-    renderMarkdownPreview(); updateFocusTimerDisplay(); convertColorFromHex(); runRegexTest(); renderHabitList(); renderBudgetList(); generatePass();
+    renderMarkdownPreview(); updateFocusTimerDisplay(); runRegexTest(); renderHabitList(); renderBudgetList(); generatePass();
   }
 
   const originalLaunchDesktop = launchDesktop;
