@@ -37,7 +37,16 @@
     --anim-curve: cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+  * { 
+    box-sizing: border-box; 
+    margin: 0; 
+    padding: 0; 
+    user-select: none !important; 
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+  }
+
   body, html {
     width: 100%; height: 100%;
     font-family: var(--font-ui);
@@ -120,6 +129,7 @@
     transition: transform 0.3s var(--anim-curve), opacity 0.3s var(--anim-curve);
     will-change: transform, opacity;
   }
+  .top-bar.hidden-menu { display: none !important; }
   .top-bar-section { display: flex; align-items: center; gap: 18px; }
   .brand-logo { font-weight: 800; font-size: 0.92rem; display: flex; align-items: center; gap: 10px; cursor: pointer; letter-spacing: 0.08em; }
   .brand-logo::before { content: ''; width: 8px; height: 8px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 12px var(--accent-glow); }
@@ -216,9 +226,9 @@
 
   /* Context Menu */
   .context-menu {
-    position: absolute; width: 220px; background: var(--glass-menu); backdrop-filter: var(--glass-blur);
+    position: fixed; width: 220px; background: var(--glass-menu); backdrop-filter: var(--glass-blur);
     border: 1px solid var(--glass-border); border-radius: 16px; padding: 8px;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.65); z-index: 9900; display: flex; flex-direction: column; gap: 4px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.65); z-index: 999999; display: flex; flex-direction: column; gap: 4px;
     opacity: 0; pointer-events: none; transform: scale(0.92);
     transition: opacity 0.15s var(--anim-curve), transform 0.15s var(--anim-curve);
     will-change: transform, opacity;
@@ -242,22 +252,33 @@
   }
   .notification-center.open { right: 0; }
 
-  /* Window Engine */
+  /* Window Engine & Resizing Handles */
   .os-window {
     position: absolute; background: var(--glass-window); backdrop-filter: var(--glass-blur);
     border: 1px solid var(--glass-border); border-radius: var(--radius-window);
     box-shadow: var(--glass-shadow); display: flex; flex-direction: column; overflow: hidden;
-    min-width: 520px; min-height: 360px; contain: layout style;
+    min-width: 320px; min-height: 200px; contain: layout style;
     opacity: 0; pointer-events: none; transform: scale(0.94) translateY(10px);
-    transition: top 0.25s var(--anim-curve), left 0.25s var(--anim-curve), width 0.25s var(--anim-curve), height 0.25s var(--anim-curve), opacity 0.2s var(--anim-curve), transform 0.2s var(--anim-curve), border-color 0.15s ease;
+    transition: opacity 0.25s var(--anim-curve), transform 0.25s var(--anim-curve), border-color 0.15s ease, top 0.35s var(--anim-curve), left 0.35s var(--anim-curve), width 0.35s var(--anim-curve), height 0.35s var(--anim-curve), border-radius 0.35s var(--anim-curve);
     will-change: transform, opacity, top, left, width, height;
   }
-  .os-window.dragging { transition: none !important; will-change: top, left; }
+  .os-window.dragging, .os-window.resizing { transition: none !important; }
   .os-window.open-active { opacity: 1; pointer-events: auto; transform: scale(1) translateY(0); }
   .os-window.unfocused { background: var(--glass-window-unfocused); border-color: rgba(255,255,255,0.08); }
   .os-window.focused { border-color: var(--glass-border-focused); box-shadow: 0 35px 90px rgba(0,0,0,0.85); }
   .os-window.minimized { opacity: 0 !important; pointer-events: none !important; transform: scale(0.85) translateY(40px) !important; }
   .os-window.fullscreen { top: 0 !important; left: 0 !important; width: 100vw !important; height: 100vh !important; border-radius: 0 !important; z-index: 99999 !important; }
+
+  /* Window Resize Handles */
+  .win-resize-handle { position: absolute; z-index: 99; }
+  .win-resize-handle.rh-n { top: 0; left: 10px; right: 10px; height: 6px; cursor: ns-resize; }
+  .win-resize-handle.rh-s { bottom: 0; left: 10px; right: 10px; height: 6px; cursor: ns-resize; }
+  .win-resize-handle.rh-e { top: 10px; bottom: 10px; right: 0; width: 6px; cursor: ew-resize; }
+  .win-resize-handle.rh-w { top: 10px; bottom: 10px; left: 0; width: 6px; cursor: ew-resize; }
+  .win-resize-handle.rh-nw { top: 0; left: 0; width: 10px; height: 10px; cursor: nwse-resize; }
+  .win-resize-handle.rh-ne { top: 0; right: 0; width: 10px; height: 10px; cursor: nesw-resize; }
+  .win-resize-handle.rh-sw { bottom: 0; left: 0; width: 10px; height: 10px; cursor: nesw-resize; }
+  .win-resize-handle.rh-se { bottom: 0; right: 0; width: 10px; height: 10px; cursor: nwse-resize; }
 
   body.has-fullscreen-app .top-bar { transform: translateY(-100%); opacity: 0; pointer-events: none; }
   body.has-fullscreen-app .dock-wrapper { transform: translateX(-50%) translateY(120px); opacity: 0; pointer-events: none; }
@@ -354,7 +375,7 @@
   .word-document-paper {
     width: 100%; max-width: 800px; min-height: 580px; background: #ffffff; color: #1e293b;
     border-radius: 8px; padding: 48px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); outline: none;
-    font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1rem; line-height: 1.6; user-select: text;
+    font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1rem; line-height: 1.6;
   }
   .word-statusbar {
     height: 28px; background: rgba(10, 14, 24, 0.9); border-top: 1px solid var(--glass-border);
@@ -463,30 +484,20 @@
   .utility-eyebrow { color: var(--text-sub); letter-spacing: 0.12em; font-size: 0.7rem; font-weight: 800; }
   .utility-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
   .utility-label { display: flex; flex-direction: column; gap: 6px; color: var(--text-sub); font-size: 0.78rem; font-weight: 700; flex: 1; }
-  .utility-textarea { min-height: 88px; resize: vertical; font-family: var(--font-code); user-select: text; }
+  .utility-textarea { min-height: 88px; resize: vertical; font-family: var(--font-code); }
   .utility-hint { color: var(--text-sub); font-size: 0.78rem; }
   .utility-grid-two { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   .markdown-layout { display: grid; grid-template-columns: 1fr 1fr; min-height: 0; }
-  .markdown-input { min-width: 0; resize: none; user-select: text; }
-  .markdown-preview { padding: 26px; overflow: auto; background: #fff; color: #1e293b; line-height: 1.6; user-select: text; }
+  .markdown-input { min-width: 0; resize: none; }
+  .markdown-preview { padding: 26px; overflow: auto; background: #fff; color: #1e293b; line-height: 1.6; }
   .markdown-preview h1, .markdown-preview h2, .markdown-preview h3 { margin: 0 0 12px; color: #0f172a; }
   .markdown-preview p, .markdown-preview ul, .markdown-preview pre { margin: 0 0 14px; }
   .markdown-preview code { font-family: var(--font-code); background: #e2e8f0; padding: 2px 5px; border-radius: 4px; }
   .markdown-preview blockquote { border-left: 3px solid var(--accent); padding-left: 12px; color: #475569; }
   .date-result, .regex-result { padding: 18px; border-radius: 14px; background: rgba(59,130,246,0.12); border: 1px solid rgba(59,130,246,0.28); color: var(--text-main); min-height: 58px; }
-  .regex-test-text { flex: 1; min-height: 130px; user-select: text; }
+  .regex-test-text { flex: 1; min-height: 130px; }
   .regex-match { background: rgba(59,130,246,0.35); color: #fff; border-radius: 4px; padding: 1px 3px; }
   .utility-check { flex: 0 0 auto; flex-direction: row; align-items: center; gap: 8px; }
-
-  /* MESSAGES APP STYLES */
-  .msg-container { display: flex; height: 100%; width: 100%; flex: 1; overflow: hidden; }
-  .msg-sidebar { width: 220px; background: rgba(0,0,0,0.4); border-right: 1px solid var(--glass-border); padding: 12px; display: flex; flex-direction: column; gap: 10px; }
-  .msg-chat-area { flex: 1; display: flex; flex-direction: column; height: 100%; background: rgba(0,0,0,0.2); }
-  .msg-list { flex: 1; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 8px; }
-  .msg-bubble { max-width: 75%; padding: 8px 12px; border-radius: 12px; font-size: 0.85rem; line-height: 1.4; word-break: break-word; }
-  .msg-sent { align-self: flex-end; background: var(--accent); color: #fff; }
-  .msg-recv { align-self: flex-start; background: rgba(255,255,255,0.1); color: var(--text-main); }
-  .msg-input-bar { padding: 10px; border-top: 1px solid var(--glass-border); display: flex; gap: 8px; background: rgba(10,14,24,0.6); }
 
   @media (max-width: 760px) {
     .start-menu-fullscreen { padding: 54px 18px 30px; }
@@ -562,12 +573,10 @@
   <div id="desktop-screen" class="os-screen hidden" onclick="closeContextMenus()">
     
     <!-- Top System Bar -->
-    <div class="top-bar">
+    <div class="top-bar" id="topBarElement" oncontextmenu="handleTopBarContextMenu(event)">
       <div class="top-bar-section">
         <div class="brand-logo" onclick="openStartMenu()">Enfrok</div>
-        <div class="top-item" onclick="openWindow('sheetApp')">📊 Spreadsheet</div>
-        <div class="top-item" onclick="openWindow('wordApp')">📄 Text Studio</div>
-        <div class="top-item" onclick="openWindow('paintApp')">🎨 Paint Studio</div>
+        <div id="topBarAppsContainer" style="display:flex; align-items:center; gap:18px;"></div>
       </div>
       <div class="top-bar-section">
         <div class="top-item" id="sysAudioMute" onclick="toggleMuteAudio()">🔊 Audio</div>
@@ -578,45 +587,6 @@
     <!-- Main Desktop Canvas -->
     <div class="desktop-area" id="desktopArea" oncontextmenu="handleContextMenuEvent(event, null)" ondragover="event.preventDefault()" ondrop="handleDesktopDrop(event)">
       <div class="desktop-grid" id="desktopGrid"></div>
-
-      <!-- APP: MESSAGES (NEW) -->
-      <div class="os-window" id="messagesApp" style="width: 720px; height: 480px; top: 50px; left: 150px;">
-        <div class="window-topbar" onmousedown="dragWindow(event, 'messagesApp')">
-          <div class="window-title">💬 Messages</div>
-          <div class="win-controls-pills">
-            <span class="win-pill-btn" onclick="minimizeWindow('messagesApp')">─</span>
-            <span class="win-pill-btn" onclick="toggleFullscreen('messagesApp')">▢</span>
-            <span class="win-pill-btn pill-close" onclick="closeWindow('messagesApp')">✕</span>
-          </div>
-        </div>
-        <div class="window-body">
-          <div id="msgAuthView" class="additive-app-body" style="display:flex; justify-content:center; align-items:center; height:100%;">
-            <div style="width:320px; display:flex; flex-direction:column; gap:12px; text-align:center;">
-              <h3>Create Messages Account</h3>
-              <input type="text" class="input-ui" id="msgRegName" placeholder="Full Name" />
-              <input type="text" class="input-ui" id="msgRegUsername" placeholder="Unique Username" />
-              <button class="btn-ui btn-accent" onclick="registerMessagesUser()">Create Account</button>
-            </div>
-          </div>
-          <div id="msgMainView" class="msg-container" style="display:none;">
-            <div class="msg-sidebar">
-              <div style="font-weight:700; font-size:0.85rem;" id="msgCurrentProfile">@user</div>
-              <input type="text" class="input-ui" id="msgSearchInput" placeholder="Search @username..." style="font-size:0.75rem;" onkeydown="if(event.key==='Enter') searchMessagesUser()" />
-              <button class="btn-ui btn-accent" style="font-size:0.75rem; justify-content:center;" onclick="searchMessagesUser()">Search User</button>
-              <div style="font-size:0.75rem; color:var(--text-sub); margin-top:6px;">Contacts & Requests</div>
-              <div id="msgContactsList" style="display:flex; flex-direction:column; gap:6px; overflow-y:auto; flex:1;"></div>
-            </div>
-            <div class="msg-chat-area">
-              <div style="padding:10px 14px; border-bottom:1px solid var(--glass-border); font-weight:700; font-size:0.9rem;" id="msgChatHeader">Select a conversation</div>
-              <div class="msg-list" id="msgList"></div>
-              <div class="msg-input-bar">
-                <input type="text" class="input-ui" id="msgTextInput" placeholder="Type a message..." onkeydown="if(event.key==='Enter') sendChatMessage()" />
-                <button class="btn-ui btn-accent" onclick="sendChatMessage()">Send</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
 
       <!-- APP 0: SPREADSHEET -->
       <div class="os-window" id="sheetApp" style="width: 880px; height: 560px; top: 30px; left: 80px;">
@@ -1127,6 +1097,24 @@ Type 'help' to view available system commands.</div>
                     <option value="fullscreen">Full-screen Start menu</option>
                   </select>
                 </div>
+
+                <!-- Upper Menu Settings -->
+                <h3 style="font-size:1.05rem; font-weight:700; margin-top:14px;">Upper Menu (Top Bar)</h3>
+                <div class="setting-row">
+                  <div class="setting-label">
+                    <span class="setting-title">Enable Upper Menu</span>
+                    <span class="setting-desc">Show or hide the main top bar menu dynamically.</span>
+                  </div>
+                  <button class="btn-ui btn-accent" id="toggleTopBarBtn" onclick="toggleTopBarVisibility()">Disable Upper Menu</button>
+                </div>
+
+                <div class="setting-row">
+                  <div class="setting-label">
+                    <span class="setting-title">Top Bar Pinned Apps</span>
+                    <span class="setting-desc">Customize which apps are pinned to the upper top bar.</span>
+                  </div>
+                  <button class="btn-ui" onclick="promptCustomTopBarApps()">Manage Top Bar Apps</button>
+                </div>
               </div>
 
               <!-- TAB 2: GLASS & EFFECTS -->
@@ -1610,7 +1598,7 @@ Write **Markdown** on the left and see a clean preview here.
     <!-- Notification Center -->
     <div class="notification-center" id="notificationCenter">
       <h3 style="font-size:1rem; font-weight:700;">Notifications & System Control</h3>
-      <div style="font-size:0.85rem; color:var(--text-sub); border-bottom:1px solid var(--glass-border); padding-bottom:14px;">Enfrok OS 5.2 loaded with enhanced performance, desktop drag-and-drop & Messages suite.</div>
+      <div style="font-size:0.85rem; color:var(--text-sub); border-bottom:1px solid var(--glass-border); padding-bottom:14px;">Enfrok OS 5.2 loaded with enhanced window resizing, top bar customization & right-click app uninstalling.</div>
     </div>
 
     <!-- TASKBAR (DOCK) -->
@@ -1632,7 +1620,7 @@ Write **Markdown** on the left and see a clean preview here.
       </div>
       <input class="input-ui fullscreen-start-search" id="fullscreenStartSearch" placeholder="Search installed applications..." oninput="filterFullscreenStart(this.value)">
       <div class="fullscreen-start-grid" id="fullscreenStartGrid"></div>
-      <div class="fullscreen-start-footer">Click an app to open it · Drag to Desktop or Taskbar to pin · Press Escape to close</div>
+      <div class="fullscreen-start-footer">Click an app to open it · Right-click to uninstall · Drag to Desktop or Taskbar to pin</div>
     </div>
 
     <!-- COMPACT START MENU PANEL -->
@@ -1669,9 +1657,8 @@ Write **Markdown** on the left and see a clean preview here.
     'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=1920'
   ];
 
-  /* ALL APPS CLEANED & UPDATED */
+  /* ALL APPS (MESSAGES APP DELETED) */
   const ALL_APPS = [
-    { id: 'messagesApp', name: 'Messages', icon: '💬', pinnedDock: true, pinnedDesktop: true },
     { id: 'sheetApp', name: 'Spreadsheet', icon: '📊', pinnedDock: true, pinnedDesktop: true },
     { id: 'wordApp', name: 'Text Studio', icon: '📄', pinnedDock: true, pinnedDesktop: true },
     { id: 'paintApp', name: 'Paint Board', icon: '🎨', pinnedDock: true, pinnedDesktop: true },
@@ -1725,12 +1712,6 @@ Write **Markdown** on the left and see a clean preview here.
   let currentWpIndex = 0;
   let currentFileFilter = 'all';
 
-  /* MESSAGES APP STATE */
-  let registeredUsers = ['alex', 'jordan', 'sam'];
-  let currentMsgProfile = null;
-  let activeConversation = null;
-  let msgData = {};
-
   let osData = {
     installed: false,
     username: 'Developer',
@@ -1741,9 +1722,11 @@ Write **Markdown** on the left and see a clean preview here.
     blurVal: 20,
     opacityVal: 75,
     startMenuMode: 'normal',
+    topBarEnabled: true,
+    topBarApps: ['sheetApp', 'wordApp', 'paintApp'],
     uninstalledApps: [],
-    desktopApps: ['messagesApp', 'sheetApp', 'wordApp', 'paintApp', 'documentCore', 'terminalApp', 'browserApp', 'calcApp', 'todoApp', 'snippetApp', 'soundboardApp', 'converterApp', 'passApp', 'concertApp', 'luckyApp', 'settingsApp'],
-    dockApps: ['messagesApp', 'sheetApp', 'wordApp', 'paintApp', 'documentCore', 'terminalApp', 'browserApp', 'calcApp', 'todoApp', 'snippetApp', 'soundboardApp', 'converterApp', 'passApp', 'concertApp', 'luckyApp', 'settingsApp'],
+    desktopApps: ['sheetApp', 'wordApp', 'paintApp', 'documentCore', 'terminalApp', 'browserApp', 'calcApp', 'todoApp', 'snippetApp', 'soundboardApp', 'converterApp', 'passApp', 'concertApp', 'luckyApp', 'settingsApp'],
+    dockApps: ['sheetApp', 'wordApp', 'paintApp', 'documentCore', 'terminalApp', 'browserApp', 'calcApp', 'todoApp', 'snippetApp', 'soundboardApp', 'converterApp', 'passApp', 'concertApp', 'luckyApp', 'settingsApp'],
     savedFiles: [
       { name: 'Welcome_Guide.doc', content: '<h2>Welcome to Enfrok OS 5.2</h2><p>This is your saved document in Files storage.</p>' }
     ]
@@ -1776,6 +1759,7 @@ Write **Markdown** on the left and see a clean preview here.
     loadData();
     populateWallpapers();
     initSpreadsheetGrid();
+    setupWindowResizeHandles();
 
     setSystemAccent(osData.accentColor || '#3b82f6');
     setStartMenuMode(osData.startMenuMode || 'normal', false);
@@ -1838,6 +1822,7 @@ Write **Markdown** on the left and see a clean preview here.
   function launchDesktop() {
     setWallpaper(osData.wallpaper);
     applyGlassSettings();
+    renderTopBar();
     document.getElementById('setup-screen').classList.add('hidden');
     document.getElementById('login-screen').classList.add('hidden');
     document.getElementById('desktop-screen').classList.remove('hidden');
@@ -1848,17 +1833,141 @@ Write **Markdown** on the left and see a clean preview here.
     updateWeatherDisplay();
   }
 
+  /* TOP BAR / UPPER MENU MANAGEMENT */
+  function renderTopBar() {
+    const bar = document.getElementById('topBarElement');
+    const container = document.getElementById('topBarAppsContainer');
+    const toggleBtn = document.getElementById('toggleTopBarBtn');
+    
+    if (osData.topBarEnabled !== false) {
+      bar.classList.remove('hidden-menu');
+      if (toggleBtn) toggleBtn.textContent = 'Disable Upper Menu';
+    } else {
+      bar.classList.add('hidden-menu');
+      if (toggleBtn) toggleBtn.textContent = 'Enable Upper Menu';
+      return;
+    }
+
+    if (!container) return;
+    container.innerHTML = '';
+    
+    const activeApps = getInstalledApps();
+    (osData.topBarApps || []).forEach(appId => {
+      const app = activeApps.find(a => a.id === appId);
+      if (app) {
+        const item = document.createElement('div');
+        item.className = 'top-item';
+        item.innerHTML = `${app.icon} ${app.name}`;
+        item.onclick = () => openWindow(app.id);
+        item.oncontextmenu = (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          handleTopBarItemContextMenu(e, app.id);
+        };
+        container.appendChild(item);
+      }
+    });
+  }
+
+  function toggleTopBarVisibility() {
+    osData.topBarEnabled = !(osData.topBarEnabled !== false);
+    saveData();
+    renderTopBar();
+  }
+
+  function handleTopBarContextMenu(e) {
+    if (e.preventDefault) e.preventDefault();
+    const menu = document.getElementById('desktopContextMenu');
+    positionContextMenu(menu, e.clientX, e.clientY);
+    menu.innerHTML = `
+      <div class="context-item" onclick="promptCustomTopBarApps()">➕ Add/Remove Upper Menu Apps</div>
+      <div class="context-item danger" onclick="toggleTopBarVisibility()">🚫 Disable Upper Menu</div>
+      <div class="context-item" onclick="openWindow('settingsApp')">⚙️ Open Upper Menu Settings</div>
+    `;
+    menu.classList.add('open');
+  }
+
+  function handleTopBarItemContextMenu(e, appId) {
+    if (e.preventDefault) e.preventDefault();
+    const menu = document.getElementById('desktopContextMenu');
+    const app = ALL_APPS.find(a => a.id === appId);
+    positionContextMenu(menu, e.clientX, e.clientY);
+    menu.innerHTML = `
+      <div class="context-item" onclick="openWindow('${appId}')">▶ Launch ${app ? app.name : ''}</div>
+      <div class="context-item danger" onclick="removeAppFromTopBar('${appId}')">🗑️ Remove from Upper Menu</div>
+      <div class="context-item danger" onclick="uninstallApp('${appId}')">⚠️ Uninstall App</div>
+    `;
+    menu.classList.add('open');
+  }
+
+  function removeAppFromTopBar(appId) {
+    osData.topBarApps = (osData.topBarApps || []).filter(id => id !== appId);
+    saveData();
+    renderTopBar();
+  }
+
+  function promptCustomTopBarApps() {
+    const installed = getInstalledApps();
+    const appListStr = installed.map((a, i) => `${i + 1}. ${a.name} (${a.id})`).join('\n');
+    const input = prompt(`Enter App IDs (comma-separated) to pin to Upper Menu:\n\nAvailable Apps:\n${appListStr}`, (osData.topBarApps || []).join(', '));
+    if (input !== null) {
+      const selected = input.split(',').map(s => s.trim()).filter(id => installed.some(a => a.id === id));
+      osData.topBarApps = selected;
+      saveData();
+      renderTopBar();
+    }
+  }
+
+  /* CONTEXT MENU POSITIONING FIX */
+  function positionContextMenu(menu, mouseX, mouseY) {
+    menu.style.display = 'flex';
+    menu.style.visibility = 'hidden';
+    menu.classList.add('open');
+    
+    const menuWidth = menu.offsetWidth || 220;
+    const menuHeight = menu.offsetHeight || 180;
+    
+    let left = mouseX;
+    let top = mouseY;
+    
+    if (left + menuWidth > window.innerWidth) {
+      left = window.innerWidth - menuWidth - 10;
+    }
+    if (top + menuHeight > window.innerHeight) {
+      top = mouseY - menuHeight;
+      if (top < 0) top = window.innerHeight - menuHeight - 10;
+    }
+    
+    menu.style.left = `${Math.max(10, left)}px`;
+    menu.style.top = `${Math.max(10, top)}px`;
+    menu.style.visibility = 'visible';
+  }
+
+  /* TASKBAR PINNING & CONTEXT MENU FIXES */
+  function togglePinToDock(appId) {
+    if (!osData.dockApps) osData.dockApps = [];
+    if (osData.dockApps.includes(appId)) {
+      osData.dockApps = osData.dockApps.filter(id => id !== appId);
+    } else {
+      osData.dockApps.push(appId);
+    }
+    saveData();
+    initDesktop();
+  }
+
   function handleContextMenuEvent(e, appId) {
     if (e.preventDefault) e.preventDefault();
     const menu = document.getElementById('desktopContextMenu');
-    menu.style.top = `${e.clientY}px`;
-    menu.style.left = `${e.clientX}px`;
 
     if (appId) {
       const app = ALL_APPS.find(a => a.id === appId);
+      const isPinnedToDock = (osData.dockApps || []).includes(appId);
+      const isDesktopPinned = (osData.desktopApps || []).includes(appId);
+
       menu.innerHTML = `
-        <div class="context-item" onclick="openWindow('${appId}')">▶ Launch ${app.name}</div>
-        <div class="context-item danger" onclick="removeFromDesktop('${appId}')">🗑️ Remove from Desktop</div>
+        <div class="context-item" onclick="openWindow('${appId}')">▶ Launch ${app ? app.name : ''}</div>
+        <div class="context-item" onclick="togglePinToDock('${appId}')">${isPinnedToDock ? '📌 Unpin from Taskbar' : '📌 Pin to Taskbar'}</div>
+        ${isDesktopPinned ? `<div class="context-item danger" onclick="removeFromDesktop('${appId}')">🗑️ Remove from Desktop</div>` : `<div class="context-item" onclick="addToDesktop('${appId}')">🖥️ Add to Desktop</div>`}
         <div class="context-item danger" onclick="uninstallApp('${appId}')">⚠️ Uninstall App</div>
       `;
     } else {
@@ -1868,7 +1977,15 @@ Write **Markdown** on the left and see a clean preview here.
         <div class="context-item" onclick="location.reload()">🔄 Refresh OS</div>
       `;
     }
-    menu.classList.add('open');
+    positionContextMenu(menu, e.clientX, e.clientY);
+  }
+
+  function addToDesktop(appId) {
+    if (!osData.desktopApps.includes(appId)) {
+      osData.desktopApps.push(appId);
+      saveData();
+      initDesktop();
+    }
   }
 
   function removeFromDesktop(appId) {
@@ -1878,13 +1995,20 @@ Write **Markdown** on the left and see a clean preview here.
   }
 
   function uninstallApp(appId) {
-    if (!osData.uninstalledApps.includes(appId)) {
-      osData.uninstalledApps.push(appId);
+    const app = ALL_APPS.find(a => a.id === appId);
+    const appName = app ? app.name : appId;
+    if (confirm(`Are you sure you want to uninstall ${appName}?`)) {
+      if (!osData.uninstalledApps.includes(appId)) {
+        osData.uninstalledApps.push(appId);
+      }
       osData.desktopApps = osData.desktopApps.filter(id => id !== appId);
       osData.dockApps = osData.dockApps.filter(id => id !== appId);
+      osData.topBarApps = (osData.topBarApps || []).filter(id => id !== appId);
       saveData();
       closeWindow(appId);
       initDesktop();
+      renderTopBar();
+      renderFolders();
     }
   }
 
@@ -1988,7 +2112,7 @@ Write **Markdown** on the left and see a clean preview here.
     // Render Hub Apps
     activeApps.forEach(app => {
       hubGrid.innerHTML += `
-        <div class="d-icon" draggable="true" ondragstart="handleAppDragStart(event, '${app.id}')" onclick="openWindow('${app.id}'); toggleLaunchHub();">
+        <div class="d-icon" draggable="true" ondragstart="handleAppDragStart(event, '${app.id}')" onclick="openWindow('${app.id}'); toggleLaunchHub();" oncontextmenu="handleContextMenuEvent(event, '${app.id}')">
           <div class="d-icon-box">${app.icon}</div>
           <span>${app.name}</span>
         </div>
@@ -2006,11 +2130,7 @@ Write **Markdown** on the left and see a clean preview here.
         dockItem.onclick = () => toggleWindow(app.id);
         dockItem.oncontextmenu = (e) => {
           e.preventDefault();
-          if (confirm(`Remove ${app.name} from Taskbar?`)) {
-            osData.dockApps = osData.dockApps.filter(id => id !== appId);
-            saveData();
-            initDesktop();
-          }
+          handleContextMenuEvent(e, app.id);
         };
         dockItemsArea.appendChild(dockItem);
       }
@@ -2059,13 +2179,30 @@ Write **Markdown** on the left and see a clean preview here.
 
   function toggleFullscreen(id) {
     const win = document.getElementById(id);
-    if (win) win.classList.toggle('fullscreen');
+    if (!win) return;
+    
+    if (win.classList.contains('fullscreen')) {
+      win.classList.remove('fullscreen');
+      if (win.dataset.prevTop) {
+        win.style.top = win.dataset.prevTop;
+        win.style.left = win.dataset.prevLeft;
+        win.style.width = win.dataset.prevWidth;
+        win.style.height = win.dataset.prevHeight;
+      }
+    } else {
+      win.dataset.prevTop = win.style.top || `${win.offsetTop}px`;
+      win.dataset.prevLeft = win.style.left || `${win.offsetLeft}px`;
+      win.dataset.prevWidth = win.style.width || `${win.offsetWidth}px`;
+      win.dataset.prevHeight = win.style.height || `${win.offsetHeight}px`;
+      
+      win.classList.add('fullscreen');
+    }
   }
 
   function closeWindow(id) {
     const win = document.getElementById(id);
     if (win) {
-      win.classList.remove('open-active', 'focused');
+      win.classList.remove('open-active', 'focused', 'fullscreen');
       win.classList.add('minimized');
       updateDockState();
     }
@@ -2082,7 +2219,7 @@ Write **Markdown** on the left and see a clean preview here.
     });
   }
 
-  /* OPTIMIZED DRAGGING (USES REQUESTANIMATIONFRAME TO REDUCE LAG) */
+  /* WINDOW DRAGGING ENGINE */
   let isDraggingWin = false;
   let dragTarget = null;
   let dragShiftX = 0, dragShiftY = 0;
@@ -2121,142 +2258,79 @@ Write **Markdown** on the left and see a clean preview here.
     document.removeEventListener('mouseup', onMouseUpWindow);
   }
 
-  /* MESSAGES APP LOGIC */
-  function registerMessagesUser() {
-    const name = document.getElementById('msgRegName').value.trim();
-    const username = document.getElementById('msgRegUsername').value.trim().toLowerCase();
-
-    if (!name || !username) {
-      alert("Please provide both name and username.");
-      return;
-    }
-
-    if (registeredUsers.includes(username)) {
-      alert("Username is already taken! Please choose another.");
-      return;
-    }
-
-    registeredUsers.push(username);
-    currentMsgProfile = { name, username, contacts: [], requests: [] };
-    
-    document.getElementById('msgAuthView').style.display = 'none';
-    document.getElementById('msgMainView').style.display = 'flex';
-    document.getElementById('msgCurrentProfile').textContent = `${name} (@${username})`;
-    renderMsgContacts();
-  }
-
-  function searchMessagesUser() {
-    const query = document.getElementById('msgSearchInput').value.trim().toLowerCase();
-    if (!query) return;
-
-    if (query === currentMsgProfile.username) {
-      alert("You cannot add yourself!");
-      return;
-    }
-
-    if (!registeredUsers.includes(query)) {
-      alert("User not found!");
-      return;
-    }
-
-    if (currentMsgProfile.contacts.includes(query)) {
-      alert("User is already in your contacts!");
-      return;
-    }
-
-    // Simulate sending a request & auto-responding for demo
-    alert(`Friend request sent to @${query}!`);
-    setTimeout(() => {
-      if (!currentMsgProfile.contacts.includes(query)) {
-        currentMsgProfile.requests.push(query);
-        renderMsgContacts();
-      }
-    }, 1000);
-  }
-
-  function acceptMsgRequest(targetUser) {
-    currentMsgProfile.requests = currentMsgProfile.requests.filter(u => u !== targetUser);
-    currentMsgProfile.contacts.push(targetUser);
-    renderMsgContacts();
-    openMsgChat(targetUser);
-  }
-
-  function declineMsgRequest(targetUser) {
-    currentMsgProfile.requests = currentMsgProfile.requests.filter(u => u !== targetUser);
-    renderMsgContacts();
-  }
-
-  function renderMsgContacts() {
-    const list = document.getElementById('msgContactsList');
-    list.innerHTML = '';
-
-    if (currentMsgProfile.requests.length > 0) {
-      list.innerHTML += `<div style="font-size:0.7rem; color:var(--accent); font-weight:700;">Incoming Requests</div>`;
-      currentMsgProfile.requests.forEach(req => {
-        list.innerHTML += `
-          <div style="padding:6px; background:rgba(255,255,255,0.05); border-radius:8px; display:flex; flex-direction:column; gap:4px;">
-            <span style="font-size:0.75rem; font-weight:600;">@${req}</span>
-            <div style="display:flex; gap:4px;">
-              <button class="btn-ui btn-accent" style="padding:2px 6px; font-size:0.65rem;" onclick="acceptMsgRequest('${req}')">Accept</button>
-              <button class="btn-ui btn-danger" style="padding:2px 6px; font-size:0.65rem;" onclick="declineMsgRequest('${req}')">Decline</button>
-            </div>
-          </div>
-        `;
+  /* WINDOW RESIZING ENGINE */
+  function setupWindowResizeHandles() {
+    const handles = ['n', 's', 'e', 'w', 'nw', 'ne', 'sw', 'se'];
+    document.querySelectorAll('.os-window').forEach(win => {
+      handles.forEach(dir => {
+        const handle = document.createElement('div');
+        handle.className = `win-resize-handle rh-${dir}`;
+        handle.onmousedown = (e) => startResizeWindow(e, win, dir);
+        win.appendChild(handle);
       });
-    }
-
-    list.innerHTML += `<div style="font-size:0.7rem; color:var(--text-sub); font-weight:700; margin-top:4px;">Direct Messages</div>`;
-    currentMsgProfile.contacts.forEach(c => {
-      list.innerHTML += `
-        <div class="os-nav-item" style="padding:6px 10px; font-size:0.8rem;" onclick="openMsgChat('${c}')">
-          👤 @${c}
-        </div>
-      `;
     });
   }
 
-  function openMsgChat(user) {
-    activeConversation = user;
-    document.getElementById('msgChatHeader').textContent = `Chat with @${user}`;
-    renderChatMessages();
+  let isResizingWin = false;
+  let resizeTarget = null;
+  let resizeDir = '';
+  let startX = 0, startY = 0, startW = 0, startH = 0, startL = 0, startT = 0;
+
+  function startResizeWindow(e, win, dir) {
+    e.preventDefault();
+    e.stopPropagation();
+    if (win.classList.contains('fullscreen')) return;
+
+    focusWindow(win);
+    isResizingWin = true;
+    resizeTarget = win;
+    resizeDir = dir;
+    win.classList.add('resizing');
+
+    startX = e.clientX;
+    startY = e.clientY;
+
+    const rect = win.getBoundingClientRect();
+    startW = rect.width;
+    startH = rect.height;
+    startL = rect.left;
+    startT = rect.top;
+
+    document.addEventListener('mousemove', onMouseMoveResize);
+    document.addEventListener('mouseup', onMouseUpResize);
   }
 
-  function renderChatMessages() {
-    const container = document.getElementById('msgList');
-    container.innerHTML = '';
+  function onMouseMoveResize(e) {
+    if (!isResizingWin || !resizeTarget) return;
+    requestAnimationFrame(() => {
+      const dx = e.clientX - startX;
+      const dy = e.clientY - startY;
 
-    if (!activeConversation) return;
-
-    const key = [currentMsgProfile.username, activeConversation].sort().join('_');
-    const messages = msgData[key] || [];
-
-    messages.forEach(m => {
-      const isMe = m.sender === currentMsgProfile.username;
-      container.innerHTML += `
-        <div class="msg-bubble ${isMe ? 'msg-sent' : 'msg-recv'}">
-          ${m.text}
-        </div>
-      `;
+      if (resizeDir.includes('e')) resizeTarget.style.width = `${Math.max(320, startW + dx)}px`;
+      if (resizeDir.includes('s')) resizeTarget.style.height = `${Math.max(200, startH + dy)}px`;
+      if (resizeDir.includes('w')) {
+        const newW = Math.max(320, startW - dx);
+        if (newW > 320) {
+          resizeTarget.style.width = `${newW}px`;
+          resizeTarget.style.left = `${startL + dx}px`;
+        }
+      }
+      if (resizeDir.includes('n')) {
+        const newH = Math.max(200, startH - dy);
+        if (newH > 200) {
+          resizeTarget.style.height = `${newH}px`;
+          resizeTarget.style.top = `${startT + dy}px`;
+        }
+      }
     });
   }
 
-  function sendChatMessage() {
-    const input = document.getElementById('msgTextInput');
-    const text = input.value.trim();
-    if (!text || !activeConversation) return;
-
-    const key = [currentMsgProfile.username, activeConversation].sort().join('_');
-    if (!msgData[key]) msgData[key] = [];
-
-    msgData[key].push({ sender: currentMsgProfile.username, text });
-    input.value = '';
-    renderChatMessages();
-
-    // Auto simulated reply
-    setTimeout(() => {
-      msgData[key].push({ sender: activeConversation, text: `Hey! Thanks for messaging. [Simulated Reply]` });
-      renderChatMessages();
-    }, 1200);
+  function onMouseUpResize() {
+    if (resizeTarget) resizeTarget.classList.remove('resizing');
+    isResizingWin = false;
+    resizeTarget = null;
+    document.removeEventListener('mousemove', onMouseMoveResize);
+    document.removeEventListener('mouseup', onMouseUpResize);
   }
 
   /* SPREADSHEET ENGINE */
@@ -2395,7 +2469,7 @@ Write **Markdown** on the left and see a clean preview here.
   function clearSheetGrid() { sheetData = {}; initSpreadsheetGrid(); }
 
   /* PAINT STUDIO ENGINE */
-  let paintTool = 'pen', paintSize = 5, paintColor = '#3b82f6', isPainting = false, startX = 0, startY = 0;
+  let paintTool = 'pen', paintSize = 5, paintColor = '#3b82f6', isPainting = false;
   let paintUndoStack = [];
 
   function initPaintStudio() {
@@ -2678,6 +2752,7 @@ Write **Markdown** on the left and see a clean preview here.
     if (!osData.desktopApps.includes(appId)) osData.desktopApps.push(appId);
     saveData();
     initDesktop();
+    renderTopBar();
     renderFolders();
     renderUninstalledAppsList();
     alert(`Reinstalled application successfully!`);
@@ -2772,7 +2847,7 @@ Write **Markdown** on the left and see a clean preview here.
     const term = query.trim().toLowerCase();
     const apps = getInstalledApps().filter(app => !term || `${app.name} ${app.id}`.toLowerCase().includes(term));
     grid.innerHTML = apps.map(app => `
-      <div class="d-icon" draggable="true" ondragstart="handleAppDragStart(event, '${app.id}')" onclick="openWindow('${app.id}'); closeFullscreenStartMenu();">
+      <div class="d-icon" draggable="true" ondragstart="handleAppDragStart(event, '${app.id}')" onclick="openWindow('${app.id}'); closeFullscreenStartMenu();" oncontextmenu="handleContextMenuEvent(event, '${app.id}')">
         <div class="d-icon-box">${app.icon}</div><span>${app.name}</span>
       </div>`).join('');
     const subtitle = document.getElementById('fullscreenStartSubtitle');
@@ -3305,11 +3380,11 @@ Write **Markdown** on the left and see a clean preview here.
   function generateAsciiArt() {
     const val = document.getElementById('asciiInput').value;
     document.getElementById('asciiOutput').value = `
-  _____ _   _ _____ _____  ____  _   _ 
- | ____| \ | |  ___|  _ \/ ___|| | | |
- |  _| |  \| | |_  | |_) \___ \| |_| |
- | |___| |\  |  _| |  _ < ___) |  _  |
- |_____|_| \_|_|   |_| \_\____/|_| |_|
+ _____ _   _ _____ _____  ____  _   _ 
+| ____| \ | |  ___|  _ \/ ___|| | | |
+|  _| |  \| | |_  | |_) \___ \| |_| |
+| |___| |\  |  _| |  _ < ___) |  _  |
+|_____|_| \_|_|   |_| \_\____/|_| |_|
  Text: ${val}
     `;
   }
