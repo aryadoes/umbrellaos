@@ -198,6 +198,16 @@
   }
   .dock-item:hover { border-color: var(--accent); background: rgba(255,255,255,0.18); transform: translateY(-4px); }
 
+  /* RUNNING APP INDICATOR BAR UNDER TASKBAR APP */
+  .dock-item-indicator {
+    position: absolute; bottom: 3px; left: 50%; transform: translateX(-50%);
+    width: 14px; height: 3px; border-radius: 99px;
+    background: var(--accent);
+    box-shadow: 0 0 10px var(--accent-glow);
+    display: none;
+  }
+  .dock-item.running .dock-item-indicator { display: block; }
+
   /* GLASSMORPHISM START MENU */
   .launch-hub-panel {
     position: absolute; bottom: 82px; left: 50%; transform: translateX(-50%) translateY(20px) scale(0.96);
@@ -779,7 +789,7 @@
         </div>
       </div>
 
-      <!-- APP 3: DOCUMENTS / ROOT STORAGE -->
+      <!-- APP 3: DOCUMENTS / ROOT STORAGE (SYSTEM APP) -->
       <div class="os-window" id="documentCore" style="width: 820px; height: 520px; top: 40px; left: 120px;">
         <div class="window-topbar" onmousedown="dragWindow(event, 'documentCore')">
           <div class="window-title">📁 Document — Root Storage</div>
@@ -809,7 +819,7 @@
         </div>
       </div>
 
-      <!-- APP 4: TERMINAL -->
+      <!-- APP 4: TERMINAL (SYSTEM APP) -->
       <div class="os-window" id="terminalApp" style="width: 640px; height: 400px; top: 70px; left: 180px;">
         <div class="window-topbar" onmousedown="dragWindow(event, 'terminalApp')">
           <div class="window-title">⚡ Command Console</div>
@@ -822,7 +832,7 @@
         <div class="window-body">
           <div class="term-body" id="termContainer">
             <div class="term-output" id="termOutput">Enfrok OS Command Console v5.2
-Type 'help' to view available system commands.</div>
+Type 'help' or 'bringback reinstall /appnameApp' to manage apps.</div>
             <div class="term-row">
               <span style="color:var(--accent); font-weight:600;">enfrok@root:~$</span>
               <input type="text" class="term-input" id="termInput" onkeydown="handleTermCmd(event)" />
@@ -1047,7 +1057,7 @@ Type 'help' to view available system commands.</div>
         </div>
       </div>
 
-      <!-- APP 15: SETTINGS -->
+      <!-- APP 15: SETTINGS (SYSTEM APP) -->
       <div class="os-window" id="settingsApp" style="width: 820px; height: 540px; top: 40px; left: 180px;">
         <div class="window-topbar" onmousedown="dragWindow(event, 'settingsApp')">
           <div class="window-title">⚙️ Control Center & Settings</div>
@@ -1154,7 +1164,7 @@ Type 'help' to view available system commands.</div>
               <!-- TAB 3: APP MANAGER -->
               <div class="settings-section" id="appManagerTab">
                 <h3 style="font-size:1.05rem; font-weight:700;">Installed & Uninstalled Applications</h3>
-                <p style="font-size:0.82rem; color:var(--text-sub);">Re-install any previously removed system applications instantly:</p>
+                <p style="font-size:0.82rem; color:var(--text-sub);">Re-install any previously removed system applications instantly or via Terminal:</p>
                 <div id="uninstalledAppsContainer" style="display:flex; flex-direction:column; gap:10px; margin-top:10px;"></div>
               </div>
 
@@ -1643,6 +1653,9 @@ Write **Markdown** on the left and see a clean preview here.
   </div>
 
 <script>
+  /* PROTECTED CORE SYSTEM APPS */
+  const SYSTEM_APPS = ['terminalApp', 'documentCore', 'settingsApp'];
+
   /* WALLPAPERS */
   const WALLPAPERS = [
     'https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=1920',
@@ -1657,7 +1670,7 @@ Write **Markdown** on the left and see a clean preview here.
     'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=1920'
   ];
 
-  /* ALL APPS (MESSAGES APP DELETED) */
+  /* ALL APPS */
   const ALL_APPS = [
     { id: 'sheetApp', name: 'Spreadsheet', icon: '📊', pinnedDock: true, pinnedDesktop: true },
     { id: 'wordApp', name: 'Text Studio', icon: '📄', pinnedDock: true, pinnedDesktop: true },
@@ -1752,6 +1765,7 @@ Write **Markdown** on the left and see a clean preview here.
     osData.accentColor = hexColor;
     saveData();
     document.documentElement.style.setProperty('--accent', hexColor);
+    document.documentElement.style.setProperty('--accent-glow', hexColor + '66');
     document.documentElement.style.setProperty('--glass-border-focused', hexColor);
   }
 
@@ -1891,11 +1905,13 @@ Write **Markdown** on the left and see a clean preview here.
     if (e.preventDefault) e.preventDefault();
     const menu = document.getElementById('desktopContextMenu');
     const app = ALL_APPS.find(a => a.id === appId);
+    const isProtected = SYSTEM_APPS.includes(appId);
+
     positionContextMenu(menu, e.clientX, e.clientY);
     menu.innerHTML = `
       <div class="context-item" onclick="openWindow('${appId}')">▶ Launch ${app ? app.name : ''}</div>
       <div class="context-item danger" onclick="removeAppFromTopBar('${appId}')">🗑️ Remove from Upper Menu</div>
-      <div class="context-item danger" onclick="uninstallApp('${appId}')">⚠️ Uninstall App</div>
+      ${!isProtected ? `<div class="context-item danger" onclick="uninstallApp('${appId}')">⚠️ Uninstall App</div>` : ''}
     `;
     menu.classList.add('open');
   }
@@ -1963,12 +1979,13 @@ Write **Markdown** on the left and see a clean preview here.
       const app = ALL_APPS.find(a => a.id === appId);
       const isPinnedToDock = (osData.dockApps || []).includes(appId);
       const isDesktopPinned = (osData.desktopApps || []).includes(appId);
+      const isProtected = SYSTEM_APPS.includes(appId);
 
       menu.innerHTML = `
         <div class="context-item" onclick="openWindow('${appId}')">▶ Launch ${app ? app.name : ''}</div>
         <div class="context-item" onclick="togglePinToDock('${appId}')">${isPinnedToDock ? '📌 Unpin from Taskbar' : '📌 Pin to Taskbar'}</div>
-        ${isDesktopPinned ? `<div class="context-item danger" onclick="removeFromDesktop('${appId}')">🗑️ Remove from Desktop</div>` : `<div class="context-item" onclick="addToDesktop('${appId}')">🖥️ Add to Desktop</div>`}
-        <div class="context-item danger" onclick="uninstallApp('${appId}')">⚠️ Uninstall App</div>
+        ${!isProtected && isDesktopPinned ? `<div class="context-item danger" onclick="removeFromDesktop('${appId}')">🗑️ Remove from Desktop</div>` : (!isDesktopPinned ? `<div class="context-item" onclick="addToDesktop('${appId}')">🖥️ Add to Desktop</div>` : '')}
+        ${!isProtected ? `<div class="context-item danger" onclick="uninstallApp('${appId}')">⚠️ Uninstall App</div>` : ''}
       `;
     } else {
       menu.innerHTML = `
@@ -1989,12 +2006,20 @@ Write **Markdown** on the left and see a clean preview here.
   }
 
   function removeFromDesktop(appId) {
+    if (SYSTEM_APPS.includes(appId)) {
+      alert("System apps like Terminal, Document, and Settings cannot be removed from desktop.");
+      return;
+    }
     osData.desktopApps = osData.desktopApps.filter(id => id !== appId);
     saveData();
     initDesktop();
   }
 
   function uninstallApp(appId) {
+    if (SYSTEM_APPS.includes(appId)) {
+      alert("System core apps like Terminal, Document, and Settings cannot be deleted!");
+      return;
+    }
     const app = ALL_APPS.find(a => a.id === appId);
     const appName = app ? app.name : appId;
     if (confirm(`Are you sure you want to uninstall ${appName}?`)) {
@@ -2086,10 +2111,9 @@ Write **Markdown** on the left and see a clean preview here.
 
   function initDesktop() {
     const desktopGrid = document.getElementById('desktopGrid');
-    const dockItemsArea = document.getElementById('dockItemsArea');
     const hubGrid = document.getElementById('hubGrid');
 
-    desktopGrid.innerHTML = ''; dockItemsArea.innerHTML = ''; hubGrid.innerHTML = '';
+    desktopGrid.innerHTML = ''; hubGrid.innerHTML = '';
 
     const activeApps = getInstalledApps();
     const uName = osData.username || 'Developer';
@@ -2117,23 +2141,6 @@ Write **Markdown** on the left and see a clean preview here.
           <span>${app.name}</span>
         </div>
       `;
-    });
-
-    // Render Dock Items
-    osData.dockApps.forEach(appId => {
-      const app = activeApps.find(a => a.id === appId);
-      if (app) {
-        const dockItem = document.createElement('div');
-        dockItem.className = 'dock-item';
-        dockItem.id = `dock-${app.id}`;
-        dockItem.innerHTML = app.icon;
-        dockItem.onclick = () => toggleWindow(app.id);
-        dockItem.oncontextmenu = (e) => {
-          e.preventDefault();
-          handleContextMenuEvent(e, app.id);
-        };
-        dockItemsArea.appendChild(dockItem);
-      }
     });
 
     renderFolders();
@@ -2208,13 +2215,43 @@ Write **Markdown** on the left and see a clean preview here.
     }
   }
 
+  /* UPDATED TASKBAR DOCK STATE LOGIC WITH GLOWING ACCENT RUNNING INDICATOR */
   function updateDockState() {
+    const dockItemsArea = document.getElementById('dockItemsArea');
+    if (!dockItemsArea) return;
+
+    dockItemsArea.innerHTML = '';
+    const activeApps = getInstalledApps();
+
+    // Gather pinned apps + all currently open apps
+    let dockAppIds = [...(osData.dockApps || [])];
+    
     ALL_APPS.forEach(app => {
       const win = document.getElementById(app.id);
-      const dockItem = document.getElementById(`dock-${app.id}`);
-      if (win && dockItem) {
-        if (win.classList.contains('open-active') && !win.classList.contains('minimized')) dockItem.classList.add('active');
-        else dockItem.classList.remove('active');
+      if (win && win.classList.contains('open-active')) {
+        if (!dockAppIds.includes(app.id)) {
+          dockAppIds.push(app.id);
+        }
+      }
+    });
+
+    dockAppIds.forEach(appId => {
+      const app = activeApps.find(a => a.id === appId);
+      const win = document.getElementById(appId);
+      if (app && win) {
+        const isOpen = win.classList.contains('open-active');
+        const isMinimized = win.classList.contains('minimized');
+
+        const dockItem = document.createElement('div');
+        dockItem.className = `dock-item ${isOpen ? 'running' : ''} ${isOpen && !isMinimized ? 'active' : ''}`;
+        dockItem.id = `dock-${app.id}`;
+        dockItem.innerHTML = `${app.icon}<div class="dock-item-indicator"></div>`;
+        dockItem.onclick = () => toggleWindow(app.id);
+        dockItem.oncontextmenu = (e) => {
+          e.preventDefault();
+          handleContextMenuEvent(e, app.id);
+        };
+        dockItemsArea.appendChild(dockItem);
       }
     });
   }
@@ -2640,7 +2677,7 @@ Write **Markdown** on the left and see a clean preview here.
     view.innerHTML = '';
 
     if (currentFileFilter === 'uninstalled') {
-      if (subtitle) subtitle.textContent = 'Uninstalled System Apps (Click to Reinstall):';
+      if (subtitle) subtitle.textContent = 'Uninstalled System Apps (Click to Reinstall or type in Terminal):';
       if (!osData.uninstalledApps || osData.uninstalledApps.length === 0) {
         view.innerHTML = '<div style="color:var(--text-sub); font-size:0.85rem; padding:20px; grid-column: 1 / -1;">No uninstalled apps. All system applications are active!</div>';
         return;
@@ -3389,12 +3426,42 @@ Write **Markdown** on the left and see a clean preview here.
     `;
   }
 
+  /* TERMINAL ENGINE WITH BRINGBACK REINSTALL SUPPORT */
   function handleTermCmd(e) {
-    if (event.key === 'Enter') {
+    if (e.key === 'Enter') {
       const input = document.getElementById('termInput');
       const out = document.getElementById('termOutput');
-      out.textContent += `\nenfrok@root:~$ ${input.value}\nExecuting '${input.value}'... OK.`;
+      const cmdStr = input.value.trim();
+
+      out.textContent += `\nenfrok@root:~$ ${cmdStr}`;
+
+      if (cmdStr.startsWith('bringback reinstall /')) {
+        const rawTarget = cmdStr.replace('bringback reinstall /', '').trim();
+        let targetApp = ALL_APPS.find(a => a.id.toLowerCase() === rawTarget.toLowerCase() || a.name.toLowerCase() === rawTarget.toLowerCase());
+
+        if (targetApp) {
+          if (!osData.uninstalledApps.includes(targetApp.id)) {
+            out.textContent += `\n[SYSTEM]: '${targetApp.name}' is already installed!`;
+          } else {
+            reinstallApp(targetApp.id);
+            out.textContent += `\n[SUCCESS]: Application '${targetApp.name}' (${targetApp.id}) re-installed successfully!`;
+          }
+        } else {
+          out.textContent += `\n[ERROR]: Application '${rawTarget}' not found. Check app ID format (e.g. /paintApp, /wordApp).`;
+        }
+      } else if (cmdStr === 'help') {
+        out.textContent += `\nAvailable Commands:\n- bringback reinstall /appnameApp\n- clear\n- systeminfo`;
+      } else if (cmdStr === 'clear') {
+        out.textContent = `Enfrok OS Command Console v5.2`;
+      } else if (cmdStr === 'systeminfo') {
+        out.textContent += `\nOS: Enfrok OS 5.2\nUser: ${osData.username}\nKernel: v5.2 WebOS Core`;
+      } else {
+        out.textContent += `\nCommand '${cmdStr}' not recognized. Type 'help' for options.`;
+      }
+
       input.value = '';
+      const container = document.getElementById('termContainer');
+      container.scrollTop = container.scrollHeight;
     }
   }
 
