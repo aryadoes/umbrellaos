@@ -18,15 +18,19 @@
     --glass-opacity-val: 0.75;
     --glass-blur: blur(var(--glass-blur-val));
     
+    /* Dark Theme Variables (Default) */
+    --theme-bg-base: #030508;
     --glass-topbar: rgba(10, 14, 24, 0.75);
     --glass-dock: rgba(12, 16, 28, var(--glass-opacity-val));
     --glass-window: rgba(12, 16, 26, var(--glass-opacity-val));
     --glass-window-unfocused: rgba(8, 11, 18, 0.85);
     --glass-menu: rgba(14, 18, 30, 0.95);
-    --glass-dialog: rgba(16, 20, 34, 0.95);
+    --glass-dialog: rgba(16, 20, 34, 0.92);
     --glass-border: rgba(255, 255, 255, 0.16);
     --glass-border-focused: rgba(59, 130, 246, 0.6);
     --glass-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+    --window-body-bg: rgba(4, 6, 10, 0.6);
+    --sidebar-bg: rgba(0, 0, 0, 0.4);
     
     --text-main: #f8fafc;
     --text-sub: #94a3b8;
@@ -35,6 +39,24 @@
     --font-ui: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
     --font-code: 'JetBrains Mono', monospace;
     --anim-curve: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* Light Theme Variables */
+  body.theme-light {
+    --theme-bg-base: #e2e8f0;
+    --glass-topbar: rgba(255, 255, 255, 0.75);
+    --glass-dock: rgba(255, 255, 255, var(--glass-opacity-val));
+    --glass-window: rgba(248, 250, 252, var(--glass-opacity-val));
+    --glass-window-unfocused: rgba(241, 245, 249, 0.85);
+    --glass-menu: rgba(255, 255, 255, 0.95);
+    --glass-dialog: rgba(255, 255, 255, 0.95);
+    --glass-border: rgba(0, 0, 0, 0.12);
+    --glass-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+    --window-body-bg: rgba(255, 255, 255, 0.7);
+    --sidebar-bg: rgba(226, 232, 240, 0.5);
+    
+    --text-main: #0f172a;
+    --text-sub: #64748b;
   }
 
   * { 
@@ -50,7 +72,7 @@
   body, html {
     width: 100%; height: 100%;
     font-family: var(--font-ui);
-    background: #030508;
+    background: var(--theme-bg-base);
     color: var(--text-main);
     overflow: hidden;
   }
@@ -69,22 +91,45 @@
     transition: background-color 0.15s, border-color 0.15s;
     will-change: background-color, border-color;
   }
+  body.theme-light .btn-ui { background: rgba(0, 0, 0, 0.05); }
   .btn-ui:hover { background: rgba(255, 255, 255, 0.18); border-color: var(--accent); }
+  body.theme-light .btn-ui:hover { background: rgba(0, 0, 0, 0.08); }
   .btn-ui.active { background: rgba(59, 130, 246, 0.25); border-color: var(--accent); }
 
   .btn-accent {
     background: linear-gradient(135deg, var(--accent), var(--accent-purple));
-    color: #ffffff; border: none; font-weight: 700;
+    color: #ffffff !important; border: none; font-weight: 700;
   }
   .btn-danger { background: rgba(239, 68, 68, 0.3); border-color: rgba(239, 68, 68, 0.6); color: #fca5a5; }
+  body.theme-light .btn-danger { color: #dc2626; }
 
   .input-ui {
     width: 100%; padding: 10px 14px; border-radius: 10px;
-    background: rgba(0, 0, 0, 0.55); border: 1px solid var(--glass-border);
+    background: rgba(0, 0, 0, 0.35); border: 1px solid var(--glass-border);
     color: var(--text-main); font-family: var(--font-ui); font-size: 0.88rem; outline: none;
     transition: border-color 0.15s ease;
   }
+  body.theme-light .input-ui { background: rgba(255, 255, 255, 0.6); }
   .input-ui:focus { border-color: var(--accent); }
+
+  /* GLASS POPUP DIALOGS (REPLACING NATIVE ALERTS) */
+  .custom-popup-overlay {
+    position: fixed; inset: 0; z-index: 9999999;
+    background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(8px);
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none; transition: opacity 0.2s var(--anim-curve);
+  }
+  .custom-popup-overlay.active { opacity: 1; pointer-events: auto; }
+  .custom-popup-card {
+    width: 420px; max-width: 90vw; background: var(--glass-dialog); backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border); border-radius: 24px; box-shadow: var(--glass-shadow);
+    padding: 24px; display: flex; flex-direction: column; gap: 16px;
+    transform: scale(0.92); transition: transform 0.2s var(--anim-curve);
+  }
+  .custom-popup-overlay.active .custom-popup-card { transform: scale(1); }
+  .custom-popup-title { font-size: 1.1rem; font-weight: 700; display: flex; align-items: center; gap: 10px; }
+  .custom-popup-body { font-size: 0.88rem; color: var(--text-sub); line-height: 1.5; }
+  .custom-popup-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 8px; }
 
   /* BOOT, SETUP & LOCK SCREEN */
   #boot-screen { background: #030508; z-index: 10000; }
@@ -149,7 +194,9 @@
     will-change: transform, background-color;
     transition: background-color 0.15s ease, border-color 0.15s ease;
   }
+  body.theme-light .d-icon { text-shadow: 0 1px 3px rgba(255,255,255,0.8); }
   .d-icon:hover { background: rgba(255, 255, 255, 0.12); border-color: rgba(255, 255, 255, 0.25); }
+  body.theme-light .d-icon:hover { background: rgba(0, 0, 0, 0.08); border-color: rgba(0, 0, 0, 0.15); }
   .d-icon.selected { background: rgba(59, 130, 246, 0.2); border-color: var(--accent); }
   .d-icon-box { font-size: 2.3rem; filter: drop-shadow(0 6px 12px rgba(0,0,0,0.5)); pointer-events: none; }
 
@@ -196,6 +243,7 @@
     transition: transform 0.15s var(--anim-curve), background-color 0.15s, border-color 0.15s;
     will-change: transform;
   }
+  body.theme-light .dock-item { background: rgba(0,0,0,0.04); border-color: rgba(0,0,0,0.08); }
   .dock-item:hover { border-color: var(--accent); background: rgba(255,255,255,0.18); transform: translateY(-4px); }
 
   /* RUNNING APP INDICATOR BAR UNDER TASKBAR APP */
@@ -212,12 +260,12 @@
   .launch-hub-panel {
     position: absolute; bottom: 82px; left: 50%; transform: translateX(-50%) translateY(20px) scale(0.96);
     width: 680px; height: 530px;
-    background: rgba(14, 18, 30, var(--glass-opacity-val));
+    background: var(--glass-menu);
     backdrop-filter: var(--glass-blur) saturate(180%);
     -webkit-backdrop-filter: var(--glass-blur) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid var(--glass-border);
     border-radius: 26px; padding: 24px;
-    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.85), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
     display: flex; flex-direction: column; gap: 18px; z-index: 8600;
     opacity: 0; pointer-events: none;
     transition: opacity 0.2s var(--anim-curve), transform 0.2s var(--anim-curve);
@@ -238,7 +286,7 @@
   .context-menu {
     position: fixed; width: 220px; background: var(--glass-menu); backdrop-filter: var(--glass-blur);
     border: 1px solid var(--glass-border); border-radius: 16px; padding: 8px;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.65); z-index: 999999; display: flex; flex-direction: column; gap: 4px;
+    box-shadow: var(--glass-shadow); z-index: 999999; display: flex; flex-direction: column; gap: 4px;
     opacity: 0; pointer-events: none; transform: scale(0.92);
     transition: opacity 0.15s var(--anim-curve), transform 0.15s var(--anim-curve);
     will-change: transform, opacity;
@@ -249,6 +297,7 @@
     cursor: pointer; display: flex; align-items: center; gap: 10px; font-weight: 500;
   }
   .context-item:hover { background: rgba(255,255,255,0.15); color: var(--accent); }
+  body.theme-light .context-item:hover { background: rgba(0,0,0,0.06); }
   .context-item.danger:hover { background: rgba(239, 68, 68, 0.3); color: #fca5a5; }
 
   /* Notification Panel */
@@ -256,7 +305,7 @@
     position: absolute; top: 42px; right: -380px; bottom: 0; width: 360px;
     background: var(--glass-menu); backdrop-filter: var(--glass-blur);
     border-left: 1px solid var(--glass-border); padding: 24px; display: flex; flex-direction: column; gap: 20px;
-    z-index: 8400; box-shadow: -15px 0 40px rgba(0,0,0,0.6);
+    z-index: 8400; box-shadow: -15px 0 40px rgba(0,0,0,0.3);
     transition: right 0.25s var(--anim-curve);
     will-change: right;
   }
@@ -275,7 +324,7 @@
   .os-window.dragging, .os-window.resizing { transition: none !important; }
   .os-window.open-active { opacity: 1; pointer-events: auto; transform: scale(1) translateY(0); }
   .os-window.unfocused { background: var(--glass-window-unfocused); border-color: rgba(255,255,255,0.08); }
-  .os-window.focused { border-color: var(--glass-border-focused); box-shadow: 0 35px 90px rgba(0,0,0,0.85); }
+  .os-window.focused { border-color: var(--glass-border-focused); box-shadow: 0 35px 90px rgba(0,0,0,0.4); }
   .os-window.minimized { opacity: 0 !important; pointer-events: none !important; transform: scale(0.85) translateY(40px) !important; }
   .os-window.fullscreen { top: 0 !important; left: 0 !important; width: 100vw !important; height: 100vh !important; border-radius: 0 !important; z-index: 99999 !important; }
 
@@ -304,15 +353,15 @@
     padding: 3px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 700; cursor: pointer;
     color: var(--text-sub); transition: background-color 0.15s, color 0.15s;
   }
-  .win-pill-btn:hover { color: #fff; background: rgba(255,255,255,0.2); }
+  .win-pill-btn:hover { color: var(--text-main); background: rgba(255,255,255,0.2); }
   .pill-close:hover { background: rgba(239, 68, 68, 0.6); color: #fca5a5; }
 
-  .window-body { flex: 1; overflow: auto; position: relative; background: rgba(4, 6, 10, 0.6); display: flex; flex-direction: column; }
+  .window-body { flex: 1; overflow: auto; position: relative; background: var(--window-body-bg); display: flex; flex-direction: column; }
 
   /* Layouts */
   .os-split-layout { display: flex; height: 100%; width: 100%; flex: 1; overflow: hidden; }
   .os-sidebar {
-    width: 220px; background: rgba(0, 0, 0, 0.4); border-right: 1px solid var(--glass-border);
+    width: 220px; background: var(--sidebar-bg); border-right: 1px solid var(--glass-border);
     padding: 16px; display: flex; flex-direction: column; gap: 8px; flex-shrink: 0; overflow-y: auto;
   }
   .os-nav-item {
@@ -320,34 +369,35 @@
     cursor: pointer; display: flex; align-items: center; gap: 10px; font-weight: 600;
   }
   .os-nav-item.active, .os-nav-item:hover { background: rgba(255, 255, 255, 0.12); color: var(--text-main); }
+  body.theme-light .os-nav-item.active, body.theme-light .os-nav-item:hover { background: rgba(0, 0, 0, 0.08); }
   
   .os-content-pane { flex: 1; padding: 22px; overflow-y: auto; height: 100%; display: flex; flex-direction: column; }
 
   /* SPREADSHEET TOOLBAR & GRID STYLES */
   .sheet-ribbon {
-    background: rgba(18, 24, 38, 0.95);
+    background: var(--glass-menu);
     border-bottom: 1px solid var(--glass-border);
     padding: 8px 12px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center;
     flex-shrink: 0;
   }
   .sheet-group { display: flex; align-items: center; gap: 4px; border-right: 1px solid var(--glass-border); padding-right: 8px; margin-right: 2px; }
   .sheet-formula-bar {
-    display: flex; align-items: center; gap: 10px; background: rgba(0,0,0,0.6);
+    display: flex; align-items: center; gap: 10px; background: rgba(0,0,0,0.2);
     padding: 6px 12px; border-bottom: 1px solid var(--glass-border); font-family: var(--font-code); font-size: 0.85rem;
   }
-  .sheet-table-wrap { flex: 1; overflow: auto; background: #0f172a; position: relative; }
-  .sheet-grid { border-collapse: collapse; width: 100%; min-width: 700px; color: #f8fafc; font-size: 0.82rem; }
-  .sheet-grid th, .sheet-grid td { border: 1px solid rgba(255,255,255,0.12); text-align: center; height: 28px; }
-  .sheet-grid th { background: rgba(30, 41, 59, 0.8); font-weight: 700; color: var(--accent); position: sticky; top: 0; z-index: 10; }
+  .sheet-table-wrap { flex: 1; overflow: auto; background: var(--window-body-bg); position: relative; }
+  .sheet-grid { border-collapse: collapse; width: 100%; min-width: 700px; color: var(--text-main); font-size: 0.82rem; }
+  .sheet-grid th, .sheet-grid td { border: 1px solid var(--glass-border); text-align: center; height: 28px; }
+  .sheet-grid th { background: rgba(30, 41, 59, 0.4); font-weight: 700; color: var(--accent); position: sticky; top: 0; z-index: 10; }
   .sheet-cell-input {
     width: 100%; height: 100%; background: transparent; border: none; outline: none;
-    color: #f8fafc; font-family: var(--font-ui); padding: 0 6px; font-size: 0.82rem;
+    color: var(--text-main); font-family: var(--font-ui); padding: 0 6px; font-size: 0.82rem;
   }
   .sheet-cell-input:focus { background: rgba(59, 130, 246, 0.15); box-shadow: inset 0 0 0 2px var(--accent); }
 
   /* PAINT STUDIO TOOLBAR */
   .paint-ribbon {
-    background: rgba(18, 24, 38, 0.95);
+    background: var(--glass-menu);
     border-bottom: 1px solid var(--glass-border);
     padding: 8px 12px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center;
     flex-shrink: 0;
@@ -355,7 +405,7 @@
   .paint-group { display: flex; align-items: center; gap: 4px; border-right: 1px solid var(--glass-border); padding-right: 8px; margin-right: 2px; }
   .paint-btn {
     min-width: 30px; height: 30px; padding: 0 5px; border-radius: 6px; border: 1px solid transparent;
-    background: rgba(255,255,255,0.05); color: #fff; font-size: 0.8rem; font-weight: 600;
+    background: rgba(255,255,255,0.05); color: var(--text-main); font-size: 0.8rem; font-weight: 600;
     display: inline-flex; align-items: center; justify-content: center; cursor: pointer;
   }
   .paint-btn:hover { background: rgba(255,255,255,0.18); border-color: var(--accent); }
@@ -363,7 +413,7 @@
 
   /* TEXT STUDIO TOOLBAR */
   .word-ribbon {
-    background: rgba(18, 24, 38, 0.95);
+    background: var(--glass-menu);
     border-bottom: 1px solid var(--glass-border);
     padding: 8px 12px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center;
     flex-shrink: 0;
@@ -371,24 +421,24 @@
   .word-group { display: flex; align-items: center; gap: 4px; border-right: 1px solid var(--glass-border); padding-right: 8px; margin-right: 2px; }
   .word-btn {
     min-width: 30px; height: 30px; padding: 0 6px; border-radius: 6px; border: 1px solid transparent;
-    background: rgba(255,255,255,0.05); color: #fff; font-size: 0.82rem; font-weight: 600;
+    background: rgba(255,255,255,0.05); color: var(--text-main); font-size: 0.82rem; font-weight: 600;
     display: inline-flex; align-items: center; justify-content: center; cursor: pointer;
   }
   .word-btn:hover { background: rgba(255,255,255,0.18); border-color: var(--accent); }
   .word-select {
-    height: 30px; border-radius: 6px; background: rgba(0,0,0,0.6); border: 1px solid var(--glass-border);
-    color: #fff; font-size: 0.8rem; padding: 0 8px; outline: none;
+    height: 30px; border-radius: 6px; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border);
+    color: var(--text-main); font-size: 0.8rem; padding: 0 8px; outline: none;
   }
   .word-editor-page {
-    flex: 1; background: rgba(2, 4, 8, 0.8); padding: 24px; overflow-y: auto; display: flex; justify-content: center;
+    flex: 1; background: rgba(2, 4, 8, 0.2); padding: 24px; overflow-y: auto; display: flex; justify-content: center;
   }
   .word-document-paper {
     width: 100%; max-width: 800px; min-height: 580px; background: #ffffff; color: #1e293b;
-    border-radius: 8px; padding: 48px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); outline: none;
+    border-radius: 8px; padding: 48px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); outline: none;
     font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1rem; line-height: 1.6;
   }
   .word-statusbar {
-    height: 28px; background: rgba(10, 14, 24, 0.9); border-top: 1px solid var(--glass-border);
+    height: 28px; background: var(--glass-topbar); border-top: 1px solid var(--glass-border);
     padding: 0 16px; display: flex; align-items: center; justify-content: space-between;
     font-size: 0.75rem; color: var(--text-sub); flex-shrink: 0;
   }
@@ -406,6 +456,7 @@
   .settings-section { display: none; flex-direction: column; gap: 20px; }
   .settings-section.active { display: flex; }
   .setting-row { display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; background: rgba(255,255,255,0.04); border: 1px solid var(--glass-border); border-radius: 14px; }
+  body.theme-light .setting-row { background: rgba(0,0,0,0.02); }
   .setting-label { display: flex; flex-direction: column; gap: 4px; }
   .setting-title { font-size: 0.9rem; font-weight: 600; }
   .setting-desc { font-size: 0.8rem; color: var(--text-sub); }
@@ -416,10 +467,10 @@
   .term-row { display: flex; gap: 10px; align-items: center; }
   .term-input { flex: 1; background: transparent; border: none; outline: none; color: #fff; font-family: var(--font-code); font-size: 0.88rem; }
 
-  .browser-bar { padding: 8px 14px; background: rgba(0,0,0,0.35); border-bottom: 1px solid var(--glass-border); display: flex; gap: 10px; }
+  .browser-bar { padding: 8px 14px; background: rgba(0,0,0,0.15); border-bottom: 1px solid var(--glass-border); display: flex; gap: 10px; }
 
   .calc-wrap { display: flex; flex-direction: column; height: 100%; padding: 20px; gap: 14px; flex: 1; }
-  .calc-disp { background: rgba(0,0,0,0.65); border: 1px solid var(--glass-border); border-radius: 14px; font-size: 2.2rem; font-family: var(--font-code); color: #fff; padding: 16px; text-align: right; }
+  .calc-disp { background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); border-radius: 14px; font-size: 2.2rem; font-family: var(--font-code); color: var(--text-main); padding: 16px; text-align: right; }
   .calc-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; flex: 1; }
   .calc-grid button { font-size: 1.1rem; border-radius: 12px; }
 
@@ -466,10 +517,21 @@
   }
   @keyframes fogPulse { 0% { opacity: 0.3; } 100% { opacity: 0.9; } }
 
+  /* LUCKY BLOCK STYLES */
+  .lucky-box {
+    width: 110px; height: 110px; border-radius: 22px;
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    box-shadow: 0 0 30px rgba(245, 158, 11, 0.5);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 3.2rem; cursor: pointer; transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .lucky-box:hover { transform: scale(1.08) rotate(3deg); box-shadow: 0 0 45px rgba(245, 158, 11, 0.8); }
+  .lucky-box:active { transform: scale(0.95); }
+
   /* ADDITIVE UTILITY APP STYLES */
   .start-menu-fullscreen {
     position: absolute; inset: 0; z-index: 8700; display: flex; flex-direction: column;
-    background: rgba(8, 11, 18, 0.88); backdrop-filter: var(--glass-blur) saturate(180%);
+    background: var(--glass-menu); backdrop-filter: var(--glass-blur) saturate(180%);
     -webkit-backdrop-filter: var(--glass-blur) saturate(180%); opacity: 0; pointer-events: none;
     transform: translateY(12px); transition: opacity 0.25s var(--anim-curve), transform 0.25s var(--anim-curve);
     padding: 46px 7vw 54px;
@@ -497,6 +559,7 @@
   .utility-textarea { min-height: 88px; resize: vertical; font-family: var(--font-code); }
   .utility-hint { color: var(--text-sub); font-size: 0.78rem; }
   .utility-grid-two { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .code-area { width: 100%; padding: 10px 14px; border-radius: 10px; background: rgba(0, 0, 0, 0.4); border: 1px solid var(--glass-border); color: var(--text-main); font-family: var(--font-code); font-size: 0.85rem; outline: none; }
   .markdown-layout { display: grid; grid-template-columns: 1fr 1fr; min-height: 0; }
   .markdown-input { min-width: 0; resize: none; }
   .markdown-preview { padding: 26px; overflow: auto; background: #fff; color: #1e293b; line-height: 1.6; }
@@ -517,6 +580,18 @@
 </style>
 </head>
 <body>
+
+  <!-- GLOBAL CLEAN GLASS POPUP CONTAINER -->
+  <div class="custom-popup-overlay" id="globalGlassPopup">
+    <div class="custom-popup-card">
+      <div class="custom-popup-title" id="popupTitle">✨ Notification</div>
+      <div class="custom-popup-body" id="popupBody">Message text goes here...</div>
+      <div id="popupInputContainer"></div>
+      <div class="custom-popup-actions" id="popupActions">
+        <button class="btn-ui btn-accent" onclick="closeGlassPopup()">OK</button>
+      </div>
+    </div>
+  </div>
 
   <!-- 1. BOOT SCREEN -->
   <div id="boot-screen" class="os-screen">
@@ -1070,15 +1145,29 @@ Type 'help' or 'bringback reinstall /appnameApp' to manage apps.</div>
         <div class="window-body">
           <div class="os-split-layout">
             <div class="os-sidebar">
-              <div class="os-nav-item active" onclick="switchSettingsTab('appearanceTab', this)">🎨 Personalize</div>
-              <div class="os-nav-item" onclick="switchSettingsTab('glassTab', this)">🖥️ Glass & Effects</div>
-              <div class="os-nav-item" onclick="switchSettingsTab('appManagerTab', this)">📦 App Manager</div>
-              <div class="os-nav-item" onclick="switchSettingsTab('systemConfigTab', this)">⚙️ OS Configuration</div>
+              <div class="os-nav-item active" id="nav-appearanceTab" onclick="switchSettingsTab('appearanceTab', this)">🎨 Personalize</div>
+              <div class="os-nav-item" id="nav-glassTab" onclick="switchSettingsTab('glassTab', this)">🖥️ Glass & Effects</div>
+              <div class="os-nav-item" id="nav-appManagerTab" onclick="switchSettingsTab('appManagerTab', this)">📦 App Manager</div>
+              <div class="os-nav-item" id="nav-systemConfigTab" onclick="switchSettingsTab('systemConfigTab', this)">⚙️ OS Configuration</div>
             </div>
             <div class="os-content-pane">
               <!-- TAB 1: PERSONALIZE -->
               <div class="settings-section active" id="appearanceTab">
-                <h3 style="font-size:1.05rem; font-weight:700;">Wallpaper Gallery</h3>
+                <h3 style="font-size:1.05rem; font-weight:700;">Theme & Personalization</h3>
+                
+                <!-- Dark / Light Mode Toggle -->
+                <div class="setting-row">
+                  <div class="setting-label">
+                    <span class="setting-title">System Theme Mode</span>
+                    <span class="setting-desc">Switch between Dark Glassmorphism and Light Glassmorphism.</span>
+                  </div>
+                  <select class="input-ui" id="themeModeSelect" style="width:160px;" onchange="setSystemTheme(this.value)">
+                    <option value="dark">🌙 Dark Mode</option>
+                    <option value="light">☀️ Light Mode</option>
+                  </select>
+                </div>
+
+                <h3 style="font-size:1.05rem; font-weight:700; margin-top:10px;">Wallpaper Gallery</h3>
                 
                 <div class="setting-row">
                   <div class="setting-label">
@@ -1095,7 +1184,7 @@ Type 'help' or 'bringback reinstall /appnameApp' to manage apps.</div>
                   </select>
                 </div>
 
-                <div class="wp-gallery" id="settingsWpGrid" style="max-height:280px; overflow-y:auto; padding-right:6px;"></div>
+                <div class="wp-gallery" id="settingsWpGrid" style="max-height:220px; overflow-y:auto; padding-right:6px;"></div>
 
                 <div class="setting-row">
                   <div class="setting-label">
@@ -1170,8 +1259,29 @@ Type 'help' or 'bringback reinstall /appnameApp' to manage apps.</div>
 
               <!-- TAB 4: OS CONFIGURATION -->
               <div class="settings-section" id="systemConfigTab">
-                <h3 style="font-size:1.05rem; font-weight:700;">Kernel & Reset Controls</h3>
-                <div class="setting-row">
+                <h3 style="font-size:1.05rem; font-weight:700;">Kernel Security & Account Password</h3>
+                
+                <!-- CHANGE PASSWORD SECTION -->
+                <div style="padding:16px; background:rgba(255,255,255,0.04); border:1px solid var(--glass-border); border-radius:14px; display:flex; flex-direction:column; gap:12px;">
+                  <span class="setting-title">🔑 Change Account Password</span>
+                  <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                    <div>
+                      <label style="font-size:0.75rem; color:var(--text-sub);">Old Password</label>
+                      <input type="password" class="input-ui" id="pwdOld" placeholder="Current password..." />
+                    </div>
+                    <div>
+                      <label style="font-size:0.75rem; color:var(--text-sub);">New Password</label>
+                      <input type="password" class="input-ui" id="pwdNew" placeholder="New password..." />
+                    </div>
+                  </div>
+                  <div>
+                    <label style="font-size:0.75rem; color:var(--text-sub);">Re-enter New Password</label>
+                    <input type="password" class="input-ui" id="pwdConfirm" placeholder="Confirm new password..." />
+                  </div>
+                  <button class="btn-ui btn-accent" style="align-self:flex-end;" onclick="changeSystemPassword()">Update Password</button>
+                </div>
+
+                <div class="setting-row" style="margin-top:10px;">
                   <div class="setting-label">
                     <span class="setting-title">Current Kernel Build</span>
                     <span class="setting-desc">Enfrok WebOS Core 5.2</span>
@@ -1446,17 +1556,6 @@ Type 'help' or 'bringback reinstall /appnameApp' to manage apps.</div>
         </div>
       </div>
 
-      <div class="os-window" id="sysMonApp" style="width: 580px; height: 380px; top: 90px; left: 230px;">
-        <div class="window-topbar" onmousedown="dragWindow(event, 'sysMonApp')">
-          <div class="window-title">📊 System Monitor</div>
-          <div class="win-controls-pills"><span class="win-pill-btn pill-close" onclick="closeWindow('sysMonApp')">✕</span></div>
-        </div>
-        <div class="window-body" style="padding:20px; display:flex; flex-direction:column; gap:14px;">
-          <div><span>CPU Load</span><b id="sysCpuVal">14%</b></div>
-          <div style="width:100%; height:8px; background:rgba(255,255,255,0.1); border-radius:4px;"><div id="sysCpuBar" style="width:14%; height:100%; background:var(--accent);"></div></div>
-        </div>
-      </div>
-
       <div class="os-window" id="hashGenApp" style="width: 520px; height: 360px; top: 90px; left: 220px;">
         <div class="window-topbar" onmousedown="dragWindow(event, 'hashGenApp')">
           <div class="window-title">🔑 Hash Generator</div>
@@ -1608,7 +1707,7 @@ Write **Markdown** on the left and see a clean preview here.
     <!-- Notification Center -->
     <div class="notification-center" id="notificationCenter">
       <h3 style="font-size:1rem; font-weight:700;">Notifications & System Control</h3>
-      <div style="font-size:0.85rem; color:var(--text-sub); border-bottom:1px solid var(--glass-border); padding-bottom:14px;">Enfrok OS 5.2 loaded with enhanced window resizing, top bar customization & right-click app uninstalling.</div>
+      <div style="font-size:0.85rem; color:var(--text-sub); border-bottom:1px solid var(--glass-border); padding-bottom:14px;">Enfrok OS 5.2 loaded with custom glass popups, dark/light theme options, and quick personalization context menu.</div>
     </div>
 
     <!-- TASKBAR (DOCK) -->
@@ -1626,7 +1725,7 @@ Write **Markdown** on the left and see a clean preview here.
           <div class="hub-avatar" id="fullscreenAvatarLetter">D</div>
           <div><div class="fullscreen-start-title">Start</div><div class="fullscreen-start-subtitle" id="fullscreenStartSubtitle">All installed applications</div></div>
         </div>
-        <button class="btn-ui" onclick="openWindow('settingsApp'); closeFullscreenStartMenu();">⚙️ Personalize</button>
+        <button class="btn-ui" onclick="openPersonalizeSettings(); closeFullscreenStartMenu();">⚙️ Personalize</button>
       </div>
       <input class="input-ui fullscreen-start-search" id="fullscreenStartSearch" placeholder="Search installed applications..." oninput="filterFullscreenStart(this.value)">
       <div class="fullscreen-start-grid" id="fullscreenStartGrid"></div>
@@ -1643,7 +1742,7 @@ Write **Markdown** on the left and see a clean preview here.
             <div style="font-size:0.78rem; color:var(--text-sub);">Enfrok Workstation Root</div>
           </div>
         </div>
-        <button class="btn-ui" onclick="openWindow('settingsApp'); toggleLaunchHub();">⚙️ Settings</button>
+        <button class="btn-ui" onclick="openPersonalizeSettings(); toggleLaunchHub();">⚙️ Settings</button>
       </div>
 
       <input type="text" class="input-ui" placeholder="Search applications or tools..." onkeyup="filterHub(this.value)" />
@@ -1656,7 +1755,7 @@ Write **Markdown** on the left and see a clean preview here.
   /* PROTECTED CORE SYSTEM APPS */
   const SYSTEM_APPS = ['terminalApp', 'documentCore', 'settingsApp'];
 
-  /* WALLPAPERS */
+  /* EXPANDED WALLPAPERS GALLERY */
   const WALLPAPERS = [
     'https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=1920',
     'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1920',
@@ -1667,10 +1766,14 @@ Write **Markdown** on the left and see a clean preview here.
     'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=1920',
     'https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=1920',
     'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=1920',
-    'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=1920'
+    'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=1920',
+    'https://images.unsplash.com/photo-1518837695005-2083093ee35b?q=80&w=1920',
+    'https://images.unsplash.com/photo-1502082553048-f009c37129b9?q=80&w=1920',
+    'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=1920',
+    'https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1920'
   ];
 
-  /* ALL APPS */
+  /* ALL APPS (System Monitor Removed) */
   const ALL_APPS = [
     { id: 'sheetApp', name: 'Spreadsheet', icon: '📊', pinnedDock: true, pinnedDesktop: true },
     { id: 'wordApp', name: 'Text Studio', icon: '📄', pinnedDock: true, pinnedDesktop: true },
@@ -1699,14 +1802,13 @@ Write **Markdown** on the left and see a clean preview here.
     { id: 'colorPickerApp', name: 'Color Studio', icon: '🎨', pinnedDock: false, pinnedDesktop: false },
     { id: 'pianoApp', name: 'Synth Piano', icon: '🎹', pinnedDock: false, pinnedDesktop: false },
     { id: 'jsonApp', name: 'JSON Formatter', icon: '🛠️', pinnedDock: false, pinnedDesktop: false },
-    { id: 'sysMonApp', name: 'System Monitor', icon: '📊', pinnedDock: false, pinnedDesktop: false },
     { id: 'hashGenApp', name: 'Hash Generator', icon: '🔑', pinnedDock: false, pinnedDesktop: false },
     { id: 'urlEncodeApp', name: 'URL Encoder', icon: '🔗', pinnedDock: false, pinnedDesktop: false },
     { id: 'loremApp', name: 'Lorem Ipsum', icon: '📝', pinnedDock: false, pinnedDesktop: false },
     { id: 'htmlEscapeApp', name: 'HTML Escaper', icon: '🛡️', pinnedDock: false, pinnedDesktop: false },
     { id: 'qrGenApp', name: 'QR Code Studio', icon: '📲', pinnedDock: false, pinnedDesktop: false },
     { id: 'mathLabApp', name: 'Math Lab Studio', icon: '🔬', pinnedDock: false, pinnedDesktop: false },
-    { id: 'contrastApp', name: 'Contrast Checker', icon: '👁️', pinnedDock: false, pinnedDesktop: false },
+    { id: 'contrastApp', name: 'Contrast Checker', icon: '👁️', pinnedDock: false, fontPinned: false },
     { id: 'focusApp', name: 'Focus Timer', icon: '⏳', pinnedDock: false, pinnedDesktop: false },
     { id: 'markdownApp', name: 'Markdown Preview', icon: '📝', pinnedDock: false, pinnedDesktop: false },
     { id: 'base64App', name: 'Base64 Studio', icon: '🔐', pinnedDock: false, pinnedDesktop: false },
@@ -1724,11 +1826,13 @@ Write **Markdown** on the left and see a clean preview here.
   let autoWpIntervalTimer = null;
   let currentWpIndex = 0;
   let currentFileFilter = 'all';
+  let isSystemMuted = false;
 
   let osData = {
     installed: false,
     username: 'Developer',
     password: '',
+    themeMode: 'dark',
     wallpaper: WALLPAPERS[0],
     accentColor: '#3b82f6',
     wpIntervalSetting: 'off',
@@ -1745,6 +1849,64 @@ Write **Markdown** on the left and see a clean preview here.
     ]
   };
 
+  /* CLEAN GLASSPOPUP MODAL SYSTEM (REPLACES BROWSER POPUPS) */
+  let popupCallback = null;
+
+  function showGlassAlert(message, title = "✨ Notification") {
+    document.getElementById('popupTitle').textContent = title;
+    document.getElementById('popupBody').textContent = message;
+    document.getElementById('popupInputContainer').innerHTML = '';
+    document.getElementById('popupActions').innerHTML = `<button class="btn-ui btn-accent" onclick="closeGlassPopup()">OK</button>`;
+    document.getElementById('globalGlassPopup').classList.add('active');
+  }
+
+  function showGlassConfirm(message, onConfirm, title = "⚠️ Confirmation") {
+    document.getElementById('popupTitle').textContent = title;
+    document.getElementById('popupBody').textContent = message;
+    document.getElementById('popupInputContainer').innerHTML = '';
+    popupCallback = onConfirm;
+    document.getElementById('popupActions').innerHTML = `
+      <button class="btn-ui" onclick="closeGlassPopup()">Cancel</button>
+      <button class="btn-ui btn-accent" onclick="triggerGlassPopupConfirm()">Confirm</button>
+    `;
+    document.getElementById('globalGlassPopup').classList.add('active');
+  }
+
+  function showGlassPrompt(message, defaultValue, onSubmit, title = "📝 Input Required") {
+    document.getElementById('popupTitle').textContent = title;
+    document.getElementById('popupBody').textContent = message;
+    document.getElementById('popupInputContainer').innerHTML = `
+      <input type="text" class="input-ui" id="glassPromptInput" value="${defaultValue || ''}" style="margin-top:8px;" onkeydown="if(event.key==='Enter') triggerGlassPopupSubmit()" />
+    `;
+    popupCallback = onSubmit;
+    document.getElementById('popupActions').innerHTML = `
+      <button class="btn-ui" onclick="closeGlassPopup()">Cancel</button>
+      <button class="btn-ui btn-accent" onclick="triggerGlassPopupSubmit()">Submit</button>
+    `;
+    document.getElementById('globalGlassPopup').classList.add('active');
+    setTimeout(() => {
+      const inp = document.getElementById('glassPromptInput');
+      if (inp) { inp.focus(); inp.select(); }
+    }, 100);
+  }
+
+  function closeGlassPopup() {
+    document.getElementById('globalGlassPopup').classList.remove('active');
+    popupCallback = null;
+  }
+
+  function triggerGlassPopupConfirm() {
+    if (popupCallback) popupCallback();
+    closeGlassPopup();
+  }
+
+  function triggerGlassPopupSubmit() {
+    const inp = document.getElementById('glassPromptInput');
+    const val = inp ? inp.value : '';
+    if (popupCallback) popupCallback(val);
+    closeGlassPopup();
+  }
+
   function loadData() {
     const saved = localStorage.getItem('enfrok_os_v52_fullsuite');
     if (saved) {
@@ -1757,8 +1919,10 @@ Write **Markdown** on the left and see a clean preview here.
   }
 
   function eraseSystemData() {
-    localStorage.removeItem('enfrok_os_v52_fullsuite');
-    location.reload();
+    showGlassConfirm("Are you sure you want to factory reset Enfrok OS? All local data, user profiles, and saved files will be cleared.", () => {
+      localStorage.removeItem('enfrok_os_v52_fullsuite');
+      location.reload();
+    }, "⚠️ Factory Reset OS");
   }
 
   function setSystemAccent(hexColor) {
@@ -1769,6 +1933,50 @@ Write **Markdown** on the left and see a clean preview here.
     document.documentElement.style.setProperty('--glass-border-focused', hexColor);
   }
 
+  /* SYSTEM THEME (DARK / LIGHT) */
+  function setSystemTheme(mode) {
+    osData.themeMode = mode;
+    saveData();
+    if (mode === 'light') {
+      document.body.classList.add('theme-light');
+    } else {
+      document.body.classList.remove('theme-light');
+    }
+    const select = document.getElementById('themeModeSelect');
+    if (select) select.value = mode;
+  }
+
+  /* CHANGE PASSWORD FEATURE IN OS CONFIGURATION */
+  function changeSystemPassword() {
+    const oldP = document.getElementById('pwdOld').value;
+    const newP = document.getElementById('pwdNew').value;
+    const confirmP = document.getElementById('pwdConfirm').value;
+
+    if (!oldP || !newP || !confirmP) {
+      showGlassAlert("Please fill in all password fields.", "⚠️ Password Error");
+      return;
+    }
+
+    if (oldP !== osData.password) {
+      showGlassAlert("The current password you entered is incorrect.", "⚠️ Authentication Failed");
+      return;
+    }
+
+    if (newP !== confirmP) {
+      showGlassAlert("New password and confirmation do not match.", "⚠️ Password Mismatch");
+      return;
+    }
+
+    osData.password = newP;
+    saveData();
+
+    document.getElementById('pwdOld').value = '';
+    document.getElementById('pwdNew').value = '';
+    document.getElementById('pwdConfirm').value = '';
+
+    showGlassAlert("Your password has been successfully updated!", "🔑 Password Updated");
+  }
+
   window.addEventListener('DOMContentLoaded', () => {
     loadData();
     populateWallpapers();
@@ -1776,6 +1984,7 @@ Write **Markdown** on the left and see a clean preview here.
     setupWindowResizeHandles();
 
     setSystemAccent(osData.accentColor || '#3b82f6');
+    setSystemTheme(osData.themeMode || 'dark');
     setStartMenuMode(osData.startMenuMode || 'normal', false);
 
     setTimeout(() => {
@@ -1796,7 +2005,7 @@ Write **Markdown** on the left and see a clean preview here.
     const password = document.getElementById('setupPassword').value.trim();
 
     if (!username || !password) {
-      alert("Both Username and Password are required to create an account.");
+      showGlassAlert("Both Username and Password are required to create an account.", "⚠️ Required Fields");
       return;
     }
 
@@ -1829,7 +2038,7 @@ Write **Markdown** on the left and see a clean preview here.
     if (inputPass === osData.password) {
       launchDesktop();
     } else {
-      alert("Incorrect Password!");
+      showGlassAlert("Incorrect Password! Please try again.", "⚠️ Access Denied");
     }
   }
 
@@ -1845,6 +2054,13 @@ Write **Markdown** on the left and see a clean preview here.
     initWhiteboard();
     initWorldClock();
     updateWeatherDisplay();
+  }
+
+  /* SYSTEM AUDIO MUTE TOGGLE */
+  function toggleMuteAudio() {
+    isSystemMuted = !isSystemMuted;
+    const btn = document.getElementById('sysAudioMute');
+    if (btn) btn.textContent = isSystemMuted ? '🔇 Muted' : '🔊 Audio';
   }
 
   /* TOP BAR / UPPER MENU MANAGEMENT */
@@ -1896,7 +2112,7 @@ Write **Markdown** on the left and see a clean preview here.
     menu.innerHTML = `
       <div class="context-item" onclick="promptCustomTopBarApps()">➕ Add/Remove Upper Menu Apps</div>
       <div class="context-item danger" onclick="toggleTopBarVisibility()">🚫 Disable Upper Menu</div>
-      <div class="context-item" onclick="openWindow('settingsApp')">⚙️ Open Upper Menu Settings</div>
+      <div class="context-item" onclick="openPersonalizeSettings()">⚙️ Personalize Upper Menu</div>
     `;
     menu.classList.add('open');
   }
@@ -1924,14 +2140,15 @@ Write **Markdown** on the left and see a clean preview here.
 
   function promptCustomTopBarApps() {
     const installed = getInstalledApps();
-    const appListStr = installed.map((a, i) => `${i + 1}. ${a.name} (${a.id})`).join('\n');
-    const input = prompt(`Enter App IDs (comma-separated) to pin to Upper Menu:\n\nAvailable Apps:\n${appListStr}`, (osData.topBarApps || []).join(', '));
-    if (input !== null) {
-      const selected = input.split(',').map(s => s.trim()).filter(id => installed.some(a => a.id === id));
-      osData.topBarApps = selected;
-      saveData();
-      renderTopBar();
-    }
+    const appListStr = installed.map((a, i) => `${a.id}`).join(', ');
+    showGlassPrompt(`Enter App IDs (comma-separated) to pin to Upper Menu:\nAvailable: ${appListStr}`, (osData.topBarApps || []).join(', '), (input) => {
+      if (input !== null && input !== undefined) {
+        const selected = input.split(',').map(s => s.trim()).filter(id => installed.some(a => a.id === id));
+        osData.topBarApps = selected;
+        saveData();
+        renderTopBar();
+      }
+    }, "📌 Pin Apps to Upper Menu");
   }
 
   /* CONTEXT MENU POSITIONING FIX */
@@ -1957,6 +2174,11 @@ Write **Markdown** on the left and see a clean preview here.
     menu.style.left = `${Math.max(10, left)}px`;
     menu.style.top = `${Math.max(10, top)}px`;
     menu.style.visibility = 'visible';
+  }
+
+  function openPersonalizeSettings() {
+    openWindow('settingsApp');
+    switchSettingsTab('appearanceTab', document.getElementById('nav-appearanceTab'));
   }
 
   /* TASKBAR PINNING & CONTEXT MENU FIXES */
@@ -1988,9 +2210,10 @@ Write **Markdown** on the left and see a clean preview here.
         ${!isProtected ? `<div class="context-item danger" onclick="uninstallApp('${appId}')">⚠️ Uninstall App</div>` : ''}
       `;
     } else {
+      /* DESKTOP BACKGROUND RIGHT-CLICK MENU (OPENS PERSONALIZE INSTEAD OF SETTINGS) */
       menu.innerHTML = `
-        <div class="context-item" onclick="openWindow('documentCore')">📁 Open Document</div>
-        <div class="context-item" onclick="openWindow('settingsApp')">⚙️ Settings</div>
+        <div class="context-item" onclick="openPersonalizeSettings()">🎨 Personalize</div>
+        <div class="context-item" onclick="openWindow('documentCore')">📁 Open Document Storage</div>
         <div class="context-item" onclick="location.reload()">🔄 Refresh OS</div>
       `;
     }
@@ -2007,7 +2230,7 @@ Write **Markdown** on the left and see a clean preview here.
 
   function removeFromDesktop(appId) {
     if (SYSTEM_APPS.includes(appId)) {
-      alert("System apps like Terminal, Document, and Settings cannot be removed from desktop.");
+      showGlassAlert("System apps like Terminal, Document, and Settings cannot be removed from desktop.", "⚠️ Protected System App");
       return;
     }
     osData.desktopApps = osData.desktopApps.filter(id => id !== appId);
@@ -2017,12 +2240,13 @@ Write **Markdown** on the left and see a clean preview here.
 
   function uninstallApp(appId) {
     if (SYSTEM_APPS.includes(appId)) {
-      alert("System core apps like Terminal, Document, and Settings cannot be deleted!");
+      showGlassAlert("System core apps like Terminal, Document, and Settings cannot be deleted!", "⚠️ Protected System App");
       return;
     }
     const app = ALL_APPS.find(a => a.id === appId);
     const appName = app ? app.name : appId;
-    if (confirm(`Are you sure you want to uninstall ${appName}?`)) {
+    
+    showGlassConfirm(`Are you sure you want to uninstall ${appName}?`, () => {
       if (!osData.uninstalledApps.includes(appId)) {
         osData.uninstalledApps.push(appId);
       }
@@ -2034,7 +2258,7 @@ Write **Markdown** on the left and see a clean preview here.
       initDesktop();
       renderTopBar();
       renderFolders();
-    }
+    }, `🗑️ Uninstall ${appName}`);
   }
 
   function handleAppDragStart(e, appId) {
@@ -2089,6 +2313,8 @@ Write **Markdown** on the left and see a clean preview here.
     if (val === '5s') ms = 5000;
     else if (val === '10s') ms = 10000;
     else if (val === '1m') ms = 60000;
+    else if (val === '5m') ms = 300000;
+    else if (val === '10m') ms = 600000;
 
     if (ms > 0) {
       autoWpIntervalTimer = setInterval(() => {
@@ -2223,7 +2449,6 @@ Write **Markdown** on the left and see a clean preview here.
     dockItemsArea.innerHTML = '';
     const activeApps = getInstalledApps();
 
-    // Gather pinned apps + all currently open apps
     let dockAppIds = [...(osData.dockApps || [])];
     
     ALL_APPS.forEach(app => {
@@ -2382,7 +2607,7 @@ Write **Markdown** on the left and see a clean preview here.
 
     for (let r = 1; r <= sheetRowsCount; r++) {
       let tr = document.createElement('tr');
-      tr.innerHTML = `<td style="font-weight:700; background:rgba(30,41,59,0.8);">${r}</td>`;
+      tr.innerHTML = `<td style="font-weight:700; background:rgba(30,41,59,0.4);">${r}</td>`;
       sheetCols.forEach(col => {
         let cellId = `${col}${r}`;
         tr.innerHTML += `
@@ -2440,6 +2665,19 @@ Write **Markdown** on the left and see a clean preview here.
     } catch(e) { return "#ERROR"; }
   }
 
+  function exportSheetCSV() {
+    let csv = sheetCols.join(',') + '\n';
+    for (let r = 1; r <= sheetRowsCount; r++) {
+      let rowVals = sheetCols.map(col => `"${(sheetData[`${col}${r}`] || '').replace(/"/g, '""')}"`);
+      csv += rowVals.join(',') + '\n';
+    }
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = activeSheetFilename.replace('.sheet', '.csv');
+    a.click();
+  }
+
   function sheetSortCol(dir) {
     let col = activeCellId[0];
     let vals = [];
@@ -2477,29 +2715,34 @@ Write **Markdown** on the left and see a clean preview here.
       let v = sheetData[k];
       if (v) { if (seen[v]) dupes.add(v); else seen[v] = true; }
     });
-    alert(`Found ${dupes.size} duplicate cell values across sheet.`);
+    showGlassAlert(`Found ${dupes.size} duplicate cell values across sheet.`, "💡 Duplicate Detection");
   }
 
   function sheetFindReplace() {
-    let findVal = prompt("Enter text to find:");
-    let replaceVal = prompt("Enter replacement text:");
-    if (findVal && replaceVal) {
-      Object.keys(sheetData).forEach(k => {
-        if (sheetData[k] === findVal) sheetData[k] = replaceVal;
-      });
-      recalcSpreadsheet();
-    }
+    showGlassPrompt("Enter text to find:", "", (findVal) => {
+      if (findVal) {
+        showGlassPrompt(`Replace '${findVal}' with:`, "", (replaceVal) => {
+          if (replaceVal !== null) {
+            Object.keys(sheetData).forEach(k => {
+              if (sheetData[k] === findVal) sheetData[k] = replaceVal;
+            });
+            recalcSpreadsheet();
+          }
+        }, "🔍 Replace Text");
+      }
+    }, "🔍 Find Text");
   }
 
   function saveSpreadsheet() {
-    const name = prompt("Spreadsheet Name:", activeSheetFilename);
-    if (!name) return;
-    activeSheetFilename = name.endsWith('.sheet') ? name : name + '.sheet';
-    document.getElementById('sheetDocTitle').textContent = activeSheetFilename;
-    const idx = osData.savedFiles.findIndex(f => f.name === activeSheetFilename);
-    if (idx >= 0) osData.savedFiles[idx].data = { ...sheetData };
-    else osData.savedFiles.push({ name: activeSheetFilename, data: { ...sheetData } });
-    saveData(); renderFolders(); alert(`Saved '${activeSheetFilename}'!`);
+    showGlassPrompt("Spreadsheet Name:", activeSheetFilename, (name) => {
+      if (!name) return;
+      activeSheetFilename = name.endsWith('.sheet') ? name : name + '.sheet';
+      document.getElementById('sheetDocTitle').textContent = activeSheetFilename;
+      const idx = osData.savedFiles.findIndex(f => f.name === activeSheetFilename);
+      if (idx >= 0) osData.savedFiles[idx].data = { ...sheetData };
+      else osData.savedFiles.push({ name: activeSheetFilename, data: { ...sheetData } });
+      saveData(); renderFolders(); showGlassAlert(`Saved '${activeSheetFilename}'!`, "💾 Spreadsheet Saved");
+    }, "💾 Save Spreadsheet");
   }
 
   function newSpreadsheet() { sheetData = {}; recalcSpreadsheet(); }
@@ -2507,7 +2750,7 @@ Write **Markdown** on the left and see a clean preview here.
 
   /* PAINT STUDIO ENGINE */
   let paintTool = 'pen', paintSize = 5, paintColor = '#3b82f6', isPainting = false;
-  let paintUndoStack = [];
+  let paintUndoStack = [], paintRedoStack = [];
 
   function initPaintStudio() {
     const canvas = document.getElementById('paintStudioCanvas');
@@ -2521,6 +2764,13 @@ Write **Markdown** on the left and see a clean preview here.
       const rect = canvas.getBoundingClientRect();
       startX = e.clientX - rect.left; startY = e.clientY - rect.top;
       if (paintTool === 'pen' || paintTool === 'eraser') { ctx.beginPath(); ctx.moveTo(startX, startY); }
+      else if (paintTool === 'bucket') { floodFillPaint(Math.floor(startX), Math.floor(startY), paintColor); savePaintState(); }
+      else if (paintTool === 'picker') { pickPaintColor(Math.floor(startX), Math.floor(startY)); }
+      else if (paintTool === 'text') {
+        showGlassPrompt("Enter text to render on canvas:", "", (txt) => {
+          if (txt) { ctx.font = `${paintSize * 4}px var(--font-ui)`; ctx.fillStyle = paintColor; ctx.fillText(txt, startX, startY); savePaintState(); }
+        }, "🔤 Add Canvas Text");
+      }
     };
 
     canvas.onmousemove = (e) => {
@@ -2542,13 +2792,103 @@ Write **Markdown** on the left and see a clean preview here.
       }
     };
 
-    canvas.onmouseup = () => { if (isPainting) { isPainting = false; savePaintState(); } };
+    canvas.onmouseup = (e) => {
+      if (!isPainting) return;
+      isPainting = false;
+      const rect = canvas.getBoundingClientRect();
+      const curX = e.clientX - rect.left, curY = e.clientY - rect.top;
+      const fillVal = document.getElementById('paintColorFill').value || '#ffffff';
+
+      ctx.lineWidth = paintSize; ctx.strokeStyle = paintColor; ctx.fillStyle = fillVal;
+
+      if (paintTool === 'line') { ctx.beginPath(); ctx.moveTo(startX, startY); ctx.lineTo(curX, curY); ctx.stroke(); }
+      else if (paintTool === 'rect') { ctx.strokeRect(startX, startY, curX - startX, curY - startY); }
+      else if (paintTool === 'circle') { ctx.beginPath(); ctx.arc(startX, startY, Math.hypot(curX - startX, curY - startY), 0, Math.PI * 2); ctx.stroke(); }
+      else if (paintTool === 'fillRect') { ctx.fillRect(startX, startY, curX - startX, curY - startY); ctx.strokeRect(startX, startY, curX - startX, curY - startY); }
+      else if (paintTool === 'fillCircle') { ctx.beginPath(); ctx.arc(startX, startY, Math.hypot(curX - startX, curY - startY), 0, Math.PI * 2); ctx.fill(); ctx.stroke(); }
+
+      savePaintState();
+    };
   }
 
-  function setPaintTool(t) { paintTool = t; }
+  function setPaintTool(t) {
+    paintTool = t;
+    document.querySelectorAll('#paintApp .paint-btn').forEach(b => b.classList.remove('active'));
+    const target = document.getElementById(`tool-${t}`);
+    if (target) target.classList.add('active');
+  }
+
   function setPaintSize(s) { paintSize = s; }
   function setPaintColor(c) { paintColor = c; }
-  function savePaintState() { const canvas = document.getElementById('paintStudioCanvas'); if (canvas) paintUndoStack.push(canvas.toDataURL()); }
+  
+  function savePaintState() {
+    const canvas = document.getElementById('paintStudioCanvas');
+    if (canvas) {
+      paintUndoStack.push(canvas.toDataURL());
+      paintRedoStack = [];
+    }
+  }
+
+  function undoPaint() {
+    if (paintUndoStack.length > 1) {
+      const canvas = document.getElementById('paintStudioCanvas');
+      const ctx = canvas.getContext('2d');
+      paintRedoStack.push(paintUndoStack.pop());
+      const img = new Image();
+      img.src = paintUndoStack[paintUndoStack.length - 1];
+      img.onload = () => { ctx.clearRect(0,0,canvas.width,canvas.height); ctx.drawImage(img, 0, 0); };
+    }
+  }
+
+  function redoPaint() {
+    if (paintRedoStack.length > 0) {
+      const canvas = document.getElementById('paintStudioCanvas');
+      const ctx = canvas.getContext('2d');
+      const state = paintRedoStack.pop();
+      paintUndoStack.push(state);
+      const img = new Image();
+      img.src = state;
+      img.onload = () => { ctx.clearRect(0,0,canvas.width,canvas.height); ctx.drawImage(img, 0, 0); };
+    }
+  }
+
+  function pickPaintColor(x, y) {
+    const canvas = document.getElementById('paintStudioCanvas');
+    const ctx = canvas.getContext('2d');
+    const p = ctx.getImageData(x, y, 1, 1).data;
+    const hex = "#" + ("0" + p[0].toString(16)).slice(-2) + ("0" + p[1].toString(16)).slice(-2) + ("0" + p[2].toString(16)).slice(-2);
+    setPaintColor(hex);
+    document.getElementById('paintColorMain').value = hex;
+  }
+
+  function floodFillPaint(startX, startY, fillHex) {
+    const canvas = document.getElementById('paintStudioCanvas');
+    const ctx = canvas.getContext('2d');
+    const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const data = imgData.data;
+
+    function hexToRgb(h) {
+      let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(h);
+      return result ? [parseInt(result[1], 16), parseInt(result[2], 16), parseInt(result[3], 16)] : [0,0,0];
+    }
+
+    const targetColor = [data[(startY * canvas.width + startX) * 4], data[(startY * canvas.width + startX) * 4 + 1], data[(startY * canvas.width + startX) * 4 + 2]];
+    const fillColor = hexToRgb(fillHex);
+
+    if (targetColor[0] === fillColor[0] && targetColor[1] === fillColor[1] && targetColor[2] === fillColor[2]) return;
+
+    const stack = [[startX, startY]];
+    while (stack.length) {
+      const [x, y] = stack.pop();
+      const idx = (y * canvas.width + x) * 4;
+      if (x < 0 || x >= canvas.width || y < 0 || y >= canvas.height) continue;
+      if (data[idx] === targetColor[0] && data[idx+1] === targetColor[1] && data[idx+2] === targetColor[2]) {
+        data[idx] = fillColor[0]; data[idx+1] = fillColor[1]; data[idx+2] = fillColor[2]; data[idx+3] = 255;
+        stack.push([x + 1, y], [x - 1, y], [x, y + 1], [x, y - 1]);
+      }
+    }
+    ctx.putImageData(imgData, 0, 0);
+  }
 
   function applyPaintFilter(filter) {
     const canvas = document.getElementById('paintStudioCanvas');
@@ -2559,6 +2899,12 @@ Write **Markdown** on the left and see a clean preview here.
     for (let i = 0; i < data.length; i += 4) {
       if (filter === 'invert') { data[i] = 255 - data[i]; data[i+1] = 255 - data[i+1]; data[i+2] = 255 - data[i+2]; }
       else if (filter === 'grayscale') { let avg = (data[i]+data[i+1]+data[i+2])/3; data[i] = avg; data[i+1] = avg; data[i+2] = avg; }
+      else if (filter === 'sepia') {
+        let r = data[i], g = data[i+1], b = data[i+2];
+        data[i] = Math.min(255, (r * 0.393) + (g * 0.769) + (b * 0.189));
+        data[i+1] = Math.min(255, (r * 0.349) + (g * 0.686) + (b * 0.168));
+        data[i+2] = Math.min(255, (r * 0.272) + (g * 0.534) + (b * 0.131));
+      }
       else if (filter === 'brightness') { data[i] = Math.min(255, data[i]+30); data[i+1] = Math.min(255, data[i+1]+30); data[i+2] = Math.min(255, data[i+2]+30); }
     }
     ctx.putImageData(imgData, 0, 0); savePaintState();
@@ -2596,19 +2942,57 @@ Write **Markdown** on the left and see a clean preview here.
 
   /* TEXT STUDIO ENGINE */
   function execWordCmd(cmd, val = null) { document.execCommand(cmd, false, val); updateWordStats(); }
+  
+  function insertWordTable() {
+    showGlassPrompt("Enter Rows:", "3", (r) => {
+      if (r) {
+        showGlassPrompt("Enter Columns:", "3", (c) => {
+          if (c) {
+            let html = '<table border="1" style="border-collapse:collapse; width:100%; margin:10px 0;">';
+            for (let i = 0; i < parseInt(r); i++) {
+              html += '<tr>';
+              for (let j = 0; j < parseInt(c); j++) html += '<td style="padding:6px; border:1px solid #ccc;">Cell</td>';
+              html += '</tr>';
+            }
+            html += '</table>';
+            execWordCmd('insertHTML', html);
+          }
+        }, "📊 Table Columns");
+      }
+    }, "📊 Table Rows");
+  }
+
+  function insertWordLink() {
+    showGlassPrompt("Enter Target URL:", "https://", (url) => {
+      if (url) execWordCmd('createLink', url);
+    }, "🔗 Insert Web Link");
+  }
+
+  function insertWordImage() {
+    showGlassPrompt("Enter Image Web URL:", "https://", (url) => {
+      if (url) execWordCmd('insertImage', url);
+    }, "🖼️ Insert Image");
+  }
+
   function wordTransformText(type) {
     const sel = window.getSelection().toString();
     if (sel) execWordCmd('insertText', type === 'upper' ? sel.toUpperCase() : sel.toLowerCase());
   }
 
   function wordInsertDateTime() { execWordCmd('insertText', new Date().toLocaleString()); }
+  
   function wordFindAndReplace() {
-    let f = prompt("Find word:"), r = prompt("Replace with:");
-    if (f && r) {
-      let paper = document.getElementById('wordPaper');
-      paper.innerHTML = paper.innerHTML.replace(new RegExp(f, 'g'), r);
-      updateWordStats();
-    }
+    showGlassPrompt("Find word:", "", (f) => {
+      if (f) {
+        showGlassPrompt(`Replace '${f}' with:`, "", (r) => {
+          if (r !== null) {
+            let paper = document.getElementById('wordPaper');
+            paper.innerHTML = paper.innerHTML.replace(new RegExp(f, 'g'), r);
+            updateWordStats();
+          }
+        }, "🔍 Replace Text");
+      }
+    }, "🔍 Find Text");
   }
 
   function updateWordStats() {
@@ -2616,18 +3000,20 @@ Write **Markdown** on the left and see a clean preview here.
     const words = text ? text.split(/\s+/).length : 0;
     document.getElementById('wordDocWords').textContent = `${words} words`;
     document.getElementById('wordDocChars').textContent = `${text.length} characters`;
+    document.getElementById('wordDocTime').textContent = `~${Math.max(1, Math.ceil(words / 200))} min`;
   }
 
   function saveWordDocument() {
-    const name = prompt("Enter Document Name:", activeDocFilename);
-    if (!name) return;
-    activeDocFilename = name.endsWith('.doc') ? name : name + '.doc';
-    document.getElementById('wordDocTitle').textContent = activeDocFilename;
-    const content = document.getElementById('wordPaper').innerHTML;
-    const existingIdx = osData.savedFiles.findIndex(f => f.name === activeDocFilename);
-    if (existingIdx >= 0) osData.savedFiles[existingIdx].content = content;
-    else osData.savedFiles.push({ name: activeDocFilename, content });
-    saveData(); renderFolders(); alert(`Saved '${activeDocFilename}'!`);
+    showGlassPrompt("Enter Document Name:", activeDocFilename, (name) => {
+      if (!name) return;
+      activeDocFilename = name.endsWith('.doc') ? name : name + '.doc';
+      document.getElementById('wordDocTitle').textContent = activeDocFilename;
+      const content = document.getElementById('wordPaper').innerHTML;
+      const existingIdx = osData.savedFiles.findIndex(f => f.name === activeDocFilename);
+      if (existingIdx >= 0) osData.savedFiles[existingIdx].content = content;
+      else osData.savedFiles.push({ name: activeDocFilename, content });
+      saveData(); renderFolders(); showGlassAlert(`Saved '${activeDocFilename}'!`, "💾 Document Saved");
+    }, "💾 Save Document");
   }
 
   function newWordDocument() {
@@ -2641,12 +3027,13 @@ Write **Markdown** on the left and see a clean preview here.
   /* CONCERT FX ENGINE */
   function triggerPyrotechnics() {
     const stage = document.getElementById('stageCanvas');
-    for (let i = 0; i < 15; i++) {
+    for (let i = 0; i < 25; i++) {
       let spark = document.createElement('div');
-      spark.style.cssText = `position:absolute; width:6px; height:6px; background:#ffd700; border-radius:50%; left:${Math.random()*100}%; top:${Math.random()*100}%; box-shadow:0 0 10px #ffd700; transition:all 0.8s ease-out;`;
+      spark.style.cssText = `position:absolute; width:6px; height:6px; background:${['#ffd700','#ff4500','#3b82f6','#ec4899'][Math.floor(Math.random()*4)]}; border-radius:50%; left:${Math.random()*100}%; top:${Math.random()*100}%; box-shadow:0 0 12px currentColor; transition:all 0.8s ease-out;`;
       stage.appendChild(spark);
       setTimeout(() => spark.remove(), 800);
     }
+    if (!isSystemMuted) playTone(880);
   }
 
   function changeConcertLights(mode) {
@@ -2657,6 +3044,7 @@ Write **Markdown** on the left and see a clean preview here.
 
   function triggerCrowdCheer() {
     document.getElementById('concertStatus').textContent = "👏 Crowd Cheering & Applause Echoing!";
+    if (!isSystemMuted) playMemeSound('applause');
     setTimeout(() => { document.getElementById('concertStatus').textContent = "RappingConcert Live Stage Active"; }, 3000);
   }
 
@@ -2746,42 +3134,45 @@ Write **Markdown** on the left and see a clean preview here.
   }
 
   function deleteSavedFile(fileName) {
-    if (confirm(`Delete '${fileName}' permanently?`)) {
+    showGlassConfirm(`Delete '${fileName}' permanently?`, () => {
       osData.savedFiles = osData.savedFiles.filter(f => f.name !== fileName);
       saveData();
       renderFolders();
-    }
+    }, "🗑️ Delete File");
   }
 
   function createNewFilePrompt() {
-    const type = prompt("Create new file type:\n1. Document (.doc)\n2. Spreadsheet (.sheet)\nType 'doc' or 'sheet':", "doc");
-    if (!type) return;
+    showGlassPrompt("Create new file type (type 'doc' or 'sheet'):", "doc", (type) => {
+      if (!type) return;
 
-    if (type.toLowerCase().includes('sheet')) {
-      const name = prompt("Enter Spreadsheet Name:", "New_Sheet.sheet");
-      if (!name) return;
-      const sheetName = name.endsWith('.sheet') ? name : name + '.sheet';
-      activeSheetFilename = sheetName;
-      document.getElementById('sheetDocTitle').textContent = sheetName;
-      sheetData = {};
-      initSpreadsheetGrid();
-      osData.savedFiles.push({ name: sheetName, data: {} });
-      saveData();
-      renderFolders();
-      openWindow('sheetApp');
-    } else {
-      const name = prompt("Enter Document Name:", "New_Document.doc");
-      if (!name) return;
-      const docName = name.endsWith('.doc') ? name : name + '.doc';
-      activeDocFilename = docName;
-      document.getElementById('wordDocTitle').textContent = docName;
-      document.getElementById('wordPaper').innerHTML = '<h2>' + docName + '</h2><p>Start writing...</p>';
-      updateWordStats();
-      osData.savedFiles.push({ name: docName, content: '<h2>' + docName + '</h2><p>Start writing...</p>' });
-      saveData();
-      renderFolders();
-      openWindow('wordApp');
-    }
+      if (type.toLowerCase().includes('sheet')) {
+        showGlassPrompt("Enter Spreadsheet Name:", "New_Sheet.sheet", (name) => {
+          if (!name) return;
+          const sheetName = name.endsWith('.sheet') ? name : name + '.sheet';
+          activeSheetFilename = sheetName;
+          document.getElementById('sheetDocTitle').textContent = sheetName;
+          sheetData = {};
+          initSpreadsheetGrid();
+          osData.savedFiles.push({ name: sheetName, data: {} });
+          saveData();
+          renderFolders();
+          openWindow('sheetApp');
+        }, "📊 New Spreadsheet");
+      } else {
+        showGlassPrompt("Enter Document Name:", "New_Document.doc", (name) => {
+          if (!name) return;
+          const docName = name.endsWith('.doc') ? name : name + '.doc';
+          activeDocFilename = docName;
+          document.getElementById('wordDocTitle').textContent = docName;
+          document.getElementById('wordPaper').innerHTML = '<h2>' + docName + '</h2><p>Start writing...</p>';
+          updateWordStats();
+          osData.savedFiles.push({ name: docName, content: '<h2>' + docName + '</h2><p>Start writing...</p>' });
+          saveData();
+          renderFolders();
+          openWindow('wordApp');
+        }, "📄 New Document");
+      }
+    }, "📂 Create New File");
   }
 
   function reinstallApp(appId) {
@@ -2792,7 +3183,7 @@ Write **Markdown** on the left and see a clean preview here.
     renderTopBar();
     renderFolders();
     renderUninstalledAppsList();
-    alert(`Reinstalled application successfully!`);
+    showGlassAlert(`Reinstalled application successfully!`, "➕ App Reinstalled");
   }
 
   function renderUninstalledAppsList() {
@@ -2836,7 +3227,8 @@ Write **Markdown** on the left and see a clean preview here.
   function switchSettingsTab(tabId, navEl) {
     document.querySelectorAll('.settings-section').forEach(s => s.classList.remove('active'));
     document.querySelectorAll('#settingsApp .os-nav-item').forEach(n => n.classList.remove('active'));
-    document.getElementById(tabId).classList.add('active'); navEl.classList.add('active');
+    document.getElementById(tabId).classList.add('active'); 
+    if (navEl) navEl.classList.add('active');
     if (tabId === 'appManagerTab') renderUninstalledAppsList();
   }
 
@@ -2873,9 +3265,10 @@ Write **Markdown** on the left and see a clean preview here.
   }
 
   function recoverLocalAccess() {
-    if (!confirm('Reset the local Enfrok OS profile? This clears the saved username, password, wallpaper, and app preferences for this browser.')) return;
-    localStorage.removeItem('enfrok_os_v52_fullsuite');
-    location.reload();
+    showGlassConfirm('Reset the local Enfrok OS profile? This clears the saved username, password, wallpaper, and app preferences for this browser.', () => {
+      localStorage.removeItem('enfrok_os_v52_fullsuite');
+      location.reload();
+    }, "⚠️ Reset Account Profile");
   }
 
   function renderFullscreenStartMenu(query = '') {
@@ -2900,7 +3293,10 @@ Write **Markdown** on the left and see a clean preview here.
   }
 
   window.addEventListener('keydown', event => {
-    if (event.key === 'Escape') closeFullscreenStartMenu();
+    if (event.key === 'Escape') {
+      closeFullscreenStartMenu();
+      closeGlassPopup();
+    }
   });
 
   setInterval(() => {
@@ -2921,16 +3317,17 @@ Write **Markdown** on the left and see a clean preview here.
     if (stats) stats.textContent = `${words} words | ${text.length} characters`;
   }
   function saveNotesAppNote() {
-    const name = prompt("Note Title:", "My_Note.doc");
-    if (!name) return;
-    const docName = name.endsWith('.doc') || name.endsWith('.txt') ? name : name + '.doc';
-    const content = document.getElementById('notesAppEditor').innerHTML;
-    const idx = osData.savedFiles.findIndex(f => f.name === docName);
-    if (idx >= 0) osData.savedFiles[idx].content = content;
-    else osData.savedFiles.push({ name: docName, content });
-    saveData();
-    renderFolders();
-    alert(`Note saved as '${docName}' in Documents Storage!`);
+    showGlassPrompt("Note Title:", "My_Note.doc", (name) => {
+      if (!name) return;
+      const docName = name.endsWith('.doc') || name.endsWith('.txt') ? name : name + '.doc';
+      const content = document.getElementById('notesAppEditor').innerHTML;
+      const idx = osData.savedFiles.findIndex(f => f.name === docName);
+      if (idx >= 0) osData.savedFiles[idx].content = content;
+      else osData.savedFiles.push({ name: docName, content });
+      saveData();
+      renderFolders();
+      showGlassAlert(`Note saved as '${docName}' in Documents Storage!`, "💾 Note Saved");
+    }, "📝 Save Quick Note");
   }
   function newNotesAppNote() {
     document.getElementById('notesAppEditor').innerHTML = '<h2>New Note</h2><p>Type your notes here...</p>';
@@ -3031,6 +3428,7 @@ Write **Markdown** on the left and see a clean preview here.
   }
 
   function playVoiceRecord() {
+    if (isSystemMuted) return;
     if (recAudioBlobUrl) {
       const audio = new Audio(recAudioBlobUrl);
       audio.play();
@@ -3138,7 +3536,7 @@ Write **Markdown** on the left and see a clean preview here.
     const type = document.getElementById('budgetTypeInput').value;
 
     if (!desc || isNaN(amount) || amount <= 0) {
-      alert("Please enter a valid description and positive amount.");
+      showGlassAlert("Please enter a valid description and positive amount.", "⚠️ Invalid Input");
       return;
     }
 
@@ -3309,10 +3707,30 @@ Write **Markdown** on the left and see a clean preview here.
     }
   }
 
+  /* COLOR PALETTE GENERATOR LOGIC */
+  function updatePaletteDisplay(hex) {
+    document.getElementById('hexValueText').textContent = hex.toUpperCase();
+  }
+
+  /* UNIT CONVERTER LOGIC */
+  function runConvert() {
+    const val = parseFloat(document.getElementById('convertVal').value) || 0;
+    const from = document.getElementById('convertFrom').value;
+    const to = document.getElementById('convertTo').value;
+    let res = val;
+
+    if (from === 'km' && to === 'miles') res = val * 0.621371;
+    else if (from === 'miles' && to === 'km') res = val / 0.621371;
+    else if (from === 'kg' && to === 'lbs') res = val * 2.20462;
+    else if (from === 'lbs' && to === 'kg') res = val / 2.20462;
+
+    document.getElementById('convertResult').textContent = `${res.toFixed(2)} ${to.toUpperCase()}`;
+  }
+
   /* UTILITY HELPERS */
   function formatJsonData() {
     const input = document.getElementById('jsonInput');
-    try { input.value = JSON.stringify(JSON.parse(input.value), null, 2); } catch { alert("Invalid JSON format"); }
+    try { input.value = JSON.stringify(JSON.parse(input.value), null, 2); } catch { showGlassAlert("Invalid JSON format", "⚠️ Error"); }
   }
 
   function generateSimpleHash() {
@@ -3341,10 +3759,11 @@ Write **Markdown** on the left and see a clean preview here.
   }
 
   function evalMathLabExpr() {
-    try { alert(`Result: ${eval(document.getElementById('mathExprInput').value)}`); } catch { alert("Invalid Math Expression"); }
+    try { showGlassAlert(`Result: ${eval(document.getElementById('mathExprInput').value)}`, "🔬 Math Lab"); } catch { showGlassAlert("Invalid Math Expression", "⚠️ Math Error"); }
   }
 
   function playTone(freq) {
+    if (isSystemMuted) return;
     try {
       const ctx = new (window.AudioContext || window.webkitAudioContext)();
       const osc = ctx.createOscillator();
@@ -3360,13 +3779,30 @@ Write **Markdown** on the left and see a clean preview here.
   }
 
   function playMemeSound(sound) {
+    if (isSystemMuted) return;
     playTone(sound === 'laser' ? 880 : 440);
   }
 
+  /* WEIGHTED ANIMAL LUCKY BLOCK REWARDS SYSTEM */
   function openLuckyBlock() {
-    const rewards = ["🐱 Mythic Cat", "🐶 Divine Dog", "🌮 Brainrot Taco", "💎 1,000 Credits", "👑 Crown of Agility"];
-    const prize = rewards[Math.floor(Math.random() * rewards.length)];
+    const rand = Math.random() * 100;
+    let prize = "";
+
+    if (rand < 50) {
+      const commons = ["🐶 Doge", "🐱 Wholesome Cat", "🐸 Pepe Frog", " Capybara"];
+      prize = `Common: ${commons[Math.floor(Math.random() * commons.length)]}`;
+    } else if (rand < 80) {
+      const rares = ["🌮 Taco Cat", " Rainbow Axolotl", "🦙 Drama Llama"];
+      prize = `Rare: ${rares[Math.floor(Math.random() * rares.length)]}`;
+    } else if (rand < 95) {
+      const legendaries = ["👑 Divine Golden Dragon", "🦄 Cosmic Unicorn", " Phoenix"];
+      prize = `Legendary: ${legendaries[Math.floor(Math.random() * legendaries.length)]}`;
+    } else {
+      prize = "🌟 MYTHIC BRAINROT GOD ANIMAL 🌟";
+    }
+
     document.getElementById('luckyResult').textContent = `🎉 You unboxed: ${prize}!`;
+    if (!isSystemMuted) playMemeSound('victory');
   }
 
   function generatePass() {
@@ -3393,7 +3829,7 @@ Write **Markdown** on the left and see a clean preview here.
 
   function saveSnippet() {
     const title = document.getElementById('snippetTitle').value;
-    if (title) alert(`Snippet '${title}' saved to local storage!`);
+    if (title) showGlassAlert(`Snippet '${title}' saved to local storage!`, "⚡ Snippet Saved");
   }
 
   function navBrowser() {
@@ -3502,6 +3938,7 @@ Write **Markdown** on the left and see a clean preview here.
         clearInterval(focusTimerHandle); focusTimerHandle = null; focusIsRunning = false;
         if (button) button.textContent = 'Start Focus';
         if (status) status.textContent = 'Session complete. Nice work.';
+        if (!isSystemMuted) playMemeSound('victory');
       }
     }, 1000);
   }
