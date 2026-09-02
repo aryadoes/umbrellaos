@@ -112,10 +112,10 @@
   body.theme-light .input-ui { background: rgba(255, 255, 255, 0.6); }
   .input-ui:focus { border-color: var(--accent); }
 
-  /* GLASS POPUP DIALOGS (REPLACING NATIVE ALERTS) */
+  /* GLASS POPUP DIALOGS (SURROUND GLASSMASK REMOVED) */
   .custom-popup-overlay {
     position: fixed; inset: 0; z-index: 9999999;
-    background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(8px);
+    background: transparent; backdrop-filter: none;
     display: flex; align-items: center; justify-content: center;
     opacity: 0; pointer-events: none; transition: opacity 0.2s var(--anim-curve);
   }
@@ -128,7 +128,7 @@
   }
   .custom-popup-overlay.active .custom-popup-card { transform: scale(1); }
   .custom-popup-title { font-size: 1.1rem; font-weight: 700; display: flex; align-items: center; gap: 10px; }
-  .custom-popup-body { font-size: 0.88rem; color: var(--text-sub); line-height: 1.5; }
+  .custom-popup-body { font-size: 0.88rem; color: var(--text-sub); line-height: 1.5; white-space: pre-wrap; }
   .custom-popup-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 8px; }
 
   /* BOOT, SETUP & LOCK SCREEN */
@@ -200,16 +200,20 @@
   .d-icon.selected { background: rgba(59, 130, 246, 0.2); border-color: var(--accent); }
   .d-icon-box { font-size: 2.3rem; filter: drop-shadow(0 6px 12px rgba(0,0,0,0.5)); pointer-events: none; }
 
-  /* TASKBAR (DOCK) */
+  /* TASKBAR (DOCK) POSITIONS */
   .dock-wrapper {
-    position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%);
+    position: absolute; bottom: 14px;
     background: var(--glass-dock); backdrop-filter: var(--glass-blur);
     border: 1px solid var(--glass-border); border-radius: var(--radius-dock);
     padding: 8px 16px; display: flex; align-items: center; gap: 10px; z-index: 8500;
     box-shadow: var(--glass-shadow);
-    transition: transform 0.3s var(--anim-curve), opacity 0.3s var(--anim-curve) !important;
-    will-change: transform, opacity;
+    transition: transform 0.3s var(--anim-curve), opacity 0.3s var(--anim-curve), left 0.3s var(--anim-curve) !important;
+    will-change: transform, opacity, left;
   }
+  .dock-wrapper.dock-pos-middle { left: 50%; transform: translateX(-50%); }
+  .dock-wrapper.dock-pos-left { left: 24px; transform: translateX(0); }
+  .dock-wrapper.dock-pos-right { left: auto; right: 24px; transform: translateX(0); }
+
   .dock-wrapper.drag-over {
     border-color: var(--accent);
     background: rgba(59, 130, 246, 0.25);
@@ -258,7 +262,7 @@
 
   /* GLASSMORPHISM START MENU */
   .launch-hub-panel {
-    position: absolute; bottom: 82px; left: 50%; transform: translateX(-50%) translateY(20px) scale(0.96);
+    position: absolute; bottom: 82px;
     width: 680px; height: 530px;
     background: var(--glass-menu);
     backdrop-filter: var(--glass-blur) saturate(180%);
@@ -268,10 +272,16 @@
     box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
     display: flex; flex-direction: column; gap: 18px; z-index: 8600;
     opacity: 0; pointer-events: none;
-    transition: opacity 0.2s var(--anim-curve), transform 0.2s var(--anim-curve);
-    will-change: transform, opacity;
+    transition: opacity 0.2s var(--anim-curve), transform 0.2s var(--anim-curve), left 0.3s var(--anim-curve);
+    will-change: transform, opacity, left;
   }
-  .launch-hub-panel.open { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(0) scale(1); }
+  .launch-hub-panel.hub-pos-middle { left: 50%; transform: translateX(-50%) translateY(20px) scale(0.96); }
+  .launch-hub-panel.hub-pos-left { left: 24px; transform: translateX(0) translateY(20px) scale(0.96); }
+  .launch-hub-panel.hub-pos-right { left: auto; right: 24px; transform: translateX(0) translateY(20px) scale(0.96); }
+
+  .launch-hub-panel.open.hub-pos-middle { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(0) scale(1); }
+  .launch-hub-panel.open.hub-pos-left { opacity: 1; pointer-events: auto; transform: translateX(0) translateY(0) scale(1); }
+  .launch-hub-panel.open.hub-pos-right { opacity: 1; pointer-events: auto; transform: translateX(0) translateY(0) scale(1); }
 
   .hub-header { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--glass-border); padding-bottom: 14px; }
   .hub-user { display: flex; align-items: center; gap: 14px; }
@@ -571,6 +581,17 @@
   .regex-test-text { flex: 1; min-height: 130px; }
   .regex-match { background: rgba(59,130,246,0.35); color: #fff; border-radius: 4px; padding: 1px 3px; }
   .utility-check { flex: 0 0 auto; flex-direction: row; align-items: center; gap: 8px; }
+
+  /* SELECTABLE MULTI-APP PICKER IN POPUPS */
+  .app-picker-list {
+    display: flex; flex-direction: column; gap: 8px; max-height: 220px; overflow-y: auto;
+    margin-top: 10px; padding-right: 4px;
+  }
+  .app-picker-item {
+    display: flex; align-items: center; gap: 12px; padding: 8px 12px; border-radius: 10px;
+    background: rgba(255,255,255,0.04); border: 1px solid var(--glass-border); cursor: pointer;
+  }
+  .app-picker-item:hover { background: rgba(255,255,255,0.12); border-color: var(--accent); }
 
   @media (max-width: 760px) {
     .start-menu-fullscreen { padding: 54px 18px 30px; }
@@ -897,7 +918,7 @@
       <!-- APP 4: TERMINAL (SYSTEM APP) -->
       <div class="os-window" id="terminalApp" style="width: 640px; height: 400px; top: 70px; left: 180px;">
         <div class="window-topbar" onmousedown="dragWindow(event, 'terminalApp')">
-          <div class="window-title">⚡ Command Console</div>
+          <div class="window-title">&gt;_ Command Console</div>
           <div class="win-controls-pills">
             <span class="win-pill-btn" onclick="minimizeWindow('terminalApp')">─</span>
             <span class="win-pill-btn" onclick="toggleFullscreen('terminalApp')">▢</span>
@@ -997,7 +1018,7 @@ Type 'help' or 'bringback reinstall /appnameApp' to manage apps.</div>
       <!-- APP 9: CODE SNIPPETS VAULT -->
       <div class="os-window" id="snippetApp" style="width: 540px; height: 400px; top: 90px; left: 240px;">
         <div class="window-topbar" onmousedown="dragWindow(event, 'snippetApp')">
-          <div class="window-title">⚡ Snippet Vault</div>
+          <div class="window-title">&gt;_ Snippet Vault</div>
           <div class="win-controls-pills">
             <span class="win-pill-btn" onclick="minimizeWindow('snippetApp')">─</span>
             <span class="win-pill-btn pill-close" onclick="closeWindow('snippetApp')">✕</span>
@@ -1167,6 +1188,19 @@ Type 'help' or 'bringback reinstall /appnameApp' to manage apps.</div>
                   </select>
                 </div>
 
+                <!-- Taskbar Position Selector -->
+                <div class="setting-row">
+                  <div class="setting-label">
+                    <span class="setting-title">Taskbar & Start Menu Position</span>
+                    <span class="setting-desc">Align taskbar and normal start menu to Left, Middle, or Right.</span>
+                  </div>
+                  <select class="input-ui" id="dockPositionSelect" style="width:160px;" onchange="setDockPosition(this.value)">
+                    <option value="middle">Middle</option>
+                    <option value="left">Left</option>
+                    <option value="right">Right</option>
+                  </select>
+                </div>
+
                 <h3 style="font-size:1.05rem; font-weight:700; margin-top:10px;">Wallpaper Gallery</h3>
                 
                 <div class="setting-row">
@@ -1210,7 +1244,7 @@ Type 'help' or 'bringback reinstall /appnameApp' to manage apps.</div>
                 <div class="setting-row">
                   <div class="setting-label">
                     <span class="setting-title">Top Bar Pinned Apps</span>
-                    <span class="setting-desc">Customize which apps are pinned to the upper top bar.</span>
+                    <span class="setting-desc">Customize which apps are pinned to upper top bar (Max 4).</span>
                   </div>
                   <button class="btn-ui" onclick="promptCustomTopBarApps()">Manage Top Bar Apps</button>
                 </div>
@@ -1259,7 +1293,18 @@ Type 'help' or 'bringback reinstall /appnameApp' to manage apps.</div>
 
               <!-- TAB 4: OS CONFIGURATION -->
               <div class="settings-section" id="systemConfigTab">
-                <h3 style="font-size:1.05rem; font-weight:700;">Kernel Security & Account Password</h3>
+                <h3 style="font-size:1.05rem; font-weight:700;">System Notes</h3>
+                
+                <!-- UPDATED KERNEL / SYSTEM NOTES SECTION -->
+                <div style="padding:16px; background:rgba(255,255,255,0.04); border:1px solid var(--glass-border); border-radius:14px; display:flex; flex-direction:column; gap:8px; font-size:0.85rem;">
+                  <div><b>Viewer & Handler:</b> UMBRELLA VWER</div>
+                  <div><b>OS:</b> Enfrok Operating System 5.2</div>
+                  <div><b>Shower:</b> Enfrok/UmbrellaOS/AryaDoes/SQBIGP</div>
+                  <div><b>V&H Security:</b> 100% Verified and Safe</div>
+                  <div><b>UMBRELLA-VWER:</b> Enfrok V&H Operator (G,S,P,E)</div>
+                </div>
+
+                <h3 style="font-size:1.05rem; font-weight:700; margin-top:14px;">Kernel Security & Account Password</h3>
                 
                 <!-- CHANGE PASSWORD SECTION -->
                 <div style="padding:16px; background:rgba(255,255,255,0.04); border:1px solid var(--glass-border); border-radius:14px; display:flex; flex-direction:column; gap:12px;">
@@ -1281,12 +1326,6 @@ Type 'help' or 'bringback reinstall /appnameApp' to manage apps.</div>
                   <button class="btn-ui btn-accent" style="align-self:flex-end;" onclick="changeSystemPassword()">Update Password</button>
                 </div>
 
-                <div class="setting-row" style="margin-top:10px;">
-                  <div class="setting-label">
-                    <span class="setting-title">Current Kernel Build</span>
-                    <span class="setting-desc">Enfrok WebOS Core 5.2</span>
-                  </div>
-                </div>
                 <div style="border-top:1px solid var(--glass-border); padding-top:18px; margin-top:12px; display:flex; gap:12px;">
                   <button class="btn-ui btn-danger" onclick="eraseSystemData()">⚠️ Factory Reset OS</button>
                 </div>
@@ -1711,7 +1750,7 @@ Write **Markdown** on the left and see a clean preview here.
     </div>
 
     <!-- TASKBAR (DOCK) -->
-    <div class="dock-wrapper" id="dockWrapper" ondragover="event.preventDefault(); this.classList.add('drag-over');" ondragleave="this.classList.remove('drag-over');" ondrop="handleDockDrop(event)">
+    <div class="dock-wrapper dock-pos-middle" id="dockWrapper" ondragover="event.preventDefault(); this.classList.add('drag-over');" ondragleave="this.classList.remove('drag-over');" ondrop="handleDockDrop(event)">
       <button class="dock-launcher-btn" onclick="openStartMenu()" title="Open Glass Start Menu">E</button>
       <div class="dock-divider"></div>
       <div id="dockItemsArea" style="display:flex; gap:10px;"></div>
@@ -1733,7 +1772,7 @@ Write **Markdown** on the left and see a clean preview here.
     </div>
 
     <!-- COMPACT START MENU PANEL -->
-    <div class="launch-hub-panel" id="launchHubPanel">
+    <div class="launch-hub-panel hub-pos-middle" id="launchHubPanel">
       <div class="hub-header">
         <div class="hub-user">
           <div class="hub-avatar" id="hubAvatarLetter">D</div>
@@ -1773,17 +1812,17 @@ Write **Markdown** on the left and see a clean preview here.
     'https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1920'
   ];
 
-  /* ALL APPS (System Monitor Removed) */
+  /* ALL APPS */
   const ALL_APPS = [
     { id: 'sheetApp', name: 'Spreadsheet', icon: '📊', pinnedDock: true, pinnedDesktop: true },
     { id: 'wordApp', name: 'Text Studio', icon: '📄', pinnedDock: true, pinnedDesktop: true },
     { id: 'paintApp', name: 'Paint Board', icon: '🎨', pinnedDock: true, pinnedDesktop: true },
     { id: 'documentCore', name: 'Document', icon: '📁', pinnedDock: true, pinnedDesktop: true },
-    { id: 'terminalApp', name: 'Terminal', icon: '⚡', pinnedDock: true, pinnedDesktop: true },
+    { id: 'terminalApp', name: 'Terminal', icon: '>_', pinnedDock: true, pinnedDesktop: true },
     { id: 'browserApp', name: 'Browser', icon: '🌐', pinnedDock: true, pinnedDesktop: true },
     { id: 'calcApp', name: 'Calculator', icon: '🧮', pinnedDock: true, pinnedDesktop: true },
     { id: 'todoApp', name: 'Tasks', icon: '✅', pinnedDock: true, pinnedDesktop: true },
-    { id: 'snippetApp', name: 'Snippets', icon: '⚡', pinnedDock: true, pinnedDesktop: true },
+    { id: 'snippetApp', name: 'Snippets', icon: '>_', pinnedDock: true, pinnedDesktop: true },
     { id: 'soundboardApp', name: 'Funny Sounds', icon: '🔊', pinnedDock: true, pinnedDesktop: true },
     { id: 'converterApp', name: 'Converter', icon: '🔄', pinnedDock: true, pinnedDesktop: true },
     { id: 'passApp', name: 'Passwords', icon: '🔑', pinnedDock: true, pinnedDesktop: true },
@@ -1833,6 +1872,7 @@ Write **Markdown** on the left and see a clean preview here.
     username: 'Developer',
     password: '',
     themeMode: 'dark',
+    dockPosition: 'middle',
     wallpaper: WALLPAPERS[0],
     accentColor: '#3b82f6',
     wpIntervalSetting: 'off',
@@ -1849,7 +1889,7 @@ Write **Markdown** on the left and see a clean preview here.
     ]
   };
 
-  /* CLEAN GLASSPOPUP MODAL SYSTEM (REPLACES BROWSER POPUPS) */
+  /* CLEAN GLASSPOPUP MODAL SYSTEM (SURROUND GLASSMASK REMOVED) */
   let popupCallback = null;
 
   function showGlassAlert(message, title = "✨ Notification") {
@@ -1946,6 +1986,26 @@ Write **Markdown** on the left and see a clean preview here.
     if (select) select.value = mode;
   }
 
+  /* TASKBAR & NORMAL START MENU POSITIONING */
+  function setDockPosition(pos) {
+    osData.dockPosition = pos;
+    saveData();
+    
+    const dock = document.getElementById('dockWrapper');
+    const hub = document.getElementById('launchHubPanel');
+    const select = document.getElementById('dockPositionSelect');
+    if (select) select.value = pos;
+
+    if (dock) {
+      dock.classList.remove('dock-pos-middle', 'dock-pos-left', 'dock-pos-right');
+      dock.classList.add(`dock-pos-${pos}`);
+    }
+    if (hub) {
+      hub.classList.remove('hub-pos-middle', 'hub-pos-left', 'hub-pos-right');
+      hub.classList.add(`hub-pos-${pos}`);
+    }
+  }
+
   /* CHANGE PASSWORD FEATURE IN OS CONFIGURATION */
   function changeSystemPassword() {
     const oldP = document.getElementById('pwdOld').value;
@@ -1985,6 +2045,7 @@ Write **Markdown** on the left and see a clean preview here.
 
     setSystemAccent(osData.accentColor || '#3b82f6');
     setSystemTheme(osData.themeMode || 'dark');
+    setDockPosition(osData.dockPosition || 'middle');
     setStartMenuMode(osData.startMenuMode || 'normal', false);
 
     setTimeout(() => {
@@ -2082,7 +2143,7 @@ Write **Markdown** on the left and see a clean preview here.
     container.innerHTML = '';
     
     const activeApps = getInstalledApps();
-    (osData.topBarApps || []).forEach(appId => {
+    (osData.topBarApps || []).slice(0, 4).forEach(appId => {
       const app = activeApps.find(a => a.id === appId);
       if (app) {
         const item = document.createElement('div');
@@ -2138,17 +2199,46 @@ Write **Markdown** on the left and see a clean preview here.
     renderTopBar();
   }
 
+  /* SELECTABLE MULTI-APP PICKER FOR TOP BAR (MAX 4) */
   function promptCustomTopBarApps() {
     const installed = getInstalledApps();
-    const appListStr = installed.map((a, i) => `${a.id}`).join(', ');
-    showGlassPrompt(`Enter App IDs (comma-separated) to pin to Upper Menu:\nAvailable: ${appListStr}`, (osData.topBarApps || []).join(', '), (input) => {
-      if (input !== null && input !== undefined) {
-        const selected = input.split(',').map(s => s.trim()).filter(id => installed.some(a => a.id === id));
-        osData.topBarApps = selected;
-        saveData();
-        renderTopBar();
+    let selected = [...(osData.topBarApps || [])];
+
+    document.getElementById('popupTitle').textContent = "📌 Pin Apps to Upper Menu (Max 4)";
+    document.getElementById('popupBody').textContent = "Select up to 4 apps to pin to the top bar:";
+
+    const container = document.getElementById('popupInputContainer');
+    container.innerHTML = `
+      <div class="app-picker-list">
+        ${installed.map(a => `
+          <label class="app-picker-item">
+            <input type="checkbox" class="topbar-app-check" value="${a.id}" ${selected.includes(a.id) ? 'checked' : ''} style="accent-color:var(--accent);">
+            <span style="font-size:1.2rem;">${a.icon}</span>
+            <div style="display:flex; flex-direction:column;">
+              <span style="font-weight:600; font-size:0.85rem;">${a.name}</span>
+              <span style="font-size:0.72rem; color:var(--text-sub);">core: ${a.id}</span>
+            </div>
+          </label>
+        `).join('')}
+      </div>
+    `;
+
+    popupCallback = () => {
+      const checkedBoxes = Array.from(document.querySelectorAll('.topbar-app-check:checked')).map(cb => cb.value);
+      if (checkedBoxes.length > 4) {
+        showGlassAlert("You can only select up to 4 apps for the Upper Menu.", "⚠️ Limit Exceeded");
+        return;
       }
-    }, "📌 Pin Apps to Upper Menu");
+      osData.topBarApps = checkedBoxes;
+      saveData();
+      renderTopBar();
+    };
+
+    document.getElementById('popupActions').innerHTML = `
+      <button class="btn-ui" onclick="closeGlassPopup()">Cancel</button>
+      <button class="btn-ui btn-accent" onclick="triggerGlassPopupConfirm()">Save</button>
+    `;
+    document.getElementById('globalGlassPopup').classList.add('active');
   }
 
   /* CONTEXT MENU POSITIONING FIX */
@@ -2210,7 +2300,6 @@ Write **Markdown** on the left and see a clean preview here.
         ${!isProtected ? `<div class="context-item danger" onclick="uninstallApp('${appId}')">⚠️ Uninstall App</div>` : ''}
       `;
     } else {
-      /* DESKTOP BACKGROUND RIGHT-CLICK MENU (OPENS PERSONALIZE INSTEAD OF SETTINGS) */
       menu.innerHTML = `
         <div class="context-item" onclick="openPersonalizeSettings()">🎨 Personalize</div>
         <div class="context-item" onclick="openWindow('documentCore')">📁 Open Document Storage</div>
@@ -2346,25 +2435,27 @@ Write **Markdown** on the left and see a clean preview here.
     document.getElementById('hubUsername').textContent = uName;
     document.getElementById('hubAvatarLetter').textContent = uName.charAt(0).toUpperCase();
 
-    // Render Desktop Apps
+    // Render Desktop Apps with Subtext [core: appnameApp]
     osData.desktopApps.forEach(appId => {
       const app = activeApps.find(a => a.id === appId);
       if (app) {
         desktopGrid.innerHTML += `
           <div class="d-icon" onclick="openWindow('${app.id}')" oncontextmenu="handleContextMenuEvent(event, '${app.id}')">
             <div class="d-icon-box">${app.icon}</div>
-            <span>${app.name}</span>
+            <span style="font-weight:600;">${app.name}</span>
+            <span style="font-size:0.68rem; color:var(--text-sub);">core: ${app.id}</span>
           </div>
         `;
       }
     });
 
-    // Render Hub Apps
+    // Render Hub Apps with Subtext [core: appnameApp]
     activeApps.forEach(app => {
       hubGrid.innerHTML += `
         <div class="d-icon" draggable="true" ondragstart="handleAppDragStart(event, '${app.id}')" onclick="openWindow('${app.id}'); toggleLaunchHub();" oncontextmenu="handleContextMenuEvent(event, '${app.id}')">
           <div class="d-icon-box">${app.icon}</div>
-          <span>${app.name}</span>
+          <span style="font-weight:600;">${app.name}</span>
+          <span style="font-size:0.68rem; color:var(--text-sub);">core: ${app.id}</span>
         </div>
       `;
     });
@@ -2398,7 +2489,6 @@ Write **Markdown** on the left and see a clean preview here.
     const win = document.getElementById(id);
     if (win) {
       win.classList.add('minimized');
-      win.classList.remove('open-active');
       updateDockState();
     }
   }
@@ -2406,8 +2496,11 @@ Write **Markdown** on the left and see a clean preview here.
   function toggleWindow(id) {
     const win = document.getElementById(id);
     if (!win) return;
-    if (win.classList.contains('minimized') || !win.classList.contains('open-active')) openWindow(id);
-    else minimizeWindow(id);
+    if (win.classList.contains('minimized') || !win.classList.contains('open-active')) {
+      openWindow(id);
+    } else {
+      minimizeWindow(id);
+    }
   }
 
   function toggleFullscreen(id) {
@@ -2435,13 +2528,12 @@ Write **Markdown** on the left and see a clean preview here.
   function closeWindow(id) {
     const win = document.getElementById(id);
     if (win) {
-      win.classList.remove('open-active', 'focused', 'fullscreen');
-      win.classList.add('minimized');
+      win.classList.remove('open-active', 'focused', 'fullscreen', 'minimized');
       updateDockState();
     }
   }
 
-  /* UPDATED TASKBAR DOCK STATE LOGIC WITH GLOWING ACCENT RUNNING INDICATOR */
+  /* UPDATED TASKBAR DOCK STATE LOGIC (MINIMIZED APPS STAY VISIBLE IN TASKBAR) */
   function updateDockState() {
     const dockItemsArea = document.getElementById('dockItemsArea');
     if (!dockItemsArea) return;
@@ -2453,7 +2545,7 @@ Write **Markdown** on the left and see a clean preview here.
     
     ALL_APPS.forEach(app => {
       const win = document.getElementById(app.id);
-      if (win && win.classList.contains('open-active')) {
+      if (win && (win.classList.contains('open-active') || win.classList.contains('minimized'))) {
         if (!dockAppIds.includes(app.id)) {
           dockAppIds.push(app.id);
         }
@@ -2466,9 +2558,10 @@ Write **Markdown** on the left and see a clean preview here.
       if (app && win) {
         const isOpen = win.classList.contains('open-active');
         const isMinimized = win.classList.contains('minimized');
+        const isRunning = isOpen || isMinimized;
 
         const dockItem = document.createElement('div');
-        dockItem.className = `dock-item ${isOpen ? 'running' : ''} ${isOpen && !isMinimized ? 'active' : ''}`;
+        dockItem.className = `dock-item ${isRunning ? 'running' : ''} ${isOpen && !isMinimized ? 'active' : ''}`;
         dockItem.id = `dock-${app.id}`;
         dockItem.innerHTML = `${app.icon}<div class="dock-item-indicator"></div>`;
         dockItem.onclick = () => toggleWindow(app.id);
@@ -3278,7 +3371,9 @@ Write **Markdown** on the left and see a clean preview here.
     const apps = getInstalledApps().filter(app => !term || `${app.name} ${app.id}`.toLowerCase().includes(term));
     grid.innerHTML = apps.map(app => `
       <div class="d-icon" draggable="true" ondragstart="handleAppDragStart(event, '${app.id}')" onclick="openWindow('${app.id}'); closeFullscreenStartMenu();" oncontextmenu="handleContextMenuEvent(event, '${app.id}')">
-        <div class="d-icon-box">${app.icon}</div><span>${app.name}</span>
+        <div class="d-icon-box">${app.icon}</div>
+        <span style="font-weight:600;">${app.name}</span>
+        <span style="font-size:0.68rem; color:var(--text-sub);">core: ${app.id}</span>
       </div>`).join('');
     const subtitle = document.getElementById('fullscreenStartSubtitle');
     if (subtitle) subtitle.textContent = `${apps.length} installed application${apps.length === 1 ? '' : 's'}`;
