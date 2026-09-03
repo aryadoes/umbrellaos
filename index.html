@@ -112,7 +112,7 @@
   body.theme-light .input-ui { background: rgba(255, 255, 255, 0.6); }
   .input-ui:focus { border-color: var(--accent); }
 
-  /* GLASS POPUP DIALOGS (SURROUND GLASSMASK REMOVED) */
+  /* GLASS POPUP DIALOGS */
   .custom-popup-overlay {
     position: fixed; inset: 0; z-index: 9999999;
     background: transparent; backdrop-filter: none;
@@ -132,7 +132,10 @@
   .custom-popup-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 8px; }
 
   /* BOOT, SETUP & LOCK SCREEN */
-  #boot-screen { background: #030508; z-index: 10000; }
+  #boot-screen { background: var(--bg-wallpaper) center/cover no-repeat; z-index: 10000; }
+  #boot-screen::before, #login-screen::before {
+    content: ''; position: absolute; inset: 0; background: rgba(3, 5, 8, 0.7); backdrop-filter: var(--glass-blur); z-index: -1;
+  }
   .boot-logo-orb {
     width: 76px; height: 76px; border-radius: 24px;
     background: linear-gradient(135deg, var(--accent), var(--accent-purple));
@@ -141,7 +144,8 @@
     font-weight: 800; font-size: 2.4rem; color: #ffffff;
   }
 
-  #setup-screen, #login-screen { background: #030508; z-index: 9000; }
+  #setup-screen { background: #030508; z-index: 9000; }
+  #login-screen { background: var(--bg-wallpaper) center/cover no-repeat; z-index: 9000; }
   .setup-card {
     width: 620px; min-height: 420px; background: var(--glass-dialog); backdrop-filter: var(--glass-blur);
     border: 1px solid var(--glass-border); border-radius: 26px; box-shadow: var(--glass-shadow);
@@ -453,14 +457,19 @@
     font-size: 0.75rem; color: var(--text-sub); flex-shrink: 0;
   }
 
-  /* File App Surface */
-  .files-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 16px; align-content: start; }
+  /* File App Surface & Media Items */
+  .files-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 16px; align-content: start; }
   .file-item {
-    border: 1px solid transparent; border-radius: 12px; padding: 14px;
+    border: 1px solid transparent; border-radius: 12px; padding: 12px;
     display: flex; flex-direction: column; align-items: center; gap: 8px; font-size: 0.8rem;
-    text-align: center; cursor: pointer; background: rgba(255,255,255,0.03);
+    text-align: center; cursor: pointer; background: rgba(255,255,255,0.03); position: relative;
   }
   .file-item:hover { border-color: var(--accent); background: rgba(255,255,255,0.08); }
+  .file-item-actions {
+    position: absolute; top: 6px; right: 6px; display: flex; gap: 4px; opacity: 0; transition: opacity 0.15s;
+  }
+  .file-item:hover .file-item-actions { opacity: 1; }
+  .file-preview-thumb { width: 100%; height: 70px; object-fit: cover; border-radius: 8px; }
 
   /* Settings UI */
   .settings-section { display: none; flex-direction: column; gap: 20px; }
@@ -527,17 +536,6 @@
   }
   @keyframes fogPulse { 0% { opacity: 0.3; } 100% { opacity: 0.9; } }
 
-  /* LUCKY BLOCK STYLES */
-  .lucky-box {
-    width: 110px; height: 110px; border-radius: 22px;
-    background: linear-gradient(135deg, #f59e0b, #d97706);
-    box-shadow: 0 0 30px rgba(245, 158, 11, 0.5);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 3.2rem; cursor: pointer; transition: transform 0.2s ease, box-shadow 0.2s ease;
-  }
-  .lucky-box:hover { transform: scale(1.08) rotate(3deg); box-shadow: 0 0 45px rgba(245, 158, 11, 0.8); }
-  .lucky-box:active { transform: scale(0.95); }
-
   /* ADDITIVE UTILITY APP STYLES */
   .start-menu-fullscreen {
     position: absolute; inset: 0; z-index: 8700; display: flex; flex-direction: column;
@@ -592,6 +590,29 @@
     background: rgba(255,255,255,0.04); border: 1px solid var(--glass-border); cursor: pointer;
   }
   .app-picker-item:hover { background: rgba(255,255,255,0.12); border-color: var(--accent); }
+
+  /* MEDIA PLAYER APP STYLES */
+  .media-player-container {
+    display: flex; flex-direction: column; height: 100%; width: 100%; background: #000;
+  }
+  .media-viewport {
+    flex: 1; display: flex; align-items: center; justify-content: center; background: #050505; position: relative; overflow: hidden;
+  }
+  .media-viewport video, .media-viewport img {
+    max-width: 100%; max-height: 100%; object-fit: contain;
+  }
+  .media-controls {
+    height: 54px; background: var(--glass-menu); border-top: 1px solid var(--glass-border);
+    display: flex; align-items: center; padding: 0 16px; gap: 14px; flex-shrink: 0;
+  }
+  .media-timeline {
+    flex: 1; -webkit-appearance: none; appearance: none; height: 6px; border-radius: 3px;
+    background: rgba(255,255,255,0.2); outline: none; cursor: pointer;
+  }
+  .media-timeline::-webkit-slider-thumb {
+    -webkit-appearance: none; appearance: none; width: 14px; height: 14px; border-radius: 50%;
+    background: var(--accent); cursor: pointer; box-shadow: 0 0 10px var(--accent-glow);
+  }
 
   @media (max-width: 760px) {
     .start-menu-fullscreen { padding: 54px 18px 30px; }
@@ -660,7 +681,7 @@
     </div>
   </div>
 
-  <!-- 3. RETURNING USER LOGIN SCREEN -->
+  <!-- 3. RETURNING USER LOGIN SCREEN / LOCK SCREEN -->
   <div id="login-screen" class="os-screen hidden">
     <div class="setup-card" style="width:440px; min-height:auto; padding:40px; display:flex; flex-direction:column; gap:20px; align-items:center; text-align:center;">
       <div class="boot-logo-orb" style="width:64px; height:64px; font-size:2rem;" id="loginAvatarLetter">D</div>
@@ -685,6 +706,7 @@
         <div id="topBarAppsContainer" style="display:flex; align-items:center; gap:18px;"></div>
       </div>
       <div class="top-bar-section">
+        <div class="top-item" onclick="lockSystemScreen()">🔒 Lock</div>
         <div class="top-item" id="sysAudioMute" onclick="toggleMuteAudio()">🔊 Audio</div>
         <div class="top-item" onclick="toggleNotifications()">🔔 <span id="sysClock">12:00 PM</span></div>
       </div>
@@ -886,7 +908,7 @@
       </div>
 
       <!-- APP 3: DOCUMENTS / ROOT STORAGE (SYSTEM APP) -->
-      <div class="os-window" id="documentCore" style="width: 820px; height: 520px; top: 40px; left: 120px;">
+      <div class="os-window" id="documentCore" style="width: 840px; height: 540px; top: 40px; left: 120px;">
         <div class="window-topbar" onmousedown="dragWindow(event, 'documentCore')">
           <div class="window-title">📁 Document — Root Storage</div>
           <div class="win-controls-pills">
@@ -901,12 +923,15 @@
               <div class="os-nav-item active" onclick="filterFiles('all', this)">📂 All Storage</div>
               <div class="os-nav-item" onclick="filterFiles('sheets', this)">📊 Spreadsheets</div>
               <div class="os-nav-item" onclick="filterFiles('docs', this)">📄 Documents</div>
+              <div class="os-nav-item" onclick="filterFiles('media', this)">🎬 Videos & Photos</div>
               <div class="os-nav-item" onclick="filterFiles('uninstalled', this)">🗑️ Uninstalled Apps</div>
-              <button class="btn-ui btn-accent" style="margin-top:auto;" onclick="createNewFilePrompt()">➕ New Document</button>
+              <input type="file" id="mediaUploadInput" accept="image/*,video/*" style="display:none;" onchange="handleMediaUpload(event)" multiple />
+              <button class="btn-ui btn-accent" style="margin-top:auto;" onclick="document.getElementById('mediaUploadInput').click()">📤 Upload Media</button>
+              <button class="btn-ui" onclick="createNewFilePrompt()">➕ New Document</button>
             </div>
-            <div class="os-content-pane">
+            <div class="os-content-pane" ondragover="event.preventDefault()" ondrop="handleMediaDrop(event)">
               <div style="margin-bottom:12px; font-size:0.85rem; color:var(--text-sub); display:flex; justify-content:space-between; align-items:center;">
-                <span id="filesPaneSubtitle">Click any saved document or spreadsheet to open:</span>
+                <span id="filesPaneSubtitle">Click any saved document or media file to open:</span>
                 <button class="btn-ui" onclick="renderFolders()">🔄 Refresh</button>
               </div>
               <div class="files-grid" id="folderView"></div>
@@ -1015,22 +1040,6 @@ Type 'help' or 'bringback reinstall /appnameApp' to manage apps.</div>
         </div>
       </div>
 
-      <!-- APP 9: CODE SNIPPETS VAULT -->
-      <div class="os-window" id="snippetApp" style="width: 540px; height: 400px; top: 90px; left: 240px;">
-        <div class="window-topbar" onmousedown="dragWindow(event, 'snippetApp')">
-          <div class="window-title">&gt;_ Snippet Vault</div>
-          <div class="win-controls-pills">
-            <span class="win-pill-btn" onclick="minimizeWindow('snippetApp')">─</span>
-            <span class="win-pill-btn pill-close" onclick="closeWindow('snippetApp')">✕</span>
-          </div>
-        </div>
-        <div class="window-body" style="padding:20px; display:flex; flex-direction:column; gap:12px;">
-          <input type="text" class="input-ui" id="snippetTitle" placeholder="Snippet Title..." />
-          <textarea class="input-ui" id="snippetCode" style="flex:1; resize:none; font-family:var(--font-code);" placeholder="Paste reusable code here..."></textarea>
-          <button class="btn-ui btn-accent" onclick="saveSnippet()">💾 Save Snippet</button>
-        </div>
-      </div>
-
       <!-- APP 10: FUNNY SOUNDBOARD -->
       <div class="os-window" id="soundboardApp" style="width: 580px; height: 440px; top: 80px; left: 220px;">
         <div class="window-topbar" onmousedown="dragWindow(event, 'soundboardApp')">
@@ -1050,42 +1059,6 @@ Type 'help' or 'bringback reinstall /appnameApp' to manage apps.</div>
           <button class="btn-ui btn-accent" onclick="playMemeSound('explode')">💥 Explosion</button>
           <button class="btn-ui btn-accent" onclick="playMemeSound('applause')">👏 Applause</button>
           <button class="btn-ui btn-accent" onclick="playMemeSound('whistle')">😗 Whistle</button>
-        </div>
-      </div>
-
-      <!-- APP 11: UNIT CONVERTER -->
-      <div class="os-window" id="converterApp" style="width: 500px; height: 380px; top: 100px; left: 260px;">
-        <div class="window-topbar" onmousedown="dragWindow(event, 'converterApp')">
-          <div class="window-title">🔄 Unit Converter</div>
-          <div class="win-controls-pills">
-            <span class="win-pill-btn" onclick="minimizeWindow('converterApp')">─</span>
-            <span class="win-pill-btn pill-close" onclick="closeWindow('converterApp')">✕</span>
-          </div>
-        </div>
-        <div class="window-body" style="padding:20px; display:flex; flex-direction:column; gap:14px;">
-          <label style="font-size:0.82rem; color:var(--text-sub);">Value</label>
-          <input type="number" class="input-ui" id="convertVal" value="100" oninput="runConvert()" />
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-            <div>
-              <label style="font-size:0.82rem; color:var(--text-sub);">From</label>
-              <select class="input-ui" id="convertFrom" onchange="runConvert()">
-                <option value="km">Kilometers (km)</option>
-                <option value="miles">Miles (mi)</option>
-                <option value="kg">Kilograms (kg)</option>
-                <option value="lbs">Pounds (lbs)</option>
-              </select>
-            </div>
-            <div>
-              <label style="font-size:0.82rem; color:var(--text-sub);">To</label>
-              <select class="input-ui" id="convertTo" onchange="runConvert()">
-                <option value="miles">Miles (mi)</option>
-                <option value="km">Kilometers (km)</option>
-                <option value="lbs">Pounds (lbs)</option>
-                <option value="kg">Kilograms (kg)</option>
-              </select>
-            </div>
-          </div>
-          <div style="padding:16px; background:rgba(255,255,255,0.05); border-radius:12px; font-size:1.3rem; font-weight:700; text-align:center; color:var(--accent);" id="convertResult">62.13 Miles</div>
         </div>
       </div>
 
@@ -1135,21 +1108,6 @@ Type 'help' or 'bringback reinstall /appnameApp' to manage apps.</div>
               <button class="btn-ui" onclick="triggerCrowdCheer()">👏 Crowd Cheer</button>
             </div>
           </div>
-        </div>
-      </div>
-
-      <!-- APP 14: LUCKY BLOCK -->
-      <div class="os-window" id="luckyApp" style="width: 520px; height: 420px; top: 80px; left: 230px;">
-        <div class="window-topbar" onmousedown="dragWindow(event, 'luckyApp')">
-          <div class="window-title">📦 Mythic Lucky Block</div>
-          <div class="win-controls-pills">
-            <span class="win-pill-btn" onclick="minimizeWindow('luckyApp')">─</span>
-            <span class="win-pill-btn pill-close" onclick="closeWindow('luckyApp')">✕</span>
-          </div>
-        </div>
-        <div class="window-body" style="display:flex; flex-direction:column; align-items:center; justify-content:center; gap:22px; padding:24px;">
-          <div class="lucky-box" onclick="openLuckyBlock()" id="luckyBox">❓</div>
-          <div style="font-weight:700; font-size:1.15rem; text-align:center;" id="luckyResult">Click the block to test your luck!</div>
         </div>
       </div>
 
@@ -1295,7 +1253,6 @@ Type 'help' or 'bringback reinstall /appnameApp' to manage apps.</div>
               <div class="settings-section" id="systemConfigTab">
                 <h3 style="font-size:1.05rem; font-weight:700;">System Notes</h3>
                 
-                <!-- UPDATED KERNEL / SYSTEM NOTES SECTION -->
                 <div style="padding:16px; background:rgba(255,255,255,0.04); border:1px solid var(--glass-border); border-radius:14px; display:flex; flex-direction:column; gap:8px; font-size:0.85rem;">
                   <div><b>Viewer & Handler:</b> UMBRELLA VWER</div>
                   <div><b>OS:</b> Enfrok Operating System 5.2</div>
@@ -1332,21 +1289,6 @@ Type 'help' or 'bringback reinstall /appnameApp' to manage apps.</div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
-
-      <!-- APP 16: ASCII STUDIO -->
-      <div class="os-window" id="asciiApp" style="width: 560px; height: 380px; top: 80px; left: 230px;">
-        <div class="window-topbar" onmousedown="dragWindow(event, 'asciiApp')">
-          <div class="window-title">🔡 ASCII Art Generator</div>
-          <div class="win-controls-pills">
-            <span class="win-pill-btn" onclick="minimizeWindow('asciiApp')">─</span>
-            <span class="win-pill-btn pill-close" onclick="closeWindow('asciiApp')">✕</span>
-          </div>
-        </div>
-        <div class="window-body" style="padding:18px; display:flex; flex-direction:column; gap:12px;">
-          <input type="text" class="input-ui" id="asciiInput" value="ENFROK" onkeyup="generateAsciiArt()" placeholder="Type text..." />
-          <textarea class="code-area" id="asciiOutput" readonly style="flex:1; font-size:0.75rem; line-height:1.2; font-family:monospace; color:var(--accent);"></textarea>
         </div>
       </div>
 
@@ -1495,17 +1437,6 @@ Type 'help' or 'bringback reinstall /appnameApp' to manage apps.</div>
         </div>
       </div>
 
-      <!-- WORLD CLOCK -->
-      <div class="os-window" id="worldClockApp" style="width: 580px; height: 440px; top: 90px; left: 230px;">
-        <div class="window-topbar" onmousedown="dragWindow(event, 'worldClockApp')">
-          <div class="window-title">🌐 World Clock & Timezones</div>
-          <div class="win-controls-pills"><span class="win-pill-btn" onclick="minimizeWindow('worldClockApp')">─</span><span class="win-pill-btn pill-close" onclick="closeWindow('worldClockApp')">✕</span></div>
-        </div>
-        <div class="window-body additive-app-body">
-          <div class="utility-grid-two" id="worldClockGrid" style="gap:12px;"></div>
-        </div>
-      </div>
-
       <!-- HABIT TRACKER -->
       <div class="os-window" id="habitApp" style="width: 540px; height: 430px; top: 80px; left: 240px;">
         <div class="window-topbar" onmousedown="dragWindow(event, 'habitApp')">
@@ -1521,34 +1452,7 @@ Type 'help' or 'bringback reinstall /appnameApp' to manage apps.</div>
         </div>
       </div>
 
-      <!-- WEATHER FORECAST -->
-      <div class="os-window" id="weatherApp" style="width: 560px; height: 440px; top: 80px; left: 200px;">
-        <div class="window-topbar" onmousedown="dragWindow(event, 'weatherApp')">
-          <div class="window-title">🌤️ Weather Forecast Studio</div>
-          <div class="win-controls-pills"><span class="win-pill-btn" onclick="minimizeWindow('weatherApp')">─</span><span class="win-pill-btn pill-close" onclick="closeWindow('weatherApp')">✕</span></div>
-        </div>
-        <div class="window-body additive-app-body">
-          <div class="utility-row">
-            <select class="input-ui" id="weatherCitySelect" onchange="updateWeatherDisplay()">
-              <option value="New York">New York 🇺🇸</option>
-              <option value="London">London 🇬🇧</option>
-              <option value="Tokyo">Tokyo 🇯🇵</option>
-              <option value="Paris">Paris 🇫🇷</option>
-              <option value="Sydney">Sydney 🇦🇺</option>
-              <option value="Mumbai">Mumbai 🇮🇳</option>
-            </select>
-            <button class="btn-ui" id="weatherUnitBtn" onclick="toggleWeatherUnit()">°C / °F</button>
-          </div>
-          <div class="utility-hero" id="weatherHeroCard">
-            <span class="utility-eyebrow" id="weatherCityName">NEW YORK</span>
-            <strong id="weatherTempDisplay">24°C</strong>
-            <span id="weatherDescDisplay">🌤️ Partly Cloudy · Humidity: 55% · Wind: 12 km/h</span>
-          </div>
-          <div class="utility-grid-two" id="weatherForecastGrid"></div>
-        </div>
-      </div>
-
-      <!-- EXTRA UTILITY APPS -->
+      <!-- COLOR PICKER STUDIO -->
       <div class="os-window" id="colorPickerApp" style="width: 460px; height: 380px; top: 100px; left: 220px;">
         <div class="window-topbar" onmousedown="dragWindow(event, 'colorPickerApp')">
           <div class="window-title">🎨 Palette Generator</div>
@@ -1560,6 +1464,7 @@ Type 'help' or 'bringback reinstall /appnameApp' to manage apps.</div>
         </div>
       </div>
 
+      <!-- PIANO APP -->
       <div class="os-window" id="pianoApp" style="width: 620px; height: 360px; top: 100px; left: 210px;">
         <div class="window-topbar" onmousedown="dragWindow(event, 'pianoApp')">
           <div class="window-title">🎹 Synth Piano Pro</div>
@@ -1584,6 +1489,7 @@ Type 'help' or 'bringback reinstall /appnameApp' to manage apps.</div>
         </div>
       </div>
 
+      <!-- JSON APP -->
       <div class="os-window" id="jsonApp" style="width: 580px; height: 420px; top: 80px; left: 210px;">
         <div class="window-topbar" onmousedown="dragWindow(event, 'jsonApp')">
           <div class="window-title">🛠️ JSON Formatter & Validator</div>
@@ -1595,6 +1501,7 @@ Type 'help' or 'bringback reinstall /appnameApp' to manage apps.</div>
         </div>
       </div>
 
+      <!-- HASH GEN APP -->
       <div class="os-window" id="hashGenApp" style="width: 520px; height: 360px; top: 90px; left: 220px;">
         <div class="window-topbar" onmousedown="dragWindow(event, 'hashGenApp')">
           <div class="window-title">🔑 Hash Generator</div>
@@ -1606,17 +1513,7 @@ Type 'help' or 'bringback reinstall /appnameApp' to manage apps.</div>
         </div>
       </div>
 
-      <div class="os-window" id="urlEncodeApp" style="width: 520px; height: 360px; top: 80px; left: 240px;">
-        <div class="window-topbar" onmousedown="dragWindow(event, 'urlEncodeApp')">
-          <div class="window-title">🔗 URL Encoder & Decoder</div>
-          <div class="win-controls-pills"><span class="win-pill-btn pill-close" onclick="closeWindow('urlEncodeApp')">✕</span></div>
-        </div>
-        <div class="window-body" style="padding:20px; display:flex; flex-direction:column; gap:12px;">
-          <textarea class="input-ui" id="urlInputText" style="height:80px; resize:none;"></textarea>
-          <button class="btn-ui btn-accent" onclick="runUrlEncode('encode')">Encode URL</button>
-        </div>
-      </div>
-
+      <!-- LOREM IPSUM APP -->
       <div class="os-window" id="loremApp" style="width: 540px; height: 380px; top: 100px; left: 230px;">
         <div class="window-topbar" onmousedown="dragWindow(event, 'loremApp')">
           <div class="window-title">📝 Lorem Ipsum Generator</div>
@@ -1628,6 +1525,7 @@ Type 'help' or 'bringback reinstall /appnameApp' to manage apps.</div>
         </div>
       </div>
 
+      <!-- HTML ESCAPER APP -->
       <div class="os-window" id="htmlEscapeApp" style="width: 520px; height: 360px; top: 90px; left: 210px;">
         <div class="window-topbar" onmousedown="dragWindow(event, 'htmlEscapeApp')">
           <div class="window-title">🛡️ HTML Entity Escaper</div>
@@ -1639,6 +1537,7 @@ Type 'help' or 'bringback reinstall /appnameApp' to manage apps.</div>
         </div>
       </div>
 
+      <!-- QR CODE STUDIO -->
       <div class="os-window" id="qrGenApp" style="width: 480px; height: 400px; top: 110px; left: 260px;">
         <div class="window-topbar" onmousedown="dragWindow(event, 'qrGenApp')">
           <div class="window-title">📲 QR Code Studio</div>
@@ -1650,6 +1549,7 @@ Type 'help' or 'bringback reinstall /appnameApp' to manage apps.</div>
         </div>
       </div>
 
+      <!-- MATH LAB APP -->
       <div class="os-window" id="mathLabApp" style="width: 520px; height: 380px; top: 80px; left: 220px;">
         <div class="window-topbar" onmousedown="dragWindow(event, 'mathLabApp')">
           <div class="window-title">🔬 Math Lab Studio</div>
@@ -1661,28 +1561,7 @@ Type 'help' or 'bringback reinstall /appnameApp' to manage apps.</div>
         </div>
       </div>
 
-      <div class="os-window" id="contrastApp" style="width: 500px; height: 360px; top: 100px; left: 240px;">
-        <div class="window-topbar" onmousedown="dragWindow(event, 'contrastApp')">
-          <div class="window-title">👁️ Contrast Checker</div>
-          <div class="win-controls-pills"><span class="win-pill-btn pill-close" onclick="closeWindow('contrastApp')">✕</span></div>
-        </div>
-        <div class="window-body" style="padding:20px; display:flex; flex-direction:column; gap:12px; align-items:center;">
-          <div id="contrastBox" style="padding:20px; border-radius:10px; background:#3b82f6; color:#ffffff;">WCAG Compliance Box</div>
-        </div>
-      </div>
-
-      <div class="os-window" id="focusApp" style="width: 500px; height: 410px; top: 100px; left: 250px;">
-        <div class="window-topbar" onmousedown="dragWindow(event, 'focusApp')">
-          <div class="window-title">⏳ Focus Timer</div>
-          <div class="win-controls-pills"><span class="win-pill-btn" onclick="minimizeWindow('focusApp')">─</span><span class="win-pill-btn pill-close" onclick="closeWindow('focusApp')">✕</span></div>
-        </div>
-        <div class="window-body additive-app-body">
-          <div class="utility-hero"><span class="utility-eyebrow">DEEP WORK SESSION</span><strong id="focusTimerDisplay">25:00</strong><span id="focusTimerStatus">Ready when you are.</span></div>
-          <div class="utility-row"><button class="btn-ui btn-accent" id="focusStartBtn" onclick="toggleFocusTimer()">Start Focus</button><button class="btn-ui" onclick="resetFocusTimer()">Reset</button></div>
-          <div class="utility-row"><label class="utility-label">Minutes <input class="input-ui" id="focusMinutesInput" type="number" min="1" max="180" value="25" onchange="setFocusMinutes(this.value)"></label><label class="utility-label">Preset <select class="input-ui" onchange="setFocusPreset(this.value)"><option value="25">25 min</option><option value="5">5 min</option><option value="50">50 min</option></select></label></div>
-        </div>
-      </div>
-
+      <!-- MARKDOWN APP -->
       <div class="os-window" id="markdownApp" style="width: 760px; height: 520px; top: 60px; left: 190px;">
         <div class="window-topbar" onmousedown="dragWindow(event, 'markdownApp')">
           <div class="window-title">📝 Markdown Preview</div>
@@ -1700,6 +1579,7 @@ Write **Markdown** on the left and see a clean preview here.
         </div>
       </div>
 
+      <!-- BASE64 APP -->
       <div class="os-window" id="base64App" style="width: 620px; height: 430px; top: 80px; left: 220px;">
         <div class="window-topbar" onmousedown="dragWindow(event, 'base64App')">
           <div class="window-title">🔐 Base64 Studio</div>
@@ -1713,6 +1593,7 @@ Write **Markdown** on the left and see a clean preview here.
         </div>
       </div>
 
+      <!-- DATE DIFF APP -->
       <div class="os-window" id="dateDiffApp" style="width: 560px; height: 440px; top: 90px; left: 230px;">
         <div class="window-topbar" onmousedown="dragWindow(event, 'dateDiffApp')">
           <div class="window-title">📅 Date Calculator</div>
@@ -1726,6 +1607,7 @@ Write **Markdown** on the left and see a clean preview here.
         </div>
       </div>
 
+      <!-- REGEX APP -->
       <div class="os-window" id="regexApp" style="width: 680px; height: 470px; top: 70px; left: 200px;">
         <div class="window-topbar" onmousedown="dragWindow(event, 'regexApp')">
           <div class="window-title">🧪 Regex Tester</div>
@@ -1735,6 +1617,30 @@ Write **Markdown** on the left and see a clean preview here.
           <input class="input-ui" id="regexPatternInput" value="\\b[A-Z][a-z]+\\b" oninput="runRegexTest()" placeholder="Regular expression, e.g. \\d+"><div class="utility-row"><label class="utility-label utility-check"><input type="checkbox" id="regexGlobalInput" checked onchange="runRegexTest()"> Global</label><label class="utility-label utility-check"><input type="checkbox" id="regexIgnoreCaseInput" onchange="runRegexTest()"> Ignore case</label></div>
           <textarea class="input-ui utility-textarea regex-test-text" id="regexTextInput" oninput="runRegexTest()">Enfrok OS makes useful tools. Enfrok apps stay organized.</textarea>
           <div class="regex-result" id="regexResult"></div>
+        </div>
+      </div>
+
+      <!-- MEDIA PLAYER APP FOR PHOTOS & VIDEOS -->
+      <div class="os-window" id="mediaPlayerApp" style="width: 720px; height: 480px; top: 70px; left: 180px;">
+        <div class="window-topbar" onmousedown="dragWindow(event, 'mediaPlayerApp')">
+          <div class="window-title">🎬 Media Viewer — <span id="mediaViewerTitle" style="color:var(--accent);">Media.mp4</span></div>
+          <div class="win-controls-pills">
+            <span class="win-pill-btn" onclick="minimizeWindow('mediaPlayerApp')">─</span>
+            <span class="win-pill-btn" onclick="toggleFullscreen('mediaPlayerApp')">▢</span>
+            <span class="win-pill-btn pill-close" onclick="closeWindow('mediaPlayerApp')">✕</span>
+          </div>
+        </div>
+        <div class="window-body">
+          <div class="media-player-container">
+            <div class="media-viewport" id="mediaViewport">
+              <!-- Video or Image injected here dynamically -->
+            </div>
+            <div class="media-controls" id="mediaControlsArea">
+              <button class="btn-ui" id="mediaPlayBtn" onclick="toggleMediaPlay()">▶ Play</button>
+              <input type="range" class="media-timeline" id="mediaTimeline" value="0" min="0" max="100" oninput="seekMedia(this.value)" />
+              <span id="mediaTimeDisplay" style="font-family:var(--font-code); font-size:0.75rem; color:var(--text-sub);">00:00 / 00:00</span>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -1812,7 +1718,7 @@ Write **Markdown** on the left and see a clean preview here.
     'https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1920'
   ];
 
-  /* ALL APPS */
+  /* ALL APPS (DELETED REQUESTED APPS) */
   const ALL_APPS = [
     { id: 'sheetApp', name: 'Spreadsheet', icon: '📊', pinnedDock: true, pinnedDesktop: true },
     { id: 'wordApp', name: 'Text Studio', icon: '📄', pinnedDock: true, pinnedDesktop: true },
@@ -1822,37 +1728,29 @@ Write **Markdown** on the left and see a clean preview here.
     { id: 'browserApp', name: 'Browser', icon: '🌐', pinnedDock: true, pinnedDesktop: true },
     { id: 'calcApp', name: 'Calculator', icon: '🧮', pinnedDock: true, pinnedDesktop: true },
     { id: 'todoApp', name: 'Tasks', icon: '✅', pinnedDock: true, pinnedDesktop: true },
-    { id: 'snippetApp', name: 'Snippets', icon: '>_', pinnedDock: true, pinnedDesktop: true },
     { id: 'soundboardApp', name: 'Funny Sounds', icon: '🔊', pinnedDock: true, pinnedDesktop: true },
-    { id: 'converterApp', name: 'Converter', icon: '🔄', pinnedDock: true, pinnedDesktop: true },
     { id: 'passApp', name: 'Passwords', icon: '🔑', pinnedDock: true, pinnedDesktop: true },
     { id: 'concertApp', name: 'Concert', icon: '🎤', pinnedDock: true, pinnedDesktop: true },
-    { id: 'luckyApp', name: 'Lucky Block', icon: '📦', pinnedDock: true, pinnedDesktop: true },
     { id: 'settingsApp', name: 'Settings', icon: '⚙️', pinnedDock: true, pinnedDesktop: true },
     { id: 'notesApp', name: 'Quick Notes', icon: '📝', pinnedDock: false, pinnedDesktop: false },
     { id: 'voiceRecorderApp', name: 'Voice Recorder', icon: '🎙️', pinnedDock: false, pinnedDesktop: false },
     { id: 'whiteboardApp', name: 'Whiteboard', icon: '🖌️', pinnedDock: false, pinnedDesktop: false },
     { id: 'budgetApp', name: 'Budget Planner', icon: '💰', pinnedDock: false, pinnedDesktop: false },
-    { id: 'worldClockApp', name: 'World Clock', icon: '🌐', pinnedDock: false, pinnedDesktop: false },
     { id: 'habitApp', name: 'Habit Tracker', icon: '🎯', pinnedDock: false, pinnedDesktop: false },
-    { id: 'weatherApp', name: 'Weather Forecast', icon: '🌤️', pinnedDock: false, pinnedDesktop: false },
-    { id: 'asciiApp', name: 'ASCII Studio', icon: '🔡', pinnedDock: false, pinnedDesktop: false },
     { id: 'stickyApp', name: 'Sticky Notes', icon: '📌', pinnedDock: false, pinnedDesktop: false },
     { id: 'colorPickerApp', name: 'Color Studio', icon: '🎨', pinnedDock: false, pinnedDesktop: false },
     { id: 'pianoApp', name: 'Synth Piano', icon: '🎹', pinnedDock: false, pinnedDesktop: false },
     { id: 'jsonApp', name: 'JSON Formatter', icon: '🛠️', pinnedDock: false, pinnedDesktop: false },
     { id: 'hashGenApp', name: 'Hash Generator', icon: '🔑', pinnedDock: false, pinnedDesktop: false },
-    { id: 'urlEncodeApp', name: 'URL Encoder', icon: '🔗', pinnedDock: false, pinnedDesktop: false },
     { id: 'loremApp', name: 'Lorem Ipsum', icon: '📝', pinnedDock: false, pinnedDesktop: false },
     { id: 'htmlEscapeApp', name: 'HTML Escaper', icon: '🛡️', pinnedDock: false, pinnedDesktop: false },
     { id: 'qrGenApp', name: 'QR Code Studio', icon: '📲', pinnedDock: false, pinnedDesktop: false },
     { id: 'mathLabApp', name: 'Math Lab Studio', icon: '🔬', pinnedDock: false, pinnedDesktop: false },
-    { id: 'contrastApp', name: 'Contrast Checker', icon: '👁️', pinnedDock: false, fontPinned: false },
-    { id: 'focusApp', name: 'Focus Timer', icon: '⏳', pinnedDock: false, pinnedDesktop: false },
     { id: 'markdownApp', name: 'Markdown Preview', icon: '📝', pinnedDock: false, pinnedDesktop: false },
     { id: 'base64App', name: 'Base64 Studio', icon: '🔐', pinnedDock: false, pinnedDesktop: false },
     { id: 'dateDiffApp', name: 'Date Calculator', icon: '📅', pinnedDock: false, pinnedDesktop: false },
-    { id: 'regexApp', name: 'Regex Tester', icon: '🧪', pinnedDock: false, pinnedDesktop: false }
+    { id: 'regexApp', name: 'Regex Tester', icon: '🧪', pinnedDock: false, pinnedDesktop: false },
+    { id: 'mediaPlayerApp', name: 'Media Viewer', icon: '🎬', pinnedDock: false, pinnedDesktop: false }
   ];
 
   let winZIndex = 200;
@@ -1882,14 +1780,15 @@ Write **Markdown** on the left and see a clean preview here.
     topBarEnabled: true,
     topBarApps: ['sheetApp', 'wordApp', 'paintApp'],
     uninstalledApps: [],
-    desktopApps: ['sheetApp', 'wordApp', 'paintApp', 'documentCore', 'terminalApp', 'browserApp', 'calcApp', 'todoApp', 'snippetApp', 'soundboardApp', 'converterApp', 'passApp', 'concertApp', 'luckyApp', 'settingsApp'],
-    dockApps: ['sheetApp', 'wordApp', 'paintApp', 'documentCore', 'terminalApp', 'browserApp', 'calcApp', 'todoApp', 'snippetApp', 'soundboardApp', 'converterApp', 'passApp', 'concertApp', 'luckyApp', 'settingsApp'],
+    desktopApps: ['sheetApp', 'wordApp', 'paintApp', 'documentCore', 'terminalApp', 'browserApp', 'calcApp', 'todoApp', 'soundboardApp', 'passApp', 'concertApp', 'settingsApp'],
+    dockApps: ['sheetApp', 'wordApp', 'paintApp', 'documentCore', 'terminalApp', 'browserApp', 'calcApp', 'todoApp', 'soundboardApp', 'passApp', 'concertApp', 'settingsApp'],
     savedFiles: [
       { name: 'Welcome_Guide.doc', content: '<h2>Welcome to Enfrok OS 5.2</h2><p>This is your saved document in Files storage.</p>' }
-    ]
+    ],
+    savedMedia: []
   };
 
-  /* CLEAN GLASSPOPUP MODAL SYSTEM (SURROUND GLASSMASK REMOVED) */
+  /* CLEAN GLASSPOPUP MODAL SYSTEM */
   let popupCallback = null;
 
   function showGlassAlert(message, title = "✨ Notification") {
@@ -2006,6 +1905,16 @@ Write **Markdown** on the left and see a clean preview here.
     }
   }
 
+  /* LOCK SCREEN FUNCTIONALITY */
+  function lockSystemScreen() {
+    document.getElementById('desktop-screen').classList.add('hidden');
+    document.getElementById('login-screen').classList.remove('hidden');
+    document.getElementById('loginTitleName').textContent = `System Locked`;
+    document.getElementById('loginAvatarLetter').textContent = (osData.username || 'D').charAt(0).toUpperCase();
+    document.getElementById('loginSubText').textContent = "Enter password to unlock Enfrok OS";
+    document.getElementById('loginPasswordInput').value = '';
+  }
+
   /* CHANGE PASSWORD FEATURE IN OS CONFIGURATION */
   function changeSystemPassword() {
     const oldP = document.getElementById('pwdOld').value;
@@ -2053,10 +1962,7 @@ Write **Markdown** on the left and see a clean preview here.
       if (!osData.installed) {
         document.getElementById('setup-screen').classList.remove('hidden');
       } else {
-        document.getElementById('login-screen').classList.remove('hidden');
-        document.getElementById('loginTitleName').textContent = `Welcome, ${osData.username}`;
-        document.getElementById('loginAvatarLetter').textContent = osData.username.charAt(0).toUpperCase();
-        document.getElementById('loginSubText').textContent = "Enter password to unlock Enfrok OS";
+        lockSystemScreen();
       }
     }, 800);
   });
@@ -2113,8 +2019,6 @@ Write **Markdown** on the left and see a clean preview here.
     initDesktop();
     initPaintStudio();
     initWhiteboard();
-    initWorldClock();
-    updateWeatherDisplay();
   }
 
   /* SYSTEM AUDIO MUTE TOGGLE */
@@ -2435,7 +2339,7 @@ Write **Markdown** on the left and see a clean preview here.
     document.getElementById('hubUsername').textContent = uName;
     document.getElementById('hubAvatarLetter').textContent = uName.charAt(0).toUpperCase();
 
-    // Render Desktop Apps with Subtext [core: appnameApp]
+    // Render Desktop Apps
     osData.desktopApps.forEach(appId => {
       const app = activeApps.find(a => a.id === appId);
       if (app) {
@@ -2449,7 +2353,7 @@ Write **Markdown** on the left and see a clean preview here.
       }
     });
 
-    // Render Hub Apps with Subtext [core: appnameApp]
+    // Render Hub Apps
     activeApps.forEach(app => {
       hubGrid.innerHTML += `
         <div class="d-icon" draggable="true" ondragstart="handleAppDragStart(event, '${app.id}')" onclick="openWindow('${app.id}'); toggleLaunchHub();" oncontextmenu="handleContextMenuEvent(event, '${app.id}')">
@@ -2530,10 +2434,14 @@ Write **Markdown** on the left and see a clean preview here.
     if (win) {
       win.classList.remove('open-active', 'focused', 'fullscreen', 'minimized');
       updateDockState();
+      if (id === 'mediaPlayerApp') {
+        const vid = document.querySelector('#mediaViewport video');
+        if (vid) vid.pause();
+      }
     }
   }
 
-  /* UPDATED TASKBAR DOCK STATE LOGIC (MINIMIZED APPS STAY VISIBLE IN TASKBAR) */
+  /* UPDATED TASKBAR DOCK STATE LOGIC */
   function updateDockState() {
     const dockItemsArea = document.getElementById('dockItemsArea');
     if (!dockItemsArea) return;
@@ -3061,10 +2969,42 @@ Write **Markdown** on the left and see a clean preview here.
     }, "🔗 Insert Web Link");
   }
 
+  /* INTEGRATED MEDIA SELECTOR FOR WORD APP */
   function insertWordImage() {
-    showGlassPrompt("Enter Image Web URL:", "https://", (url) => {
-      if (url) execWordCmd('insertImage', url);
-    }, "🖼️ Insert Image");
+    if (osData.savedMedia && osData.savedMedia.length > 0) {
+      document.getElementById('popupTitle').textContent = "🖼️ Select Image or Video";
+      document.getElementById('popupBody').textContent = "Choose from your uploaded Videos & Photos:";
+      
+      const container = document.getElementById('popupInputContainer');
+      container.innerHTML = `
+        <div class="app-picker-list">
+          ${osData.savedMedia.map(m => `
+            <div class="app-picker-item" onclick="confirmInsertWordMedia('${m.url}', '${m.type}')">
+              <span style="font-size:1.2rem;">${m.type === 'video' ? '🎥' : '🖼️'}</span>
+              <div style="display:flex; flex-direction:column; flex:1;">
+                <span style="font-weight:600; font-size:0.85rem;">${m.name}</span>
+                <span style="font-size:0.72rem; color:var(--text-sub);">${m.type.toUpperCase()}</span>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+      document.getElementById('popupActions').innerHTML = `<button class="btn-ui" onclick="closeGlassPopup()">Cancel</button>`;
+      document.getElementById('globalGlassPopup').classList.add('active');
+    } else {
+      showGlassPrompt("Enter Image Web URL:", "https://", (url) => {
+        if (url) execWordCmd('insertImage', url);
+      }, "🖼️ Insert Image URL");
+    }
+  }
+
+  function confirmInsertWordMedia(url, type) {
+    closeGlassPopup();
+    if (type === 'video') {
+      execWordCmd('insertHTML', `<video src="${url}" controls style="max-width:100%; border-radius:8px; margin:10px 0;"></video>`);
+    } else {
+      execWordCmd('insertImage', url);
+    }
   }
 
   function wordTransformText(type) {
@@ -3141,7 +3081,7 @@ Write **Markdown** on the left and see a clean preview here.
     setTimeout(() => { document.getElementById('concertStatus').textContent = "RappingConcert Live Stage Active"; }, 3000);
   }
 
-  /* DOCUMENTS & FILE STORAGE ENGINE */
+  /* DOCUMENTS & FILE STORAGE ENGINE + MEDIA UPLOAD HANDLING */
   function filterFiles(category, navEl) {
     currentFileFilter = category;
     if (navEl) {
@@ -3149,6 +3089,40 @@ Write **Markdown** on the left and see a clean preview here.
       navEl.classList.add('active');
     }
     renderFolders();
+  }
+
+  function handleMediaUpload(e) {
+    const files = Array.from(e.target.files);
+    processUploadedFiles(files);
+  }
+
+  function handleMediaDrop(e) {
+    e.preventDefault();
+    if (e.dataTransfer && e.dataTransfer.files) {
+      processUploadedFiles(Array.from(e.dataTransfer.files));
+    }
+  }
+
+  function processUploadedFiles(files) {
+    if (!osData.savedMedia) osData.savedMedia = [];
+    files.forEach(file => {
+      const isVideo = file.type.startsWith('video');
+      const isImage = file.type.startsWith('image');
+      if (isVideo || isImage) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          osData.savedMedia.push({
+            id: 'media_' + Date.now() + Math.random().toString(36).substr(2, 4),
+            name: file.name,
+            type: isVideo ? 'video' : 'photo',
+            url: event.target.result
+          });
+          saveData();
+          renderFolders();
+        };
+        reader.readAsDataURL(file);
+      }
+    });
   }
 
   function renderFolders() {
@@ -3178,6 +3152,29 @@ Write **Markdown** on the left and see a clean preview here.
       return;
     }
 
+    if (currentFileFilter === 'media') {
+      if (subtitle) subtitle.textContent = 'Videos & Photos Storage (Click to Play or View):';
+      const mediaList = osData.savedMedia || [];
+      if (mediaList.length === 0) {
+        view.innerHTML = '<div style="color:var(--text-sub); font-size:0.85rem; padding:20px; grid-column: 1 / -1;">No Videos or Photos uploaded yet. Drag & drop or click "Upload Media".</div>';
+        return;
+      }
+      mediaList.forEach(m => {
+        const icon = m.type === 'video' ? '🎥' : '🖼️';
+        view.innerHTML += `
+          <div class="file-item" onclick="openMediaViewer('${m.id}')" title="Click to view">
+            <div class="file-item-actions">
+              <button class="btn-ui" style="padding:2px 6px; font-size:0.7rem;" onclick="event.stopPropagation(); renameMediaFile('${m.id}')">✏️</button>
+              <button class="btn-ui btn-danger" style="padding:2px 6px; font-size:0.7rem;" onclick="event.stopPropagation(); deleteMediaFile('${m.id}')">🗑️</button>
+            </div>
+            ${m.type === 'photo' ? `<img src="${m.url}" class="file-preview-thumb" />` : `<span style="font-size:2.2rem;">${icon}</span>`}
+            <span style="word-break:break-word; font-weight:600;">${m.name}</span>
+          </div>
+        `;
+      });
+      return;
+    }
+
     if (subtitle) subtitle.textContent = 'Click any saved document or spreadsheet to open:';
     
     let files = osData.savedFiles || [];
@@ -3188,7 +3185,7 @@ Write **Markdown** on the left and see a clean preview here.
     }
 
     if (files.length === 0) {
-      view.innerHTML = '<div style="color:var(--text-sub); font-size:0.85rem; padding:20px; grid-column: 1 / -1;">No files found in this category. Click "New Document" to create one.</div>';
+      view.innerHTML = '<div style="color:var(--text-sub); font-size:0.85rem; padding:20px; grid-column: 1 / -1;">No documents found. Click "New Document" to create one.</div>';
       return;
     }
 
@@ -3197,14 +3194,93 @@ Write **Markdown** on the left and see a clean preview here.
       const safeName = f.name.replace(/'/g, "\\'");
       view.innerHTML += `
         <div class="file-item" onclick="openSavedFile('${safeName}')" title="Click to open file">
+          <div class="file-item-actions">
+            <button class="btn-ui btn-danger" style="padding:2px 6px; font-size:0.7rem;" onclick="event.stopPropagation(); deleteSavedFile('${safeName}')">🗑️</button>
+          </div>
           <span style="font-size:2.2rem;">${isSheet ? '📊' : '📄'}</span>
           <span style="word-break:break-word;">${f.name}</span>
-          <div style="display:flex; gap:6px; margin-top:4px;">
-            <button class="btn-ui" style="padding:2px 6px; font-size:0.7rem;" onclick="event.stopPropagation(); deleteSavedFile('${safeName}')">🗑️</button>
-          </div>
         </div>
       `;
     });
+  }
+
+  function openMediaViewer(mediaId) {
+    const item = (osData.savedMedia || []).find(m => m.id === mediaId);
+    if (!item) return;
+
+    document.getElementById('mediaViewerTitle').textContent = item.name;
+    const viewport = document.getElementById('mediaViewport');
+    const controls = document.getElementById('mediaControlsArea');
+
+    if (item.type === 'video') {
+      viewport.innerHTML = `<video id="activeVideoElem" src="${item.url}" style="width:100%; height:100%;"></video>`;
+      controls.style.display = 'flex';
+      const vid = document.getElementById('activeVideoElem');
+      
+      vid.ontimeupdate = () => {
+        const timeline = document.getElementById('mediaTimeline');
+        const display = document.getElementById('mediaTimeDisplay');
+        if (vid.duration) {
+          timeline.value = (vid.currentTime / vid.duration) * 100;
+          display.textContent = `${formatMediaTime(vid.currentTime)} / ${formatMediaTime(vid.duration)}`;
+        }
+      };
+      vid.onended = () => {
+        document.getElementById('mediaPlayBtn').textContent = '▶ Play';
+      };
+    } else {
+      viewport.innerHTML = `<img src="${item.url}" style="max-width:100%; max-height:100%; object-fit:contain;" />`;
+      controls.style.display = 'none';
+    }
+
+    openWindow('mediaPlayerApp');
+  }
+
+  function toggleMediaPlay() {
+    const vid = document.getElementById('activeVideoElem');
+    const btn = document.getElementById('mediaPlayBtn');
+    if (vid) {
+      if (vid.paused) {
+        vid.play();
+        btn.textContent = '⏸ Pause';
+      } else {
+        vid.pause();
+        btn.textContent = '▶ Play';
+      }
+    }
+  }
+
+  function seekMedia(val) {
+    const vid = document.getElementById('activeVideoElem');
+    if (vid && vid.duration) {
+      vid.currentTime = (val / 100) * vid.duration;
+    }
+  }
+
+  function formatMediaTime(s) {
+    const mins = Math.floor(s / 60).toString().padStart(2, '0');
+    const secs = Math.floor(s % 60).toString().padStart(2, '0');
+    return `${mins}:${secs}`;
+  }
+
+  function renameMediaFile(mediaId) {
+    const item = osData.savedMedia.find(m => m.id === mediaId);
+    if (!item) return;
+    showGlassPrompt("Rename Media File:", item.name, (newName) => {
+      if (newName) {
+        item.name = newName;
+        saveData();
+        renderFolders();
+      }
+    }, "✏️ Rename Media");
+  }
+
+  function deleteMediaFile(mediaId) {
+    showGlassConfirm("Delete this media file permanently?", () => {
+      osData.savedMedia = osData.savedMedia.filter(m => m.id !== mediaId);
+      saveData();
+      renderFolders();
+    }, "🗑️ Delete Media");
   }
 
   function openSavedFile(fileName) {
@@ -3316,7 +3392,12 @@ Write **Markdown** on the left and see a clean preview here.
     saveData(); applyGlassSettings();
   }
 
-  function setWallpaper(url) { osData.wallpaper = url; saveData(); document.documentElement.style.setProperty('--bg-wallpaper', `url('${url}')`); }
+  function setWallpaper(url) { 
+    osData.wallpaper = url; 
+    saveData(); 
+    document.documentElement.style.setProperty('--bg-wallpaper', `url('${url}')`); 
+  }
+
   function switchSettingsTab(tabId, navEl) {
     document.querySelectorAll('.settings-section').forEach(s => s.classList.remove('active'));
     document.querySelectorAll('#settingsApp .os-nav-item').forEach(n => n.classList.remove('active'));
@@ -3687,37 +3768,6 @@ Write **Markdown** on the left and see a clean preview here.
     }
   }
 
-  /* WORLD CLOCK LOGIC */
-  function initWorldClock() {
-    const grid = document.getElementById('worldClockGrid');
-    if (!grid) return;
-    const cities = [
-      { name: 'New York', zone: 'America/New_York', flag: '🇺🇸' },
-      { name: 'London', zone: 'Europe/London', flag: '🇬🇧' },
-      { name: 'Tokyo', zone: 'Asia/Tokyo', flag: '🇯🇵' },
-      { name: 'Paris', zone: 'Europe/Paris', flag: '🇫🇷' },
-      { name: 'Sydney', zone: 'Australia/Sydney', flag: '🇦🇺' },
-      { name: 'Dubai', zone: 'Asia/Dubai', flag: '🇦🇪' }
-    ];
-
-    function updateClocks() {
-      grid.innerHTML = cities.map(c => {
-        const timeStr = new Date().toLocaleTimeString('en-US', { timeZone: c.zone, hour: '2-digit', minute: '2-digit', second: '2-digit' });
-        const dateStr = new Date().toLocaleDateString('en-US', { timeZone: c.zone, weekday: 'short', month: 'short', day: 'numeric' });
-        return `
-          <div style="padding:14px; background:rgba(255,255,255,0.04); border-radius:14px; border:1px solid var(--glass-border); text-align:center;">
-            <div style="font-size:0.8rem; color:var(--text-sub); font-weight:700;">${c.flag} ${c.name.toUpperCase()}</div>
-            <div style="font-size:1.6rem; font-family:var(--font-code); font-weight:800; color:var(--accent); margin:6px 0;">${timeStr}</div>
-            <div style="font-size:0.75rem; color:var(--text-sub);">${dateStr}</div>
-          </div>
-        `;
-      }).join('');
-    }
-
-    updateClocks();
-    setInterval(updateClocks, 1000);
-  }
-
   /* HABIT TRACKER LOGIC */
   let habitList = [
     { id: 1, name: 'Drink 2L Water', done: false },
@@ -3759,67 +3809,9 @@ Write **Markdown** on the left and see a clean preview here.
     `).join('');
   }
 
-  /* WEATHER FORECAST LOGIC */
-  let isCelsius = true;
-
-  const weatherData = {
-    'New York': { tempC: 24, desc: '🌤️ Partly Cloudy · Humidity: 55% · Wind: 12 km/h' },
-    'London': { tempC: 18, desc: '🌧️ Light Rain · Humidity: 82% · Wind: 18 km/h' },
-    'Tokyo': { tempC: 27, desc: '☀️ Clear Skies · Humidity: 45% · Wind: 8 km/h' },
-    'Paris': { tempC: 21, desc: '⛅ Overcast · Humidity: 60% · Wind: 10 km/h' },
-    'Sydney': { tempC: 19, desc: '🌬️ Windy & Cool · Humidity: 50% · Wind: 25 km/h' },
-    'Mumbai': { tempC: 31, desc: '🌩️ Thunderstorms · Humidity: 88% · Wind: 22 km/h' }
-  };
-
-  function toggleWeatherUnit() {
-    isCelsius = !isCelsius;
-    updateWeatherDisplay();
-  }
-
-  function updateWeatherDisplay() {
-    const city = document.getElementById('weatherCitySelect').value;
-    const data = weatherData[city] || weatherData['New York'];
-
-    const temp = isCelsius ? `${data.tempC}°C` : `${Math.round(data.tempC * 9/5 + 32)}°F`;
-
-    document.getElementById('weatherCityName').textContent = city.toUpperCase();
-    document.getElementById('weatherTempDisplay').textContent = temp;
-    document.getElementById('weatherDescDisplay').textContent = data.desc;
-
-    const forecastGrid = document.getElementById('weatherForecastGrid');
-    if (forecastGrid) {
-      forecastGrid.innerHTML = ['Tomorrow', 'Day 3', 'Day 4', 'Day 5'].map((day, idx) => {
-        const offset = (idx + 1) * 2;
-        const fTemp = isCelsius ? `${data.tempC - offset}°C` : `${Math.round((data.tempC - offset) * 9/5 + 32)}°F`;
-        return `
-          <div style="padding:10px; background:rgba(255,255,255,0.04); border-radius:10px; border:1px solid var(--glass-border); text-align:center;">
-            <div style="font-size:0.75rem; color:var(--text-sub); font-weight:700;">${day}</div>
-            <div style="font-size:1.1rem; font-weight:800; color:var(--accent); margin:4px 0;">${fTemp}</div>
-            <div style="font-size:0.7rem; color:var(--text-sub);">Sunny</div>
-          </div>
-        `;
-      }).join('');
-    }
-  }
-
   /* COLOR PALETTE GENERATOR LOGIC */
   function updatePaletteDisplay(hex) {
     document.getElementById('hexValueText').textContent = hex.toUpperCase();
-  }
-
-  /* UNIT CONVERTER LOGIC */
-  function runConvert() {
-    const val = parseFloat(document.getElementById('convertVal').value) || 0;
-    const from = document.getElementById('convertFrom').value;
-    const to = document.getElementById('convertTo').value;
-    let res = val;
-
-    if (from === 'km' && to === 'miles') res = val * 0.621371;
-    else if (from === 'miles' && to === 'km') res = val / 0.621371;
-    else if (from === 'kg' && to === 'lbs') res = val * 2.20462;
-    else if (from === 'lbs' && to === 'kg') res = val / 2.20462;
-
-    document.getElementById('convertResult').textContent = `${res.toFixed(2)} ${to.toUpperCase()}`;
   }
 
   /* UTILITY HELPERS */
@@ -3832,11 +3824,6 @@ Write **Markdown** on the left and see a clean preview here.
     const txt = document.getElementById('hashInputText').value;
     let hash = 0; for (let i = 0; i < txt.length; i++) { hash = ((hash << 5) - hash) + txt.charCodeAt(i); hash |= 0; }
     document.getElementById('hashOutputHex').value = `0x${(hash >>> 0).toString(16).toUpperCase()}`;
-  }
-
-  function runUrlEncode(mode) {
-    const input = document.getElementById('urlInputText').value;
-    document.getElementById('urlInputText').value = mode === 'encode' ? encodeURIComponent(input) : decodeURIComponent(input);
   }
 
   function generateLoremIpsum() {
@@ -3878,28 +3865,6 @@ Write **Markdown** on the left and see a clean preview here.
     playTone(sound === 'laser' ? 880 : 440);
   }
 
-  /* WEIGHTED ANIMAL LUCKY BLOCK REWARDS SYSTEM */
-  function openLuckyBlock() {
-    const rand = Math.random() * 100;
-    let prize = "";
-
-    if (rand < 50) {
-      const commons = ["🐶 Doge", "🐱 Wholesome Cat", "🐸 Pepe Frog", " Capybara"];
-      prize = `Common: ${commons[Math.floor(Math.random() * commons.length)]}`;
-    } else if (rand < 80) {
-      const rares = ["🌮 Taco Cat", " Rainbow Axolotl", "🦙 Drama Llama"];
-      prize = `Rare: ${rares[Math.floor(Math.random() * rares.length)]}`;
-    } else if (rand < 95) {
-      const legendaries = ["👑 Divine Golden Dragon", "🦄 Cosmic Unicorn", " Phoenix"];
-      prize = `Legendary: ${legendaries[Math.floor(Math.random() * legendaries.length)]}`;
-    } else {
-      prize = "🌟 MYTHIC BRAINROT GOD ANIMAL 🌟";
-    }
-
-    document.getElementById('luckyResult').textContent = `🎉 You unboxed: ${prize}!`;
-    if (!isSystemMuted) playMemeSound('victory');
-  }
-
   function generatePass() {
     const len = parseInt(document.getElementById('passLenText').textContent, 10) || 16;
     const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+";
@@ -3922,11 +3887,6 @@ Write **Markdown** on the left and see a clean preview here.
     input.value = '';
   }
 
-  function saveSnippet() {
-    const title = document.getElementById('snippetTitle').value;
-    if (title) showGlassAlert(`Snippet '${title}' saved to local storage!`, "⚡ Snippet Saved");
-  }
-
   function navBrowser() {
     const url = document.getElementById('browserUrl').value;
     document.getElementById('browserIframe').src = url;
@@ -3945,19 +3905,7 @@ Write **Markdown** on the left and see a clean preview here.
     catch { document.getElementById('calcDisp').value = 'Error'; }
   }
 
-  function generateAsciiArt() {
-    const val = document.getElementById('asciiInput').value;
-    document.getElementById('asciiOutput').value = `
- _____ _   _ _____ _____  ____  _   _ 
-| ____| \ | |  ___|  _ \/ ___|| | | |
-|  _| |  \| | |_  | |_) \___ \| |_| |
-| |___| |\  |  _| |  _ < ___) |  _  |
-|_____|_| \_|_|   |_| \_\____/|_| |_|
- Text: ${val}
-    `;
-  }
-
-  /* TERMINAL ENGINE WITH BRINGBACK REINSTALL SUPPORT */
+  /* TERMINAL ENGINE */
   function handleTermCmd(e) {
     if (e.key === 'Enter') {
       const input = document.getElementById('termInput');
@@ -3996,56 +3944,6 @@ Write **Markdown** on the left and see a clean preview here.
     }
   }
 
-  let focusSecondsRemaining = 25 * 60;
-  let focusTimerHandle = null;
-  let focusIsRunning = false;
-
-  function updateFocusTimerDisplay() {
-    const m = Math.floor(focusSecondsRemaining / 60).toString().padStart(2, '0');
-    const s = (focusSecondsRemaining % 60).toString().padStart(2, '0');
-    const display = document.getElementById('focusTimerDisplay');
-    if (display) display.textContent = `${m}:${s}`;
-  }
-  function setFocusMinutes(value) {
-    if (focusIsRunning) return;
-    const minutes = Math.max(1, Math.min(180, parseInt(value, 10) || 25));
-    document.getElementById('focusMinutesInput').value = minutes;
-    focusSecondsRemaining = minutes * 60;
-    updateFocusTimerDisplay();
-  }
-  function setFocusPreset(value) { setFocusMinutes(value); }
-  function toggleFocusTimer() {
-    const button = document.getElementById('focusStartBtn');
-    const status = document.getElementById('focusTimerStatus');
-    if (focusIsRunning) {
-      clearInterval(focusTimerHandle); focusTimerHandle = null; focusIsRunning = false;
-      if (button) button.textContent = 'Resume Focus';
-      if (status) status.textContent = 'Paused. Resume when ready.';
-      return;
-    }
-    if (focusSecondsRemaining <= 0) setFocusMinutes(document.getElementById('focusMinutesInput').value);
-    focusIsRunning = true;
-    if (button) button.textContent = 'Pause';
-    if (status) status.textContent = 'Focus session in progress.';
-    focusTimerHandle = setInterval(() => {
-      focusSecondsRemaining -= 1; updateFocusTimerDisplay();
-      if (focusSecondsRemaining <= 0) {
-        clearInterval(focusTimerHandle); focusTimerHandle = null; focusIsRunning = false;
-        if (button) button.textContent = 'Start Focus';
-        if (status) status.textContent = 'Session complete. Nice work.';
-        if (!isSystemMuted) playMemeSound('victory');
-      }
-    }, 1000);
-  }
-  function resetFocusTimer() {
-    clearInterval(focusTimerHandle); focusTimerHandle = null; focusIsRunning = false;
-    setFocusMinutes(document.getElementById('focusMinutesInput').value);
-    const button = document.getElementById('focusStartBtn');
-    const status = document.getElementById('focusTimerStatus');
-    if (button) button.textContent = 'Start Focus';
-    if (status) status.textContent = 'Ready when you are.';
-  }
-
   function escapeUtilityHtml(value) {
     return value.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
@@ -4054,7 +3952,7 @@ Write **Markdown** on the left and see a clean preview here.
     const preview = document.getElementById('markdownPreview');
     if (!input || !preview) return;
     let text = escapeUtilityHtml(input.value);
-    text = text.replace(/^### (.*)$/gm, '<h3>$1</h3>').replace(/^## (.*)$/gm, '<h2>$1</h2>').replace(/^# (.*)$/gm, '<h1>$1</h1>');
+    text = text.replace(/^### (.*)$/gm, '<h3>$1</h3>').replace(/^## (.*)$/gm, '2>$1</h2>').replace(/^# (.*)$/gm, '<h1>$1</h1>');
     text = text.replace(/^> (.*)$/gm, '<blockquote>$1</blockquote>');
     text = text.replace(/^[-*] (.*)$/gm, '<li>$1</li>');
     text = text.replace(/(<li>.*<\/li>\n?)+/g, match => `<ul>${match}</ul>`);
@@ -4124,7 +4022,7 @@ Write **Markdown** on the left and see a clean preview here.
     const toIso = date => { const offset = date.getTimezoneOffset(); return new Date(date.getTime() - offset * 60000).toISOString().slice(0, 10); };
     const start = document.getElementById('dateStartInput'), endInput = document.getElementById('dateEndInput');
     if (start && endInput) { start.value = toIso(today); endInput.value = toIso(end); calculateDateDifference(); }
-    renderMarkdownPreview(); updateFocusTimerDisplay(); runRegexTest(); renderHabitList(); renderBudgetList(); generatePass();
+    renderMarkdownPreview(); runRegexTest(); renderHabitList(); renderBudgetList(); generatePass();
   }
 
   const originalLaunchDesktop = launchDesktop;
