@@ -133,7 +133,7 @@
 
   /* BOOT, SETUP & LOCK SCREEN */
   #boot-screen { background: var(--bg-wallpaper) center/cover no-repeat; z-index: 10000; }
-  #boot-screen::before, #login-screen::before {
+  #boot-screen::before {
     content: ''; position: absolute; inset: 0; background: rgba(3, 5, 8, 0.7); backdrop-filter: var(--glass-blur); z-index: -1;
   }
   .boot-logo-orb {
@@ -145,7 +145,7 @@
   }
 
   #setup-screen { background: #030508; z-index: 9000; }
-  #login-screen { background: var(--bg-wallpaper) center/cover no-repeat; z-index: 9000; }
+
   .setup-card {
     width: 620px; min-height: 420px; background: var(--glass-dialog); backdrop-filter: var(--glass-blur);
     border: 1px solid var(--glass-border); border-radius: 26px; box-shadow: var(--glass-shadow);
@@ -169,6 +169,83 @@
 
   /* MAIN DESKTOP */
   #desktop-screen { background: var(--bg-wallpaper) center/cover no-repeat; z-index: 100; justify-content: flex-start; }
+
+  /* ============ NEW LOCK SCREEN (clock + wallpaper -> animated password reveal) ============ */
+  #lockScreen {
+    position: absolute; inset: 0; z-index: 9500;
+    background: var(--bg-wallpaper) center/cover no-repeat;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    cursor: pointer; overflow: hidden;
+  }
+  #lockScreen.hidden { display: none !important; }
+  #lockScreen::before {
+    content: ''; position: absolute; inset: 0; background: rgba(3, 5, 8, 0.35);
+    backdrop-filter: blur(2px); transition: backdrop-filter 0.4s var(--anim-curve), background-color 0.4s var(--anim-curve);
+    z-index: 0;
+  }
+  #lockScreen.unlocking::before { background: rgba(3, 5, 8, 0.72); backdrop-filter: var(--glass-blur); }
+
+  .lock-clock-layer {
+    position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 6px;
+    transition: opacity 0.35s var(--anim-curve), transform 0.45s var(--anim-curve);
+    text-align: center;
+  }
+  .lock-clock-time {
+    font-size: clamp(3.6rem, 11vw, 7rem); font-weight: 800; color: #fff; letter-spacing: -0.02em;
+    text-shadow: 0 8px 40px rgba(0,0,0,0.55);
+    font-variant-numeric: tabular-nums;
+  }
+  .lock-clock-date {
+    font-size: 1.15rem; font-weight: 600; color: rgba(255,255,255,0.88);
+    text-shadow: 0 4px 18px rgba(0,0,0,0.5);
+  }
+  .lock-clock-hint {
+    margin-top: 26px; font-size: 0.8rem; font-weight: 600; color: rgba(255,255,255,0.65);
+    letter-spacing: 0.06em; text-transform: uppercase;
+    animation: lockHintPulse 2.4s ease-in-out infinite;
+  }
+  @keyframes lockHintPulse { 0%,100% { opacity: 0.45; } 50% { opacity: 0.95; } }
+
+  #lockScreen.unlocking .lock-clock-layer {
+    opacity: 0; transform: translateY(-26px) scale(0.94); pointer-events: none;
+  }
+
+  .lock-auth-layer {
+    position: relative; z-index: 2;
+    display: flex; flex-direction: column; align-items: center; gap: 18px;
+    opacity: 0; transform: translateY(22px) scale(0.96);
+    pointer-events: none;
+    transition: opacity 0.45s var(--anim-curve) 0.08s, transform 0.45s var(--anim-curve) 0.08s;
+    width: 100%;
+  }
+  #lockScreen.unlocking .lock-auth-layer { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
+
+  .lock-auth-card {
+    width: 380px; max-width: 88vw; background: var(--glass-dialog); backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border); border-radius: 26px; box-shadow: var(--glass-shadow);
+    padding: 34px 30px; display: flex; flex-direction: column; align-items: center; gap: 16px;
+  }
+  .lock-auth-avatar {
+    width: 64px; height: 64px; border-radius: 20px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-purple));
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 2rem; color: #fff;
+    box-shadow: 0 0 30px var(--accent-glow);
+  }
+  .lock-auth-name { font-size: 1.25rem; font-weight: 800; color: var(--text-main); }
+  .lock-auth-sub { font-size: 0.82rem; color: var(--text-sub); margin-top: -8px; }
+  .lock-auth-card .input-ui { text-align: center; }
+  .lock-back-btn {
+    font-size: 0.78rem; color: rgba(255,255,255,0.75); font-weight: 600; cursor: pointer;
+    padding: 8px 4px; transition: color 0.15s;
+  }
+  .lock-back-btn:hover { color: #fff; }
+
+  /* RETURNING USER LOGIN SCREEN (first login only, distinct from in-session lock) */
+  #login-screen { background: var(--bg-wallpaper) center/cover no-repeat; z-index: 9000; }
+  #login-screen::before {
+    content: ''; position: absolute; inset: 0; background: rgba(3, 5, 8, 0.7); backdrop-filter: var(--glass-blur); z-index: -1;
+  }
 
   /* Top System Bar */
   .top-bar {
@@ -721,7 +798,7 @@
     </div>
   </div>
 
-  <!-- 3. RETURNING USER LOGIN SCREEN / LOCK SCREEN -->
+  <!-- 3. RETURNING USER LOGIN SCREEN (first boot login) -->
   <div id="login-screen" class="os-screen hidden">
     <div class="setup-card" style="width:440px; min-height:auto; padding:40px; display:flex; flex-direction:column; gap:20px; align-items:center; text-align:center;">
       <div class="boot-logo-orb" style="width:64px; height:64px; font-size:2rem;" id="loginAvatarLetter">D</div>
@@ -733,6 +810,25 @@
       <button class="btn-ui btn-accent" style="width:100%; justify-content:center; padding:12px;" onclick="verifyLoginPassword()">Continue →</button>
       <button class="btn-ui" id="forgotPassBtn" style="width:100%; justify-content:center; font-size:0.78rem;" onclick="recoverLocalAccess()">Forgot password? Reset local profile</button>
       <p style="font-size:0.7rem; color:var(--text-sub);">This clears only this browser's saved Enfrok OS profile.</p>
+    </div>
+  </div>
+
+  <!-- 3B. IN-SESSION LOCK SCREEN: Clock + Wallpaper -> tap -> animated password reveal -->
+  <div id="lockScreen" class="os-screen hidden" onclick="revealLockAuth(event)">
+    <div class="lock-clock-layer" id="lockClockLayer">
+      <div class="lock-clock-time" id="lockClockTime">12:00</div>
+      <div class="lock-clock-date" id="lockClockDate">Sunday, January 1</div>
+      <div class="lock-clock-hint">Tap anywhere to unlock</div>
+    </div>
+    <div class="lock-auth-layer" id="lockAuthLayer">
+      <div class="lock-auth-card" onclick="event.stopPropagation()">
+        <div class="lock-auth-avatar" id="lockAuthAvatar">D</div>
+        <div class="lock-auth-name" id="lockAuthName">Developer</div>
+        <div class="lock-auth-sub">Enter your password to continue</div>
+        <input type="password" class="input-ui" id="lockAuthPasswordInput" placeholder="Password..." onkeydown="if(event.key==='Enter') verifyLockPassword()" />
+        <button class="btn-ui btn-accent" style="width:100%; justify-content:center; padding:12px;" onclick="verifyLockPassword()">Unlock →</button>
+      </div>
+      <div class="lock-back-btn" onclick="event.stopPropagation(); hideLockAuth()">← Back to clock</div>
     </div>
   </div>
 
@@ -1314,9 +1410,6 @@ Type 'help' or 'bringback reinstall /appnameApp' to manage apps.</div>
 
                   <div style="margin-top:6px; font-size:0.82rem; font-weight:700; color:var(--text-sub);">Apps currently using VRAM</div>
                   <div id="vramActiveAppsList" style="display:flex; flex-direction:column; gap:8px;"></div>
-
-                  <div style="margin-top:6px; font-size:0.82rem; font-weight:700; color:var(--text-sub);">VRAM allowance per app</div>
-                  <div id="vramAllowanceList" style="display:flex; flex-direction:column; gap:8px;"></div>
                 </div>
 
                 <div style="padding:16px; background:rgba(255,255,255,0.04); border:1px solid var(--glass-border); border-radius:14px; display:flex; flex-direction:column; gap:12px;">
@@ -1325,20 +1418,19 @@ Type 'help' or 'bringback reinstall /appnameApp' to manage apps.</div>
                     <span class="vram-tag" id="storageUsageLabel">0 MB / 3 GB</span>
                   </div>
                   <div class="vram-meter-track"><div class="vram-meter-fill" id="storageMeterFill" style="width:0%;"></div></div>
-                  <span class="setting-desc">Each photo uses 100 MB and each video uses 150 MB of storage. Uploads are blocked once storage is full until files are deleted.</span>
-                </div>
 
-                <div class="redeem-box">
-                  <span class="setting-title" style="font-size:0.82rem;">Enter VSE Code...</span>
-                  <div class="redeem-row">
-                    <input type="text" class="input-ui" id="vseCodeInput" placeholder="Enter VSE Code..." />
-                    <button class="btn-ui btn-accent" onclick="redeemVseCode()">Redeem</button>
+                  <div class="redeem-box">
+                    <span class="setting-title" style="font-size:0.82rem;">Enter VSE Code...</span>
+                    <div class="redeem-row">
+                      <input type="text" class="input-ui" id="vseCodeInput" placeholder="Enter VSE Code..." />
+                      <button class="btn-ui btn-accent" onclick="redeemVseCode()">Redeem</button>
+                    </div>
+                    <div class="redeem-row">
+                      <button class="btn-ui" onclick="changeVseCode()">Change Code</button>
+                      <button class="btn-ui btn-danger" onclick="deleteVseCode()">Delete Code</button>
+                    </div>
+                    <div class="redeem-status" id="vseCodeStatus"></div>
                   </div>
-                  <div class="redeem-row">
-                    <button class="btn-ui" onclick="changeVseCode()">Change Code</button>
-                    <button class="btn-ui btn-danger" onclick="deleteVseCode()">Delete Code</button>
-                  </div>
-                  <div class="redeem-status" id="vseCodeStatus"></div>
                 </div>
 
                 <h3 style="font-size:1.05rem; font-weight:700; margin-top:14px;">Kernel Security & Account Password</h3>
@@ -1839,6 +1931,7 @@ Write **Markdown** on the left and see a clean preview here.
   const STORAGE_BASE_TOTAL_MB = 3072;      // 3 GB
   const IMAGE_STORAGE_COST_MB = 100;
   const VIDEO_STORAGE_COST_MB = 150;
+  const DOCUMENT_STORAGE_COST_MB = 180;    // Paint Studio / Text Studio / Spreadsheet files
 
   const VRAM_APP_COSTS = {
     notesApp: 100,
@@ -2014,14 +2107,56 @@ Write **Markdown** on the left and see a clean preview here.
     }
   }
 
-  /* LOCK SCREEN FUNCTIONALITY */
+  /* ============ LOCK SCREEN (in-session) ============ */
+  let lockClockTimer = null;
+
   function lockSystemScreen() {
     document.getElementById('desktop-screen').classList.add('hidden');
-    document.getElementById('login-screen').classList.remove('hidden');
-    document.getElementById('loginTitleName').textContent = `System Locked`;
-    document.getElementById('loginAvatarLetter').textContent = (osData.username || 'D').charAt(0).toUpperCase();
-    document.getElementById('loginSubText').textContent = "Enter password to unlock Enfrok OS";
-    document.getElementById('loginPasswordInput').value = '';
+    const lock = document.getElementById('lockScreen');
+    lock.classList.remove('hidden');
+    lock.classList.remove('unlocking');
+    document.getElementById('lockAuthPasswordInput').value = '';
+    document.getElementById('lockAuthName').textContent = osData.username || 'Developer';
+    document.getElementById('lockAuthAvatar').textContent = (osData.username || 'D').charAt(0).toUpperCase();
+    updateLockClock();
+    if (lockClockTimer) clearInterval(lockClockTimer);
+    lockClockTimer = setInterval(updateLockClock, 1000);
+  }
+
+  function updateLockClock() {
+    const now = new Date();
+    const timeEl = document.getElementById('lockClockTime');
+    const dateEl = document.getElementById('lockClockDate');
+    if (timeEl) timeEl.textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    if (dateEl) dateEl.textContent = now.toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' });
+  }
+
+  function revealLockAuth(e) {
+    const lock = document.getElementById('lockScreen');
+    if (lock.classList.contains('unlocking')) return;
+    lock.classList.add('unlocking');
+    setTimeout(() => {
+      const input = document.getElementById('lockAuthPasswordInput');
+      if (input) input.focus();
+    }, 260);
+  }
+
+  function hideLockAuth() {
+    const lock = document.getElementById('lockScreen');
+    lock.classList.remove('unlocking');
+    document.getElementById('lockAuthPasswordInput').value = '';
+  }
+
+  function verifyLockPassword() {
+    const inputPass = document.getElementById('lockAuthPasswordInput').value;
+    if (inputPass === osData.password) {
+      if (lockClockTimer) { clearInterval(lockClockTimer); lockClockTimer = null; }
+      document.getElementById('lockScreen').classList.add('hidden');
+      document.getElementById('lockScreen').classList.remove('unlocking');
+      document.getElementById('desktop-screen').classList.remove('hidden');
+    } else {
+      showGlassAlert("Incorrect Password! Please try again.", "⚠️ Access Denied");
+    }
   }
 
   /* CHANGE PASSWORD FEATURE IN OS CONFIGURATION */
@@ -2071,7 +2206,9 @@ Write **Markdown** on the left and see a clean preview here.
       if (!osData.installed) {
         document.getElementById('setup-screen').classList.remove('hidden');
       } else {
-        lockSystemScreen();
+        document.getElementById('login-screen').classList.remove('hidden');
+        document.getElementById('loginAvatarLetter').textContent = (osData.username || 'D').charAt(0).toUpperCase();
+        document.getElementById('loginTitleName').textContent = `Welcome Back, ${osData.username || 'Developer'}`;
       }
     }, 800);
   });
@@ -2124,6 +2261,7 @@ Write **Markdown** on the left and see a clean preview here.
     renderTopBar();
     document.getElementById('setup-screen').classList.add('hidden');
     document.getElementById('login-screen').classList.add('hidden');
+    document.getElementById('lockScreen').classList.add('hidden');
     document.getElementById('desktop-screen').classList.remove('hidden');
     initDesktop();
     initPaintStudio();
@@ -2229,7 +2367,6 @@ Write **Markdown** on the left and see a clean preview here.
             <span style="font-size:1.2rem;">${a.icon}</span>
             <div style="display:flex; flex-direction:column;">
               <span style="font-weight:600; font-size:0.85rem;">${a.name}</span>
-              <span style="font-size:0.72rem; color:var(--text-sub);">core: ${a.id}</span>
             </div>
           </label>
         `).join('')}
@@ -2456,7 +2593,6 @@ Write **Markdown** on the left and see a clean preview here.
           <div class="d-icon" onclick="openWindow('${app.id}')" oncontextmenu="handleContextMenuEvent(event, '${app.id}')">
             <div class="d-icon-box">${app.icon}</div>
             <span style="font-weight:600;">${app.name}</span>
-            <span style="font-size:0.68rem; color:var(--text-sub);">core: ${app.id}</span>
           </div>
         `;
       }
@@ -2468,7 +2604,6 @@ Write **Markdown** on the left and see a clean preview here.
         <div class="d-icon" draggable="true" ondragstart="handleAppDragStart(event, '${app.id}')" onclick="openWindow('${app.id}'); toggleLaunchHub();" oncontextmenu="handleContextMenuEvent(event, '${app.id}')">
           <div class="d-icon-box">${app.icon}</div>
           <span style="font-weight:600;">${app.name}</span>
-          <span style="font-size:0.68rem; color:var(--text-sub);">core: ${app.id}</span>
         </div>
       `;
     });
@@ -2573,25 +2708,6 @@ Write **Markdown** on the left and see a clean preview here.
       activeList.innerHTML = rows;
     }
 
-    const allowanceList = document.getElementById('vramAllowanceList');
-    if (allowanceList) {
-      const labelFor = (id, name) => `
-        <div class="vram-app-row">
-          <span>${name}</span>
-          <span class="vram-tag">${formatMbLabel(getAppVramCost(id))}</span>
-        </div>
-      `;
-      allowanceList.innerHTML = [
-        labelFor('notesApp', '📝 Quick Notes'),
-        labelFor('documentCore', '📁 Document Core'),
-        labelFor('wordApp', '📄 Text Studio'),
-        labelFor('sheetApp', '📊 Spreadsheet'),
-        labelFor('paintApp', '🎨 Paint Studio'),
-        labelFor('browserApp', '🌐 Web Browser'),
-        `<div class="vram-app-row"><span>All other apps</span><span class="vram-tag">${VRAM_DEFAULT_APP_COST} MB each</span></div>`
-      ].join('');
-    }
-
     const storageUsageLabel = document.getElementById('storageUsageLabel');
     const storageFill = document.getElementById('storageMeterFill');
     if (storageUsageLabel && storageFill) {
@@ -2617,6 +2733,9 @@ Write **Markdown** on the left and see a clean preview here.
     let used = 0;
     (osData.savedMedia || []).forEach(m => {
       used += m.type === 'video' ? VIDEO_STORAGE_COST_MB : IMAGE_STORAGE_COST_MB;
+    });
+    (osData.savedFiles || []).forEach(f => {
+      used += DOCUMENT_STORAGE_COST_MB;
     });
     return used;
   }
@@ -3091,7 +3210,7 @@ Write **Markdown** on the left and see a clean preview here.
       const idx = osData.savedFiles.findIndex(f => f.name === activeSheetFilename);
       if (idx >= 0) osData.savedFiles[idx].data = { ...sheetData };
       else osData.savedFiles.push({ name: activeSheetFilename, data: { ...sheetData } });
-      saveData(); renderFolders(); showGlassAlert(`Saved '${activeSheetFilename}'!`, "💾 Spreadsheet Saved");
+      saveData(); renderFolders(); refreshStorageVramPanel(); showGlassAlert(`Saved '${activeSheetFilename}'!`, "💾 Spreadsheet Saved");
     }, "💾 Save Spreadsheet");
   }
 
@@ -3394,7 +3513,7 @@ Write **Markdown** on the left and see a clean preview here.
       const existingIdx = osData.savedFiles.findIndex(f => f.name === activeDocFilename);
       if (existingIdx >= 0) osData.savedFiles[existingIdx].content = content;
       else osData.savedFiles.push({ name: activeDocFilename, content });
-      saveData(); renderFolders(); showGlassAlert(`Saved '${activeDocFilename}'!`, "💾 Document Saved");
+      saveData(); renderFolders(); refreshStorageVramPanel(); showGlassAlert(`Saved '${activeDocFilename}'!`, "💾 Document Saved");
     }, "💾 Save Document");
   }
 
@@ -3491,7 +3610,7 @@ Write **Markdown** on the left and see a clean preview here.
     });
 
     if (rejectedForStorage > 0) {
-      showGlassAlert(`Storage is full. ${rejectedForStorage} file(s) could not be added. Delete some Photos or Videos to free up space.`, "⚠️ Storage Full");
+      showGlassAlert(`Storage is full. ${rejectedForStorage} file(s) could not be added.`, "⚠️ Storage Full");
     }
   }
 
@@ -3678,6 +3797,7 @@ Write **Markdown** on the left and see a clean preview here.
       osData.savedFiles = osData.savedFiles.filter(f => f.name !== fileName);
       saveData();
       renderFolders();
+      refreshStorageVramPanel();
     }, "🗑️ Delete File");
   }
 
@@ -3696,6 +3816,7 @@ Write **Markdown** on the left and see a clean preview here.
           osData.savedFiles.push({ name: sheetName, data: {} });
           saveData();
           renderFolders();
+          refreshStorageVramPanel();
           openWindow('sheetApp');
         }, "📊 New Spreadsheet");
       } else {
@@ -3709,6 +3830,7 @@ Write **Markdown** on the left and see a clean preview here.
           osData.savedFiles.push({ name: docName, content: '<h2>' + docName + '</h2><p>Start writing...</p>' });
           saveData();
           renderFolders();
+          refreshStorageVramPanel();
           openWindow('wordApp');
         }, "📄 New Document");
       }
@@ -3741,7 +3863,6 @@ Write **Markdown** on the left and see a clean preview here.
           <div class="setting-row">
             <div class="setting-label">
               <span class="setting-title">${app.icon} ${app.name}</span>
-              <span class="setting-desc">App ID: ${app.id}</span>
             </div>
             <button class="btn-ui btn-accent" onclick="reinstallApp('${app.id}')">➕ Re-install App</button>
           </div>
@@ -3826,7 +3947,6 @@ Write **Markdown** on the left and see a clean preview here.
       <div class="d-icon" draggable="true" ondragstart="handleAppDragStart(event, '${app.id}')" onclick="openWindow('${app.id}'); closeFullscreenStartMenu();" oncontextmenu="handleContextMenuEvent(event, '${app.id}')">
         <div class="d-icon-box">${app.icon}</div>
         <span style="font-weight:600;">${app.name}</span>
-        <span style="font-size:0.68rem; color:var(--text-sub);">core: ${app.id}</span>
       </div>`).join('');
     const subtitle = document.getElementById('fullscreenStartSubtitle');
     if (subtitle) subtitle.textContent = `${apps.length} installed application${apps.length === 1 ? '' : 's'}`;
@@ -3875,6 +3995,7 @@ Write **Markdown** on the left and see a clean preview here.
       else osData.savedFiles.push({ name: docName, content });
       saveData();
       renderFolders();
+      refreshStorageVramPanel();
       showGlassAlert(`Note saved as '${docName}' in Documents Storage!`, "💾 Note Saved");
     }, "📝 Save Quick Note");
   }
