@@ -614,6 +614,34 @@
     background: var(--accent); cursor: pointer; box-shadow: 0 0 10px var(--accent-glow);
   }
 
+  /* STORAGE & VRAM PANEL STYLES */
+  .vram-meter-track {
+    width: 100%; height: 14px; border-radius: 999px; background: rgba(255,255,255,0.08);
+    border: 1px solid var(--glass-border); overflow: hidden; position: relative;
+  }
+  .vram-meter-fill {
+    height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--accent), var(--accent-purple));
+    transition: width 0.3s var(--anim-curve), background-color 0.3s;
+  }
+  .vram-meter-fill.vram-warn { background: linear-gradient(90deg, #f59e0b, #f97316); }
+  .vram-meter-fill.vram-full { background: linear-gradient(90deg, #ef4444, #dc2626); }
+  .vram-app-row {
+    display: flex; align-items: center; justify-content: space-between; padding: 10px 14px;
+    background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); border-radius: 12px; font-size: 0.82rem;
+  }
+  .vram-app-row.locked { opacity: 0.85; }
+  .vram-tag {
+    font-family: var(--font-code); font-size: 0.75rem; color: var(--accent); font-weight: 700;
+  }
+  .vram-tag.locked-tag { color: #f87171; }
+  .redeem-box {
+    margin-top: 8px; padding: 16px; border-radius: 14px; background: rgba(255,255,255,0.03);
+    border: 1px dashed var(--glass-border); display: flex; flex-direction: column; gap: 10px;
+  }
+  .redeem-row { display: flex; gap: 8px; flex-wrap: wrap; }
+  .redeem-row .input-ui { flex: 1; min-width: 160px; font-family: var(--font-code); letter-spacing: 0.05em; }
+  .redeem-status { font-size: 0.78rem; color: var(--text-sub); min-height: 1.2em; }
+
   @media (max-width: 760px) {
     .start-menu-fullscreen { padding: 54px 18px 30px; }
     .fullscreen-start-header { align-items: flex-start; flex-direction: column; }
@@ -631,6 +659,18 @@
       <div id="popupInputContainer"></div>
       <div class="custom-popup-actions" id="popupActions">
         <button class="btn-ui btn-accent" onclick="closeGlassPopup()">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- VRAM LIMIT EXCEEDED POPUP -->
+  <div class="custom-popup-overlay" id="vramLimitPopup">
+    <div class="custom-popup-card">
+      <div class="custom-popup-title">⚠️ VRAM Limit exceeded. Please quit some apps to run the rest of the programs.</div>
+      <div class="custom-popup-body">Close one or more running apps to free up VRAM, then try opening the app again.</div>
+      <div class="app-picker-list" id="vramPopupAppList"></div>
+      <div class="custom-popup-actions">
+        <button class="btn-ui btn-accent" onclick="closeVramLimitPopup()">Close</button>
       </div>
     </div>
   </div>
@@ -1261,6 +1301,46 @@ Type 'help' or 'bringback reinstall /appnameApp' to manage apps.</div>
                   <div><b>UMBRELLA-VWER:</b> Enfrok V&H Operator (G,S,P,E)</div>
                 </div>
 
+                <!-- STORAGE & VRAM PANEL -->
+                <h3 style="font-size:1.05rem; font-weight:700; margin-top:14px;">Storage & VRAM</h3>
+
+                <div style="padding:16px; background:rgba(255,255,255,0.04); border:1px solid var(--glass-border); border-radius:14px; display:flex; flex-direction:column; gap:12px;">
+                  <div style="display:flex; justify-content:space-between; align-items:baseline;">
+                    <span class="setting-title">VRAM Usage</span>
+                    <span class="vram-tag" id="vramUsageLabel">0 MB / 2 GB</span>
+                  </div>
+                  <div class="vram-meter-track"><div class="vram-meter-fill" id="vramMeterFill" style="width:0%;"></div></div>
+                  <span class="setting-desc" id="vramCapacityDesc">Total capacity: 2 GB (1.96 GB usable by apps)</span>
+
+                  <div style="margin-top:6px; font-size:0.82rem; font-weight:700; color:var(--text-sub);">Apps currently using VRAM</div>
+                  <div id="vramActiveAppsList" style="display:flex; flex-direction:column; gap:8px;"></div>
+
+                  <div style="margin-top:6px; font-size:0.82rem; font-weight:700; color:var(--text-sub);">VRAM allowance per app</div>
+                  <div id="vramAllowanceList" style="display:flex; flex-direction:column; gap:8px;"></div>
+                </div>
+
+                <div style="padding:16px; background:rgba(255,255,255,0.04); border:1px solid var(--glass-border); border-radius:14px; display:flex; flex-direction:column; gap:12px;">
+                  <div style="display:flex; justify-content:space-between; align-items:baseline;">
+                    <span class="setting-title">Storage Usage</span>
+                    <span class="vram-tag" id="storageUsageLabel">0 MB / 3 GB</span>
+                  </div>
+                  <div class="vram-meter-track"><div class="vram-meter-fill" id="storageMeterFill" style="width:0%;"></div></div>
+                  <span class="setting-desc">Each photo uses 100 MB and each video uses 150 MB of storage. Uploads are blocked once storage is full until files are deleted.</span>
+                </div>
+
+                <div class="redeem-box">
+                  <span class="setting-title" style="font-size:0.82rem;">Enter VSE Code...</span>
+                  <div class="redeem-row">
+                    <input type="text" class="input-ui" id="vseCodeInput" placeholder="Enter VSE Code..." />
+                    <button class="btn-ui btn-accent" onclick="redeemVseCode()">Redeem</button>
+                  </div>
+                  <div class="redeem-row">
+                    <button class="btn-ui" onclick="changeVseCode()">Change Code</button>
+                    <button class="btn-ui btn-danger" onclick="deleteVseCode()">Delete Code</button>
+                  </div>
+                  <div class="redeem-status" id="vseCodeStatus"></div>
+                </div>
+
                 <h3 style="font-size:1.05rem; font-weight:700; margin-top:14px;">Kernel Security & Account Password</h3>
                 
                 <!-- CHANGE PASSWORD SECTION -->
@@ -1753,6 +1833,34 @@ Write **Markdown** on the left and see a clean preview here.
     { id: 'mediaPlayerApp', name: 'Media Viewer', icon: '🎬', pinnedDock: false, pinnedDesktop: false }
   ];
 
+  /* STORAGE & VRAM ENGINE CONFIGURATION */
+  const VRAM_BASE_TOTAL_MB = 2048;         // 2 GB
+  const VRAM_RESERVED_MB = 80;             // permanent system-reserved amount
+  const STORAGE_BASE_TOTAL_MB = 3072;      // 3 GB
+  const IMAGE_STORAGE_COST_MB = 100;
+  const VIDEO_STORAGE_COST_MB = 150;
+
+  const VRAM_APP_COSTS = {
+    notesApp: 100,
+    documentCore: 4,
+    wordApp: 150,
+    sheetApp: 150,
+    paintApp: 150,
+    browserApp: 1024
+  };
+  const VRAM_DEFAULT_APP_COST = 80;
+
+  function getAppVramCost(appId) {
+    if (Object.prototype.hasOwnProperty.call(VRAM_APP_COSTS, appId)) return VRAM_APP_COSTS[appId];
+    return VRAM_DEFAULT_APP_COST;
+  }
+
+  const VSE_CODES = {
+    'SQD171': { vramGB: 8, storageGB: 16 },
+    'SQD178': { vramGB: 16, storageGB: 32 },
+    'SQD887': { vramGB: 32, storageGB: 64 }
+  };
+
   let winZIndex = 200;
   let activeSheetFilename = "Untitled_Sheet.sheet";
   let activeDocFilename = "Untitled_Document.doc";
@@ -1785,7 +1893,8 @@ Write **Markdown** on the left and see a clean preview here.
     savedFiles: [
       { name: 'Welcome_Guide.doc', content: '<h2>Welcome to Enfrok OS 5.2</h2><p>This is your saved document in Files storage.</p>' }
     ],
-    savedMedia: []
+    savedMedia: [],
+    vseRedeemedCode: null
   };
 
   /* CLEAN GLASSPOPUP MODAL SYSTEM */
@@ -2369,14 +2478,252 @@ Write **Markdown** on the left and see a clean preview here.
     updateDockState();
   }
 
+  /* STORAGE & VRAM ENGINE */
+  function getVramCapacityMB() {
+    if (osData.vseRedeemedCode && VSE_CODES[osData.vseRedeemedCode]) {
+      return VSE_CODES[osData.vseRedeemedCode].vramGB * 1024;
+    }
+    return VRAM_BASE_TOTAL_MB;
+  }
+
+  function getStorageCapacityMB() {
+    if (osData.vseRedeemedCode && VSE_CODES[osData.vseRedeemedCode]) {
+      return VSE_CODES[osData.vseRedeemedCode].storageGB * 1024;
+    }
+    return STORAGE_BASE_TOTAL_MB;
+  }
+
+  function getUsableVramMB() {
+    return getVramCapacityMB() - VRAM_RESERVED_MB;
+  }
+
+  function getRunningAppIds() {
+    const running = [];
+    ALL_APPS.forEach(app => {
+      const win = document.getElementById(app.id);
+      if (win && (win.classList.contains('open-active') || win.classList.contains('minimized'))) {
+        running.push(app.id);
+      }
+    });
+    return running;
+  }
+
+  function getUsedVramMB() {
+    const running = getRunningAppIds();
+    let used = VRAM_RESERVED_MB;
+    running.forEach(id => { used += getAppVramCost(id); });
+    return used;
+  }
+
+  function formatMbLabel(mb) {
+    if (mb >= 1024) {
+      const gb = mb / 1024;
+      return `${gb % 1 === 0 ? gb.toFixed(0) : gb.toFixed(2)} GB`;
+    }
+    return `${Math.round(mb)} MB`;
+  }
+
+  function canOpenAppWithinVram(appId) {
+    if (getRunningAppIds().includes(appId)) return true; // already running / just needs focus
+    const cost = getAppVramCost(appId);
+    const projected = getUsedVramMB() + cost;
+    return projected <= getVramCapacityMB();
+  }
+
+  function refreshStorageVramPanel() {
+    const usageLabel = document.getElementById('vramUsageLabel');
+    const fill = document.getElementById('vramMeterFill');
+    const capacityDesc = document.getElementById('vramCapacityDesc');
+    if (!usageLabel || !fill) return;
+
+    const capacity = getVramCapacityMB();
+    const usable = getUsableVramMB();
+    const used = getUsedVramMB();
+    const pct = Math.min(100, (used / capacity) * 100);
+
+    usageLabel.textContent = `${formatMbLabel(used)} / ${formatMbLabel(capacity)}`;
+    fill.style.width = `${pct}%`;
+    fill.classList.remove('vram-warn', 'vram-full');
+    if (pct >= 100) fill.classList.add('vram-full');
+    else if (pct >= 75) fill.classList.add('vram-warn');
+
+    if (capacityDesc) {
+      capacityDesc.textContent = `Total capacity: ${formatMbLabel(capacity)} (${formatMbLabel(usable)} usable by apps)`;
+    }
+
+    const activeList = document.getElementById('vramActiveAppsList');
+    if (activeList) {
+      const running = getRunningAppIds();
+      let rows = `
+        <div class="vram-app-row locked">
+          <span>V&H Runner(UMB-VWR)</span>
+          <span class="vram-tag locked-tag">80MB VRAM</span>
+        </div>
+      `;
+      running.forEach(id => {
+        const app = ALL_APPS.find(a => a.id === id);
+        if (!app) return;
+        rows += `
+          <div class="vram-app-row">
+            <span>${app.icon} ${app.name}</span>
+            <span class="vram-tag">${getAppVramCost(id)} MB</span>
+          </div>
+        `;
+      });
+      activeList.innerHTML = rows;
+    }
+
+    const allowanceList = document.getElementById('vramAllowanceList');
+    if (allowanceList) {
+      const labelFor = (id, name) => `
+        <div class="vram-app-row">
+          <span>${name}</span>
+          <span class="vram-tag">${formatMbLabel(getAppVramCost(id))}</span>
+        </div>
+      `;
+      allowanceList.innerHTML = [
+        labelFor('notesApp', '📝 Quick Notes'),
+        labelFor('documentCore', '📁 Document Core'),
+        labelFor('wordApp', '📄 Text Studio'),
+        labelFor('sheetApp', '📊 Spreadsheet'),
+        labelFor('paintApp', '🎨 Paint Studio'),
+        labelFor('browserApp', '🌐 Web Browser'),
+        `<div class="vram-app-row"><span>All other apps</span><span class="vram-tag">${VRAM_DEFAULT_APP_COST} MB each</span></div>`
+      ].join('');
+    }
+
+    const storageUsageLabel = document.getElementById('storageUsageLabel');
+    const storageFill = document.getElementById('storageMeterFill');
+    if (storageUsageLabel && storageFill) {
+      const storageCapacity = getStorageCapacityMB();
+      const storageUsed = getUsedStorageMB();
+      const storagePct = Math.min(100, (storageUsed / storageCapacity) * 100);
+      storageUsageLabel.textContent = `${formatMbLabel(storageUsed)} / ${formatMbLabel(storageCapacity)}`;
+      storageFill.style.width = `${storagePct}%`;
+      storageFill.classList.remove('vram-warn', 'vram-full');
+      if (storagePct >= 100) storageFill.classList.add('vram-full');
+      else if (storagePct >= 75) storageFill.classList.add('vram-warn');
+    }
+
+    const statusLine = document.getElementById('vseCodeStatus');
+    if (statusLine) {
+      statusLine.textContent = osData.vseRedeemedCode
+        ? `Active code: ${osData.vseRedeemedCode} (VRAM ${VSE_CODES[osData.vseRedeemedCode].vramGB} GB, Storage ${VSE_CODES[osData.vseRedeemedCode].storageGB} GB)`
+        : 'No VSE code redeemed.';
+    }
+  }
+
+  function getUsedStorageMB() {
+    let used = 0;
+    (osData.savedMedia || []).forEach(m => {
+      used += m.type === 'video' ? VIDEO_STORAGE_COST_MB : IMAGE_STORAGE_COST_MB;
+    });
+    return used;
+  }
+
+  function showVramLimitPopup(blockedAppId) {
+    const listEl = document.getElementById('vramPopupAppList');
+    if (listEl) {
+      const running = getRunningAppIds();
+      listEl.innerHTML = running.map(id => {
+        const app = ALL_APPS.find(a => a.id === id);
+        if (!app) return '';
+        return `
+          <div class="app-picker-item" style="justify-content:space-between;">
+            <div style="display:flex; align-items:center; gap:10px;">
+              <span style="font-size:1.2rem;">${app.icon}</span>
+              <div style="display:flex; flex-direction:column;">
+                <span style="font-weight:600; font-size:0.85rem;">${app.name}</span>
+                <span style="font-size:0.72rem; color:var(--text-sub);">${getAppVramCost(id)} MB</span>
+              </div>
+            </div>
+            <button class="btn-ui btn-danger" style="padding:4px 10px; font-size:0.75rem;" onclick="quitAppFromVramPopup('${id}', '${blockedAppId || ''}')">Quit</button>
+          </div>
+        `;
+      }).join('') || '<div style="font-size:0.82rem; color:var(--text-sub); padding:8px;">No closable apps are currently running.</div>';
+    }
+    document.getElementById('vramLimitPopup').classList.add('active');
+  }
+
+  function closeVramLimitPopup() {
+    document.getElementById('vramLimitPopup').classList.remove('active');
+  }
+
+  function quitAppFromVramPopup(appId, retryAppId) {
+    closeWindow(appId);
+    showVramLimitPopup(retryAppId);
+    refreshStorageVramPanel();
+    if (retryAppId && canOpenAppWithinVram(retryAppId)) {
+      closeVramLimitPopup();
+      openWindow(retryAppId);
+    }
+  }
+
+  /* VSE CODE REDEMPTION */
+  function redeemVseCode() {
+    const input = document.getElementById('vseCodeInput');
+    const status = document.getElementById('vseCodeStatus');
+    const code = (input.value || '').trim().toUpperCase();
+
+    if (!code) {
+      if (status) status.textContent = 'Enter a code first.';
+      return;
+    }
+
+    if (!VSE_CODES[code]) {
+      if (status) status.textContent = 'Invalid VSE code.';
+      return;
+    }
+
+    osData.vseRedeemedCode = code;
+    saveData();
+    input.value = '';
+    refreshStorageVramPanel();
+    showGlassAlert(`VSE code ${code} redeemed. VRAM is now ${VSE_CODES[code].vramGB} GB and Storage is now ${VSE_CODES[code].storageGB} GB.`, "✅ Code Redeemed");
+  }
+
+  function changeVseCode() {
+    showGlassPrompt("Enter new VSE Code to replace the current one:", "", (val) => {
+      const code = (val || '').trim().toUpperCase();
+      if (!code) return;
+      if (!VSE_CODES[code]) {
+        showGlassAlert("Invalid VSE code.", "⚠️ Invalid Code");
+        return;
+      }
+      osData.vseRedeemedCode = code;
+      saveData();
+      refreshStorageVramPanel();
+      showGlassAlert(`Code changed to ${code}.`, "✅ Code Updated");
+    }, "🔁 Change VSE Code");
+  }
+
+  function deleteVseCode() {
+    if (!osData.vseRedeemedCode) {
+      showGlassAlert("No VSE code is currently active.", "ℹ️ Nothing to Delete");
+      return;
+    }
+    showGlassConfirm("Remove the active VSE code? VRAM and Storage will return to default limits.", () => {
+      osData.vseRedeemedCode = null;
+      saveData();
+      refreshStorageVramPanel();
+    }, "🗑️ Delete VSE Code");
+  }
+
   function openWindow(id) {
     const win = document.getElementById(id);
-    if (win) {
-      win.classList.add('open-active');
-      win.classList.remove('minimized');
-      focusWindow(win);
-      updateDockState();
+    if (!win) return;
+
+    const alreadyRunning = win.classList.contains('open-active') || win.classList.contains('minimized');
+    if (!alreadyRunning && !canOpenAppWithinVram(id)) {
+      showVramLimitPopup(id);
+      return;
     }
+
+    win.classList.add('open-active');
+    win.classList.remove('minimized');
+    focusWindow(win);
+    updateDockState();
+    refreshStorageVramPanel();
   }
 
   function focusWindow(win) {
@@ -2394,6 +2741,7 @@ Write **Markdown** on the left and see a clean preview here.
     if (win) {
       win.classList.add('minimized');
       updateDockState();
+      refreshStorageVramPanel();
     }
   }
 
@@ -2434,6 +2782,7 @@ Write **Markdown** on the left and see a clean preview here.
     if (win) {
       win.classList.remove('open-active', 'focused', 'fullscreen', 'minimized');
       updateDockState();
+      refreshStorageVramPanel();
       if (id === 'mediaPlayerApp') {
         const vid = document.querySelector('#mediaViewport video');
         if (vid) vid.pause();
@@ -3094,6 +3443,7 @@ Write **Markdown** on the left and see a clean preview here.
   function handleMediaUpload(e) {
     const files = Array.from(e.target.files);
     processUploadedFiles(files);
+    e.target.value = '';
   }
 
   function handleMediaDrop(e) {
@@ -3105,24 +3455,44 @@ Write **Markdown** on the left and see a clean preview here.
 
   function processUploadedFiles(files) {
     if (!osData.savedMedia) osData.savedMedia = [];
+
+    let rejectedForStorage = 0;
+    const acceptedFiles = [];
+
     files.forEach(file => {
       const isVideo = file.type.startsWith('video');
       const isImage = file.type.startsWith('image');
-      if (isVideo || isImage) {
-        const reader = new FileReader();
-        reader.onload = (event) => {
-          osData.savedMedia.push({
-            id: 'media_' + Date.now() + Math.random().toString(36).substr(2, 4),
-            name: file.name,
-            type: isVideo ? 'video' : 'photo',
-            url: event.target.result
-          });
-          saveData();
-          renderFolders();
-        };
-        reader.readAsDataURL(file);
+      if (!isVideo && !isImage) return;
+
+      const cost = isVideo ? VIDEO_STORAGE_COST_MB : IMAGE_STORAGE_COST_MB;
+      const projected = getUsedStorageMB() + acceptedFiles.reduce((sum, f) => sum + f.cost, 0) + cost;
+
+      if (projected > getStorageCapacityMB()) {
+        rejectedForStorage++;
+        return;
       }
+      acceptedFiles.push({ file, isVideo, cost });
     });
+
+    acceptedFiles.forEach(({ file, isVideo }) => {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        osData.savedMedia.push({
+          id: 'media_' + Date.now() + Math.random().toString(36).substr(2, 4),
+          name: file.name,
+          type: isVideo ? 'video' : 'photo',
+          url: event.target.result
+        });
+        saveData();
+        renderFolders();
+        refreshStorageVramPanel();
+      };
+      reader.readAsDataURL(file);
+    });
+
+    if (rejectedForStorage > 0) {
+      showGlassAlert(`Storage is full. ${rejectedForStorage} file(s) could not be added. Delete some Photos or Videos to free up space.`, "⚠️ Storage Full");
+    }
   }
 
   function renderFolders() {
@@ -3280,6 +3650,7 @@ Write **Markdown** on the left and see a clean preview here.
       osData.savedMedia = osData.savedMedia.filter(m => m.id !== mediaId);
       saveData();
       renderFolders();
+      refreshStorageVramPanel();
     }, "🗑️ Delete Media");
   }
 
@@ -3404,6 +3775,7 @@ Write **Markdown** on the left and see a clean preview here.
     document.getElementById(tabId).classList.add('active'); 
     if (navEl) navEl.classList.add('active');
     if (tabId === 'appManagerTab') renderUninstalledAppsList();
+    if (tabId === 'systemConfigTab') refreshStorageVramPanel();
   }
 
   function closeContextMenus() { document.getElementById('desktopContextMenu').classList.remove('open'); }
@@ -3472,6 +3844,7 @@ Write **Markdown** on the left and see a clean preview here.
     if (event.key === 'Escape') {
       closeFullscreenStartMenu();
       closeGlassPopup();
+      closeVramLimitPopup();
     }
   });
 
@@ -4023,6 +4396,7 @@ Write **Markdown** on the left and see a clean preview here.
     const start = document.getElementById('dateStartInput'), endInput = document.getElementById('dateEndInput');
     if (start && endInput) { start.value = toIso(today); endInput.value = toIso(end); calculateDateDifference(); }
     renderMarkdownPreview(); runRegexTest(); renderHabitList(); renderBudgetList(); generatePass();
+    refreshStorageVramPanel();
   }
 
   const originalLaunchDesktop = launchDesktop;
