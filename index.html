@@ -108,7 +108,7 @@
   .lock-back-btn:hover { color: #fff; }
   #login-screen { background: var(--bg-wallpaper) center/cover no-repeat; z-index: 9000; }
   #login-screen::before { content: ''; position: absolute; inset: 0; background: rgba(3, 5, 8, 0.7); backdrop-filter: var(--glass-blur); z-index: -1; }
-  .top-bar { width: 100%; height: 42px; background: var(--glass-topbar); backdrop-filter: var(--glass-blur); border-bottom: 1px solid var(--glass-border); display: flex; align-items: center; justify-content: space-between; padding: 0 20px; z-index: 8000; transition: transform 0.3s var(--anim-curve), opacity 0.3s var(--anim-curve); will-change: transform, opacity; }
+  .top-bar { width: calc(100% - 24px); height: 42px; margin: 12px 12px 0; background: var(--glass-topbar); backdrop-filter: var(--glass-blur); border: 1px solid var(--glass-border); border-radius: 16px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; z-index: 8000; box-shadow: 0 12px 30px rgba(0,0,0,0.24); transition: transform 0.3s var(--anim-curve), opacity 0.3s var(--anim-curve); will-change: transform, opacity; }
   .top-bar.hidden-menu { display: none !important; }
   .top-bar-section { display: flex; align-items: center; gap: 18px; }
   .brand-logo { font-weight: 800; font-size: 0.92rem; display: flex; align-items: center; gap: 10px; cursor: pointer; letter-spacing: 0.08em; }
@@ -231,6 +231,13 @@
   .calc-disp { background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); border-radius: 14px; font-size: 2.2rem; font-family: var(--font-code); color: var(--text-main); padding: 16px; text-align: right; }
   .calc-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; flex: 1; }
   .calc-grid button { font-size: 1.1rem; border-radius: 12px; }
+  .oscdd-editor { flex: 1; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px; padding: 16px; min-height: 0; }
+  .oscdd-pane { display: flex; flex-direction: column; gap: 8px; min-height: 0; }
+  .oscdd-pane-title { color: var(--text-sub); font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; }
+  .oscdd-input, .oscdd-preview { flex: 1; min-height: 0; width: 100%; border: 1px solid var(--glass-border); border-radius: 14px; background: rgba(0,0,0,0.3); color: var(--text-main); }
+  .oscdd-input { resize: none; padding: 14px; font-family: var(--font-code); font-size: 0.8rem; line-height: 1.5; user-select: text !important; -webkit-user-select: text !important; }
+  .oscdd-preview { background: #fff; }
+  @media (max-width: 700px) { .oscdd-editor { grid-template-columns: 1fr; grid-template-rows: 1fr 1fr; } }
   .wp-gallery { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 10px; }
   .wp-thumb { height: 85px; border-radius: 12px; border: 2px solid transparent; cursor: pointer; background-size: cover; background-position: center; }
   .wp-thumb:hover, .wp-thumb.active { border-color: var(--accent); }
@@ -442,7 +449,7 @@
       <div class="top-bar-section">
         <div class="top-item" onclick="lockSystemScreen()">🔒 Lock</div>
         <div class="top-item" id="sysAudioMute" onclick="toggleMuteAudio()">🔊 Audio</div>
-        <div class="top-item" onclick="toggleNotifications()">🔔 <span id="sysClock">12:00 PM</span></div>
+        <div class="top-item"><span id="sysClock">12:00 PM</span></div>
       </div>
     </div>
 
@@ -686,6 +693,27 @@ Type 'help' or 'bringback reinstall /appnameApp' to manage apps.</div>
               <span style="color:var(--accent); font-weight:600;">enfrok@root:~$</span>
               <input type="text" class="term-input" id="termInput" onkeydown="handleTermCmd(event)" />
             </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="os-window" id="oscddApp" style="width: 900px; height: 620px; top: 36px; left: 120px;">
+        <div class="window-topbar" onmousedown="dragWindow(event, 'oscddApp')">
+          <div class="window-title">⚒️ OS CDD</div>
+          <div class="win-controls-pills">
+            <span class="win-pill-btn" onclick="minimizeWindow('oscddApp')">─</span>
+            <span class="win-pill-btn" onclick="toggleFullscreen('oscddApp')">▢</span>
+            <span class="win-pill-btn pill-close" onclick="closeWindow('oscddApp')">✕</span>
+          </div>
+        </div>
+        <div class="window-body">
+          <div class="oscdd-editor">
+            <label class="oscdd-pane"><span class="oscdd-pane-title">Pasted HTML</span><textarea class="oscdd-input" id="oscddHtmlInput" spellcheck="false" placeholder="Paste HTML here..."></textarea></label>
+            <div class="oscdd-pane"><span class="oscdd-pane-title">Live Preview</span><iframe class="oscdd-preview" id="oscddPreview" title="OS CDD HTML preview" sandbox="allow-scripts"></iframe></div>
+          </div>
+          <div style="display:flex; justify-content:flex-end; gap:8px; padding:0 16px 16px;">
+            <button class="btn-ui" onclick="clearOscddHtml()">Clear</button>
+            <button class="btn-ui btn-accent" onclick="previewOscddHtml()">Apply Preview</button>
           </div>
         </div>
       </div>
@@ -980,21 +1008,9 @@ Type 'help' or 'bringback reinstall /appnameApp' to manage apps.</div>
                 <div style="padding:16px; background:rgba(255,255,255,0.04); border:1px solid var(--glass-border); border-radius:14px; display:flex; flex-direction:column; gap:12px;">
                   <div style="display:flex; justify-content:space-between; align-items:baseline;">
                     <span class="setting-title">Storage Usage</span>
-                    <span class="vram-tag" id="storageUsageLabel">0 MB / 3 GB</span>
+                    <span class="vram-tag" id="storageUsageLabel">0 MB / 4 GB</span>
                   </div>
                   <div class="vram-meter-track"><div class="vram-meter-fill" id="storageMeterFill" style="width:0%;"></div></div>
-                  <div class="redeem-box">
-                    <span class="setting-title" style="font-size:0.82rem;">Enter VSE Code...</span>
-                    <div class="redeem-row">
-                      <input type="text" class="input-ui" id="vseCodeInput" placeholder="Enter VSE Code..." />
-                      <button class="btn-ui btn-accent" onclick="redeemVseCode()">Redeem</button>
-                    </div>
-                    <div class="redeem-row">
-                      <button class="btn-ui" onclick="changeVseCode()">Change Code</button>
-                      <button class="btn-ui btn-danger" onclick="deleteVseCode()">Delete Code</button>
-                    </div>
-                    <div class="redeem-status" id="vseCodeStatus"></div>
-                  </div>
                 </div>
                 <h3 style="font-size:1.05rem; font-weight:700; margin-top:14px;">Kernel Security & Account Password</h3>
                 <div style="padding:16px; background:rgba(255,255,255,0.04); border:1px solid var(--glass-border); border-radius:14px; display:flex; flex-direction:column; gap:12px;">
@@ -1434,11 +1450,6 @@ Write **Markdown** on the left and see a clean preview here.
 
     <div class="context-menu" id="desktopContextMenu"></div>
 
-    <div class="notification-center" id="notificationCenter">
-      <h3 style="font-size:1rem; font-weight:700;">Notifications & System Control</h3>
-      <div style="font-size:0.85rem; color:var(--text-sub); border-bottom:1px solid var(--glass-border); padding-bottom:14px;">Enfrok OS 5.2 loaded with custom glass popups, dark/light theme options, and quick personalization context menu.</div>
-    </div>
-
     <div class="dock-wrapper dock-pos-middle" id="dockWrapper" ondragover="event.preventDefault(); this.classList.add('drag-over');" ondragleave="this.classList.remove('drag-over');" ondrop="handleDockDrop(event)">
       <button class="dock-launcher-btn" onclick="openStartMenu()" title="Open Glass Start Menu">E</button>
       <div class="dock-divider"></div>
@@ -1493,7 +1504,10 @@ Write **Markdown** on the left and see a clean preview here.
     'https://images.unsplash.com/photo-1518837695005-2083093ee35b?q=80&w=1920',
     'https://images.unsplash.com/photo-1502082553048-f009c37129b9?q=80&w=1920',
     'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=1920',
-    'https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1920'
+    'https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1920',
+    'https://images.unsplash.com/photo-1511497584788-876760111969?q=80&w=1920',
+    'https://images.unsplash.com/photo-1497250681960-ef046c08a56e?q=80&w=1920',
+    'https://images.unsplash.com/photo-1500534623283-312aade485b7?q=80&w=1920'
   ];
 
   const ALL_APPS = [
@@ -1533,7 +1547,7 @@ Write **Markdown** on the left and see a clean preview here.
 
   const VRAM_BASE_TOTAL_MB = 2048;
   const VRAM_RESERVED_MB = 80;
-  const STORAGE_BASE_TOTAL_MB = 3072;
+  const STORAGE_BASE_TOTAL_MB = 4096;
   const IMAGE_STORAGE_COST_MB = 100;
   const VIDEO_STORAGE_COST_MB = 150;
   const DOCUMENT_STORAGE_COST_MB = 180;
@@ -2180,11 +2194,9 @@ Write **Markdown** on the left and see a clean preview here.
   }
 
   function getVramCapacityMB() {
-    if (osData.vseRedeemedCode && VSE_CODES[osData.vseRedeemedCode]) return VSE_CODES[osData.vseRedeemedCode].vramGB * 1024;
     return VRAM_BASE_TOTAL_MB;
   }
   function getStorageCapacityMB() {
-    if (osData.vseRedeemedCode && VSE_CODES[osData.vseRedeemedCode]) return VSE_CODES[osData.vseRedeemedCode].storageGB * 1024;
     return STORAGE_BASE_TOTAL_MB;
   }
   function getUsableVramMB() { return getVramCapacityMB() - VRAM_RESERVED_MB; }
@@ -3364,8 +3376,20 @@ Write **Markdown** on the left and see a clean preview here.
   }
 
   function closeContextMenus() { document.getElementById('desktopContextMenu').classList.remove('open'); }
-  function toggleNotifications() { document.getElementById('notificationCenter').classList.toggle('open'); }
   function toggleLaunchHub() { document.getElementById('launchHubPanel').classList.toggle('open'); }
+
+  function previewOscddHtml() {
+    const input = document.getElementById('oscddHtmlInput');
+    const preview = document.getElementById('oscddPreview');
+    if (input && preview) preview.srcdoc = input.value;
+  }
+
+  function clearOscddHtml() {
+    const input = document.getElementById('oscddHtmlInput');
+    const preview = document.getElementById('oscddPreview');
+    if (input) input.value = '';
+    if (preview) preview.srcdoc = '';
+  }
 
   function setStartMenuMode(mode, persist = true) {
     osData.startMenuMode = mode === 'fullscreen' ? 'fullscreen' : 'normal';
@@ -3874,7 +3898,10 @@ Write **Markdown** on the left and see a clean preview here.
       const out = document.getElementById('termOutput');
       const cmdStr = input.value.trim();
       out.textContent += `\nenfrok@root:~$ ${cmdStr}`;
-      if (cmdStr.startsWith('bringback reinstall /')) {
+      if (cmdStr === 'open oscdd app:dev_12') {
+        openWindow('oscddApp');
+        out.textContent += '\n[SYSTEM]: OS CDD opened.';
+      } else if (cmdStr.startsWith('bringback reinstall /')) {
         const rawTarget = cmdStr.replace('bringback reinstall /', '').trim();
         let targetApp = ALL_APPS.find(a => a.id.toLowerCase() === rawTarget.toLowerCase() || a.name.toLowerCase() === rawTarget.toLowerCase());
         if (targetApp) {
