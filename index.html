@@ -156,13 +156,14 @@
   .context-item.danger:hover { background: rgba(239, 68, 68, 0.3); color: #fca5a5; }
   .notification-center { position: absolute; top: 42px; right: -380px; bottom: 0; width: 360px; background: var(--glass-menu); backdrop-filter: var(--glass-blur); border-left: 1px solid var(--glass-border); padding: 24px; display: flex; flex-direction: column; gap: 20px; z-index: 8400; box-shadow: -15px 0 40px rgba(0,0,0,0.3); transition: right 0.25s var(--anim-curve); will-change: right; }
   .notification-center.open { right: 0; }
-  .os-window { position: absolute; background: var(--glass-window); backdrop-filter: var(--glass-blur); border: 1px solid var(--glass-border); border-radius: var(--radius-window); box-shadow: var(--glass-shadow); display: flex; flex-direction: column; overflow: hidden; min-width: 320px; min-height: 200px; contain: layout style; opacity: 0; pointer-events: none; transform: scale(0.94) translateY(10px); transition: opacity 0.25s var(--anim-curve), transform 0.25s var(--anim-curve), border-color 0.15s ease, top 0.35s var(--anim-curve), left 0.35s var(--anim-curve), width 0.35s var(--anim-curve), height 0.35s var(--anim-curve), border-radius 0.35s var(--anim-curve); will-change: transform, opacity, top, left, width, height; }
+  .os-window { position: absolute; background: var(--glass-window); backdrop-filter: var(--glass-blur); border: 1px solid var(--glass-border); border-radius: var(--radius-window); box-shadow: var(--glass-shadow); display: flex; flex-direction: column; overflow: hidden; min-width: 320px; min-height: 200px; contain: layout style; opacity: 0; pointer-events: none; transform: scale(0.94) translateY(10px); transition: opacity 0.25s var(--anim-curve), transform 0.25s var(--anim-curve), border-color 0.15s ease, border-radius 0.35s var(--anim-curve); will-change: transform, opacity; }
   .os-window.dragging, .os-window.resizing { transition: none !important; }
   .os-window.open-active { opacity: 1; pointer-events: auto; transform: scale(1) translateY(0); }
   .os-window.unfocused { background: var(--glass-window-unfocused); border-color: rgba(255,255,255,0.08); }
   .os-window.focused { border-color: var(--glass-border-focused); box-shadow: 0 35px 90px rgba(0,0,0,0.4); }
   .os-window.minimized { opacity: 0 !important; pointer-events: none !important; transform: scale(0.85) translateY(40px) !important; }
-  .os-window.fullscreen { top: 0 !important; left: 0 !important; width: 100vw !important; height: 100vh !important; border-radius: 0 !important; z-index: 99999 !important; }
+  .os-window.fullscreen { position: fixed !important; inset: 0 !important; width: 100vw !important; height: 100vh !important; border-radius: 0 !important; z-index: 7900 !important; animation: fullscreenEnter 0.28s var(--anim-curve) both; }
+  @keyframes fullscreenEnter { from { opacity: 0.45; transform: scale(0.97); } to { opacity: 1; transform: scale(1); } }
   .win-resize-handle { position: absolute; z-index: 99; }
   .win-resize-handle.rh-n { top: 0; left: 10px; right: 10px; height: 6px; cursor: ns-resize; }
   .win-resize-handle.rh-s { bottom: 0; left: 10px; right: 10px; height: 6px; cursor: ns-resize; }
@@ -174,6 +175,8 @@
   .win-resize-handle.rh-se { bottom: 0; right: 0; width: 10px; height: 10px; cursor: nwse-resize; }
   body.has-fullscreen-app .top-bar { transform: translateY(-100%); opacity: 0; pointer-events: none; }
   body.has-fullscreen-app .dock-wrapper { transform: translateX(-50%) translateY(120px); opacity: 0; pointer-events: none; }
+  #calcApp .win-resize-handle { display: none; }
+  #calcApp .window-topbar { cursor: default; }
   .window-topbar { height: 44px; background: rgba(255,255,255,0.04); border-bottom: 1px solid var(--glass-border); display: flex; align-items: center; justify-content: space-between; padding: 0 18px; cursor: move; flex-shrink: 0; }
   .window-title { font-size: 0.88rem; font-weight: 600; display: flex; align-items: center; gap: 10px; }
   .win-controls-pills { display: flex; align-items: center; gap: 4px; background: rgba(255,255,255,0.08); padding: 4px 8px; border-radius: 20px; border: 1px solid var(--glass-border); }
@@ -250,6 +253,13 @@
   .laser-beam { position: absolute; top: 0; width: 4px; height: 100%; opacity: 0.8; box-shadow: 0 0 15px currentColor; transform-origin: top center; animation: laserScan 2s ease-in-out infinite alternate; }
   @keyframes laserScan { 0% { transform: rotate(-35deg); } 100% { transform: rotate(35deg); } }
   .fog-overlay { position: absolute; inset: 0; background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 80%); pointer-events: none; animation: fogPulse 4s infinite alternate; }
+  #concertApp .window-body { background: #070b14; }
+  #concertApp .stage-canvas { background: linear-gradient(135deg, #101a35 0%, #090b18 48%, #26102e 100%); }
+  #concertApp .stage-canvas::after { content: 'LIVE / 01'; position: absolute; top: 18px; left: 20px; z-index: 12; color: #f8fafc; font: 700 0.7rem var(--font-code); letter-spacing: 0.16em; border-left: 3px solid #f97316; padding-left: 10px; }
+  #concertApp .stage-canvas > div[style*="background:rgba(0,0,0,0.6)"] { background: #0f172a !important; border-radius: 10px !important; }
+  #paintApp .window-body { background: #0b1220; }
+  #paintApp .paint-ribbon { background: #172033; padding: 10px 14px; }
+  #paintApp .paint-group { border-right-color: rgba(255,255,255,0.1); }
   @keyframes fogPulse { 0% { opacity: 0.3; } 100% { opacity: 0.9; } }
   .start-menu-fullscreen { position: absolute; inset: 0; z-index: 8700; display: flex; flex-direction: column; background: var(--glass-menu); backdrop-filter: var(--glass-blur) saturate(180%); -webkit-backdrop-filter: var(--glass-blur) saturate(180%); opacity: 0; pointer-events: none; transform: translateY(12px); transition: opacity 0.25s var(--anim-curve), transform 0.25s var(--anim-curve); padding: 46px 7vw 54px; will-change: transform, opacity; }
   .start-menu-fullscreen.open { opacity: 1; pointer-events: auto; transform: translateY(0); }
@@ -555,6 +565,10 @@
               <button class="paint-btn" onclick="undoPaint()">↩️</button>
               <button class="paint-btn" onclick="redoPaint()">↪️</button>
             </div>
+            <div class="paint-group">
+              <button class="paint-btn" onclick="openWallpaperBrowser()">🖼️ Browse wallpapers</button>
+              <span style="font-size:0.72rem; color:var(--text-sub);">Canvas lab</span>
+            </div>
           </div>
           <div style="flex:1; background:#111827; display:flex; align-items:center; justify-content:center; overflow:hidden; padding:16px;">
             <canvas id="paintStudioCanvas" width="800" height="460" style="background:#ffffff; border-radius:8px; box-shadow:0 10px 30px rgba(0,0,0,0.5); cursor:crosshair;"></canvas>
@@ -714,6 +728,34 @@ Type 'help' or 'bringback reinstall /appnameApp' to manage apps.</div>
           <div style="display:flex; justify-content:flex-end; gap:8px; padding:0 16px 16px;">
             <button class="btn-ui" onclick="clearOscddHtml()">Clear</button>
             <button class="btn-ui btn-accent" onclick="previewOscddHtml()">Apply Preview</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="os-window" id="htmlTesterApp" style="width: 960px; height: 620px; top: 34px; left: 100px;">
+        <div class="window-topbar" onmousedown="dragWindow(event, 'htmlTesterApp')">
+          <div class="window-title">⚒️ HTML Code Tester</div>
+          <div class="win-controls-pills">
+            <span class="win-pill-btn" onclick="minimizeWindow('htmlTesterApp')">─</span>
+            <span class="win-pill-btn" onclick="toggleFullscreen('htmlTesterApp')">▢</span>
+            <span class="win-pill-btn pill-close" onclick="closeWindow('htmlTesterApp')">✕</span>
+          </div>
+        </div>
+        <div class="window-body">
+          <div class="oscdd-editor">
+            <label class="oscdd-pane"><span class="oscdd-pane-title">HTML workspace</span><textarea class="oscdd-input" id="htmlTesterInput" spellcheck="false"><!doctype html>
+<html>
+  <body>
+    <h1>Hello, Enfrok</h1>
+    <p>Build something here, then press Debug.</p>
+  </body>
+</html></textarea></label>
+            <div class="oscdd-pane"><span class="oscdd-pane-title">Debug preview</span><iframe class="oscdd-preview" id="htmlTesterPreview" title="HTML Code Tester preview" sandbox="allow-scripts"></iframe></div>
+          </div>
+          <div style="display:flex; justify-content:flex-end; gap:8px; padding:0 16px 16px;">
+            <button class="btn-ui" onclick="clearHtmlTester()">Clear</button>
+            <button class="btn-ui btn-accent" onclick="debugHtmlTester()">▶ Debug</button>
+            <button class="btn-ui" onclick="testHtmlInBrowser()">🌐 Test in Browser</button>
           </div>
         </div>
       </div>
@@ -921,6 +963,14 @@ Type 'help' or 'bringback reinstall /appnameApp' to manage apps.</div>
                   </select>
                 </div>
                 <div class="wp-gallery" id="settingsWpGrid" style="max-height:220px; overflow-y:auto; padding-right:6px;"></div>
+                <div class="setting-row">
+                  <div class="setting-label">
+                    <span class="setting-title">Add a wallpaper</span>
+                    <span class="setting-desc">Choose an image from your computer and add it to the gallery.</span>
+                  </div>
+                  <button class="btn-ui btn-accent" onclick="openWallpaperBrowser()">🖼️ Browse wallpapers</button>
+                  <input type="file" id="wallpaperUploadInput" accept="image/*" multiple hidden onchange="handleWallpaperUpload(event)" />
+                </div>
                 <div class="setting-row">
                   <div class="setting-label">
                     <span class="setting-title">Start Menu Style</span>
@@ -1372,80 +1422,6 @@ Write **Markdown** on the left and see a clean preview here.
         </div>
       </div>
 
-      <!-- APP: MESSAGES -->
-      <div class="os-window" id="messagesApp" style="width: 860px; height: 560px; top: 40px; left: 140px;">
-        <div class="window-topbar" onmousedown="dragWindow(event, 'messagesApp')">
-          <div class="window-title">💬 Messages</div>
-          <div class="win-controls-pills">
-            <span class="win-pill-btn" onclick="minimizeWindow('messagesApp')">─</span>
-            <span class="win-pill-btn" onclick="toggleFullscreen('messagesApp')">▢</span>
-            <span class="win-pill-btn pill-close" onclick="closeWindow('messagesApp')">✕</span>
-          </div>
-        </div>
-        <div class="window-body" id="messagesWindowBody">
-          <!-- Onboarding (create username/name) shown until profile exists -->
-          <div id="msgOnboarding" style="flex:1; display:flex; align-items:center; justify-content:center; padding:30px;">
-            <div style="width:360px; max-width:90%; display:flex; flex-direction:column; gap:14px; background:rgba(255,255,255,0.04); border:1px solid var(--glass-border); border-radius:18px; padding:28px;">
-              <div style="text-align:center;">
-                <div style="font-size:2.2rem;">💬</div>
-                <h2 style="margin-top:8px;">Welcome to Messages</h2>
-                <p style="font-size:0.82rem; color:var(--text-sub); margin-top:4px;">Create your profile to start chatting.</p>
-              </div>
-              <div>
-                <label style="font-size:0.78rem; color:var(--text-sub);">Display Name</label>
-                <input type="text" class="input-ui" id="msgSetupName" placeholder="e.g. Alex Johnson" style="margin-top:4px;" />
-              </div>
-              <div>
-                <label style="font-size:0.78rem; color:var(--text-sub);">Username</label>
-                <input type="text" class="input-ui" id="msgSetupUsername" placeholder="e.g. alexj" style="margin-top:4px;" />
-                <span style="font-size:0.7rem; color:var(--text-sub);">Others will add you using this unique @username.</span>
-              </div>
-              <button class="btn-ui btn-accent" style="justify-content:center; padding:12px;" onclick="createMessagesProfile()">Create Profile →</button>
-              <div id="msgSetupError" style="font-size:0.76rem; color:#fca5a5;"></div>
-            </div>
-          </div>
-
-          <!-- Main Messenger Interface -->
-          <div id="msgMainInterface" class="msg-layout" style="display:none;">
-            <div class="msg-sidebar">
-              <div class="msg-sidebar-head">
-                <div class="msg-me-row">
-                  <div class="msg-avatar" id="msgMyAvatar">A</div>
-                  <div>
-                    <div class="msg-me-name" id="msgMyName">Alex Johnson</div>
-                    <div class="msg-me-handle" id="msgMyHandle">@alexj</div>
-                  </div>
-                </div>
-                <button class="btn-ui btn-accent" style="justify-content:center;" onclick="openAddPeoplePopup()">➕ Add People</button>
-              </div>
-              <div class="msg-contact-list" id="msgContactList"></div>
-            </div>
-            <div class="msg-chat-pane" id="msgChatPane">
-              <div class="msg-empty-state" id="msgEmptyState">
-                <div style="font-size:2.5rem;">👋</div>
-                <div>Select a contact or add someone new to start chatting.</div>
-              </div>
-              <div id="msgActiveThread" style="display:none; flex-direction:column; height:100%;">
-                <div class="msg-chat-head">
-                  <div class="msg-avatar" id="msgActiveAvatar" style="width:34px; height:34px; font-size:0.85rem;">?</div>
-                  <div>
-                    <div style="font-weight:700; font-size:0.88rem;" id="msgActiveName">Name</div>
-                    <div style="font-size:0.72rem; color:var(--text-sub);" id="msgActiveHandle">@username</div>
-                  </div>
-                  <button class="btn-ui btn-danger" style="margin-left:auto; padding:4px 10px; font-size:0.72rem;" onclick="removeActiveContact()">🗑️ Remove</button>
-                </div>
-                <div class="msg-thread" id="msgThreadContainer"></div>
-                <div class="msg-input-row">
-                  <button class="btn-ui msg-attach-btn" onclick="openMessagesMediaPicker()" title="Send from Photos & Videos">📎</button>
-                  <input type="text" class="input-ui" id="msgTextInput" placeholder="Type a message..." onkeydown="if(event.key==='Enter') sendMessagesText()" />
-                  <button class="btn-ui btn-accent" onclick="sendMessagesText()">Send</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
     </div>
 
     <div class="context-menu" id="desktopContextMenu"></div>
@@ -1507,7 +1483,24 @@ Write **Markdown** on the left and see a clean preview here.
     'https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1920',
     'https://images.unsplash.com/photo-1511497584788-876760111969?q=80&w=1920',
     'https://images.unsplash.com/photo-1497250681960-ef046c08a56e?q=80&w=1920',
-    'https://images.unsplash.com/photo-1500534623283-312aade485b7?q=80&w=1920'
+    'https://images.unsplash.com/photo-1500534623283-312aade485b7?q=80&w=1920',
+    'https://images.unsplash.com/photo-1519608487953-e999c86e7455?q=80&w=1920',
+    'https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=1920',
+    'https://images.unsplash.com/photo-1470770841072-f978cf4d019e?q=80&w=1920',
+    'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1920',
+    'https://images.unsplash.com/photo-1493246507139-91e8fad9978e?q=80&w=1920',
+    'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?q=80&w=1920',
+    'https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?q=80&w=1920',
+    'https://images.unsplash.com/photo-1494783367193-149034c05e8f?q=80&w=1920',
+    'https://images.unsplash.com/photo-1433086966358-54859d0ed716?q=80&w=1920',
+    'https://images.unsplash.com/photo-1444464666168-49d633b86797?q=80&w=1920',
+    'https://images.unsplash.com/photo-1511497584788-876760111969?q=80&w=1920',
+    'https://images.unsplash.com/photo-1500534623283-312aade485b7?q=80&w=1920&sat=-20',
+    'https://images.unsplash.com/photo-1518173946687-a4c8892bbd9f?q=80&w=1920',
+    'https://images.unsplash.com/photo-1501854140801-50d01698950b?q=80&w=1920',
+    'https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?q=80&w=1920',
+    'https://images.unsplash.com/photo-1523712999610-f77fbcfc3843?q=80&w=1920',
+    'https://images.unsplash.com/photo-1473445361085-b9a07f55608b?q=80&w=1920'
   ];
 
   const ALL_APPS = [
@@ -1523,7 +1516,6 @@ Write **Markdown** on the left and see a clean preview here.
     { id: 'passApp', name: 'Passwords', icon: '🔑', pinnedDock: true, pinnedDesktop: true },
     { id: 'concertApp', name: 'Concert', icon: '🎤', pinnedDock: true, pinnedDesktop: true },
     { id: 'settingsApp', name: 'Settings', icon: '⚙️', pinnedDock: true, pinnedDesktop: true },
-    { id: 'messagesApp', name: 'Messages', icon: '💬', pinnedDock: true, pinnedDesktop: true },
     { id: 'notesApp', name: 'Quick Notes', icon: '📝', pinnedDock: false, pinnedDesktop: false },
     { id: 'voiceRecorderApp', name: 'Voice Recorder', icon: '🎙️', pinnedDock: false, pinnedDesktop: false },
     { id: 'whiteboardApp', name: 'Whiteboard', icon: '🖌️', pinnedDock: false, pinnedDesktop: false },
@@ -1542,7 +1534,8 @@ Write **Markdown** on the left and see a clean preview here.
     { id: 'base64App', name: 'Base64 Studio', icon: '🔐', pinnedDock: false, pinnedDesktop: false },
     { id: 'dateDiffApp', name: 'Date Calculator', icon: '📅', pinnedDock: false, pinnedDesktop: false },
     { id: 'regexApp', name: 'Regex Tester', icon: '🧪', pinnedDock: false, pinnedDesktop: false },
-    { id: 'mediaPlayerApp', name: 'Media Viewer', icon: '🎬', pinnedDock: false, pinnedDesktop: false }
+    { id: 'mediaPlayerApp', name: 'Media Viewer', icon: '🎬', pinnedDock: false, pinnedDesktop: false },
+    { id: 'htmlTesterApp', name: 'HTML Code Tester', icon: '⚒️', pinnedDock: false, pinnedDesktop: false }
   ];
 
   const VRAM_BASE_TOTAL_MB = 2048;
@@ -1560,7 +1553,6 @@ Write **Markdown** on the left and see a clean preview here.
     sheetApp: 150,
     paintApp: 150,
     browserApp: 1024,
-    messagesApp: 90
   };
   const VRAM_DEFAULT_APP_COST = 80;
 
@@ -1598,6 +1590,7 @@ Write **Markdown** on the left and see a clean preview here.
     themeMode: 'dark',
     dockPosition: 'middle',
     wallpaper: WALLPAPERS[0],
+    customWallpapers: [],
     accentColor: '#3b82f6',
     wpIntervalSetting: 'off',
     blurVal: 20,
@@ -1606,8 +1599,8 @@ Write **Markdown** on the left and see a clean preview here.
     topBarEnabled: true,
     topBarApps: ['sheetApp', 'wordApp', 'paintApp'],
     uninstalledApps: [],
-    desktopApps: ['sheetApp', 'wordApp', 'paintApp', 'documentCore', 'terminalApp', 'browserApp', 'calcApp', 'todoApp', 'soundboardApp', 'passApp', 'concertApp', 'settingsApp', 'messagesApp'],
-    dockApps: ['sheetApp', 'wordApp', 'paintApp', 'documentCore', 'terminalApp', 'browserApp', 'calcApp', 'todoApp', 'soundboardApp', 'passApp', 'concertApp', 'settingsApp', 'messagesApp'],
+    desktopApps: ['sheetApp', 'wordApp', 'paintApp', 'documentCore', 'terminalApp', 'browserApp', 'calcApp', 'todoApp', 'soundboardApp', 'passApp', 'concertApp', 'settingsApp'],
+    dockApps: ['sheetApp', 'wordApp', 'paintApp', 'documentCore', 'terminalApp', 'browserApp', 'calcApp', 'todoApp', 'soundboardApp', 'passApp', 'concertApp', 'settingsApp'],
     savedFiles: [
       { name: 'Welcome_Guide.doc', content: '<h2>Welcome to Enfrok OS 5.2</h2><p>This is your saved document in Files storage.</p>' }
     ],
@@ -2116,7 +2109,7 @@ Write **Markdown** on the left and see a clean preview here.
     const settingsGrid = document.getElementById('settingsWpGrid');
     if (!settingsGrid) return;
     settingsGrid.innerHTML = '';
-    WALLPAPERS.forEach((wp) => {
+    [...WALLPAPERS, ...(osData.customWallpapers || [])].forEach((wp) => {
       const card = document.createElement('div');
       card.className = `wp-thumb ${osData.wallpaper === wp ? 'active' : ''}`;
       card.style.backgroundImage = `url('${wp}')`;
@@ -2127,6 +2120,28 @@ Write **Markdown** on the left and see a clean preview here.
       };
       settingsGrid.appendChild(card);
     });
+  }
+
+  function openWallpaperBrowser() {
+    const picker = document.getElementById('wallpaperUploadInput');
+    if (picker) picker.click();
+    openWindow('documentCore');
+    filterFiles('media', document.querySelector('#documentCore .os-nav-item[onclick*="media"]'));
+  }
+
+  function handleWallpaperUpload(event) {
+    const files = Array.from(event.target.files || []).filter(file => file.type.startsWith('image/'));
+    if (!osData.customWallpapers) osData.customWallpapers = [];
+    files.forEach(file => {
+      const reader = new FileReader();
+      reader.onload = (loadEvent) => {
+        osData.customWallpapers.push(loadEvent.target.result);
+        saveData();
+        populateWallpapers();
+      };
+      reader.readAsDataURL(file);
+    });
+    event.target.value = '';
   }
 
   function setAutoWpTimer(val) {
@@ -2427,12 +2442,14 @@ Write **Markdown** on the left and see a clean preview here.
         win.style.width = win.dataset.prevWidth;
         win.style.height = win.dataset.prevHeight;
       }
+      document.body.classList.toggle('has-fullscreen-app', !!document.querySelector('.os-window.fullscreen'));
     } else {
       win.dataset.prevTop = win.style.top || `${win.offsetTop}px`;
       win.dataset.prevLeft = win.style.left || `${win.offsetLeft}px`;
       win.dataset.prevWidth = win.style.width || `${win.offsetWidth}px`;
       win.dataset.prevHeight = win.style.height || `${win.offsetHeight}px`;
       win.classList.add('fullscreen');
+      document.body.classList.add('has-fullscreen-app');
     }
   }
 
@@ -2445,6 +2462,15 @@ Write **Markdown** on the left and see a clean preview here.
       if (id === 'mediaPlayerApp') {
         const vid = document.querySelector('#mediaViewport video');
         if (vid) vid.pause();
+      }
+      if (id === 'browserApp') {
+        browserTabs = [];
+        activeBrowserTabId = null;
+        browserTabCounter = 0;
+        const strip = document.getElementById('browserTabStrip');
+        const panes = document.getElementById('browserTabPanes');
+        if (strip) strip.innerHTML = '';
+        if (panes) panes.innerHTML = '';
       }
     }
   }
@@ -2481,17 +2507,21 @@ Write **Markdown** on the left and see a clean preview here.
 
   let isDraggingWin = false;
   let dragTarget = null;
-  let dragShiftX = 0, dragShiftY = 0;
+  let dragStartX = 0, dragStartY = 0, dragOriginLeft = 0, dragOriginTop = 0;
 
   function dragWindow(e, id) {
     const win = document.getElementById(id);
     if (win.classList.contains('fullscreen')) return;
+    if (id === 'calcApp') return;
+    if (e.target.closest('button, input, select, textarea, a, .win-controls-pills')) return;
     focusWindow(win);
     isDraggingWin = true;
     dragTarget = win;
     win.classList.add('dragging');
-    dragShiftX = e.clientX - win.getBoundingClientRect().left;
-    dragShiftY = e.clientY - win.getBoundingClientRect().top;
+    dragStartX = e.clientX;
+    dragStartY = e.clientY;
+    dragOriginLeft = win.offsetLeft;
+    dragOriginTop = win.offsetTop;
     document.addEventListener('mousemove', onMouseMoveWindow);
     document.addEventListener('mouseup', onMouseUpWindow);
   }
@@ -2500,8 +2530,8 @@ Write **Markdown** on the left and see a clean preview here.
     if (!isDraggingWin || !dragTarget) return;
     requestAnimationFrame(() => {
       if (dragTarget) {
-        dragTarget.style.left = `${e.clientX - dragShiftX}px`;
-        dragTarget.style.top = `${e.clientY - dragShiftY}px`;
+        dragTarget.style.left = `${dragOriginLeft + e.clientX - dragStartX}px`;
+        dragTarget.style.top = `${dragOriginTop + e.clientY - dragStartY}px`;
       }
     });
   }
@@ -2534,7 +2564,7 @@ Write **Markdown** on the left and see a clean preview here.
   function startResizeWindow(e, win, dir) {
     e.preventDefault();
     e.stopPropagation();
-    if (win.classList.contains('fullscreen')) return;
+    if (win.classList.contains('fullscreen') || win.id === 'calcApp') return;
     focusWindow(win);
     isResizingWin = true;
     resizeTarget = win;
@@ -3382,6 +3412,47 @@ Write **Markdown** on the left and see a clean preview here.
     const input = document.getElementById('oscddHtmlInput');
     const preview = document.getElementById('oscddPreview');
     if (input && preview) preview.srcdoc = input.value;
+  }
+
+  function debugHtmlTester() {
+    const input = document.getElementById('htmlTesterInput');
+    const preview = document.getElementById('htmlTesterPreview');
+    if (input && preview) {
+      preview.removeAttribute('src');
+      preview.srcdoc = prepareHtmlTesterSource(input.value);
+    }
+    testHtmlInBrowser();
+  }
+
+  function prepareHtmlTesterSource(source) {
+    const baseHref = new URL('.', window.location.href).href;
+    const baseTag = `<base href="${baseHref}">`;
+    if (/<base\s/i.test(source)) return source;
+    if (/<head[^>]*>/i.test(source)) return source.replace(/<head([^>]*)>/i, `<head$1>${baseTag}`);
+    return `${baseTag}${source}`;
+  }
+
+  function testHtmlInBrowser() {
+    const input = document.getElementById('htmlTesterInput');
+    if (!input || !input.value.trim()) return;
+    const blob = new Blob([prepareHtmlTesterSource(input.value)], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    openWindow('browserApp');
+    if (!browserTabs || browserTabs.length === 0) initBrowserTabs();
+    const activeTab = browserTabs.find(tab => tab.id === activeBrowserTabId) || browserTabs[0];
+    activeBrowserTabId = activeTab.id;
+    activeTab.url = url;
+    activeTab.title = 'HTML Debug Preview';
+    activeTab.history = [url];
+    activeTab.histIdx = 0;
+    renderBrowserTabs();
+  }
+
+  function clearHtmlTester() {
+    const input = document.getElementById('htmlTesterInput');
+    const preview = document.getElementById('htmlTesterPreview');
+    if (input) input.value = '';
+    if (preview) preview.srcdoc = '';
   }
 
   function clearOscddHtml() {
