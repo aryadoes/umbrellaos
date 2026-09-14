@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Enfrok OS 5.2</title>
+<title>Enfrok OS 5.3</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -12,7 +12,7 @@
     --accent: #3b82f6;
     --accent-purple: #60a5fa;
     --accent-glow: rgba(59, 130, 246, 0.4);
-    --bg-wallpaper: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=1920&auto=format&fit=crop');
+    --bg-wallpaper: url('https://images.unsplash.com/photo-1519608487953-e999c86e7455?q=80&w=1920&auto=format&fit=crop');
     --glass-blur-val: 20px;
     --glass-opacity-val: 0.75;
     --glass-blur: blur(var(--glass-blur-val));
@@ -76,6 +76,39 @@
   #boot-screen { background: var(--bg-wallpaper) center/cover no-repeat; z-index: 10000; }
   #boot-screen::before { content: ''; position: absolute; inset: 0; background: rgba(3, 5, 8, 0.7); backdrop-filter: var(--glass-blur); z-index: -1; }
   .boot-logo-orb { width: 76px; height: 76px; border-radius: 24px; background: linear-gradient(135deg, var(--accent), var(--accent-purple)); box-shadow: 0 0 50px var(--accent-glow); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 2.4rem; color: #ffffff; }
+  .boot-logo-premium {
+    background: linear-gradient(135deg, #6d28d9 0%, #7c3aed 22%, #4f46e5 48%, #2563eb 72%, #8b5cf6 100%);
+    background-size: 220% 220%;
+    animation: bootOrbShine 4.5s ease infinite;
+    box-shadow: 0 0 36px rgba(124, 58, 237, 0.65), 0 0 72px rgba(37, 99, 235, 0.45), 0 12px 40px rgba(0,0,0,0.45);
+    color: #ffffff;
+  }
+  @keyframes bootOrbShine {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  .boot-title-premium {
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: clamp(2rem, 4.5vw, 2.75rem);
+    font-weight: 800;
+    margin-top: 22px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    background: linear-gradient(105deg, #ddd6fe 0%, #a78bfa 25%, #60a5fa 55%, #c4b5fd 80%, #e0e7ff 100%);
+    background-size: 220% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    animation: bootTitleShimmer 5s ease infinite;
+    filter: drop-shadow(0 8px 28px rgba(99, 102, 241, 0.35));
+  }
+  @keyframes bootTitleShimmer {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
   #setup-screen { background: #030508; z-index: 9000; }
   .setup-card { width: 620px; min-height: 420px; background: var(--glass-dialog); backdrop-filter: var(--glass-blur); border: 1px solid var(--glass-border); border-radius: 26px; box-shadow: var(--glass-shadow); display: flex; overflow: hidden; contain: content; }
   .setup-sidebar { width: 200px; background: rgba(0, 0, 0, 0.5); border-right: 1px solid var(--glass-border); padding: 40px 22px; display: flex; flex-direction: column; gap: 18px; }
@@ -129,6 +162,31 @@
   .brand-logo::before { content: ''; width: 8px; height: 8px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 12px var(--accent-glow); }
   .top-item { font-size: 0.82rem; color: var(--text-sub); cursor: pointer; display: flex; align-items: center; gap: 6px; font-weight: 600; }
   .top-item:hover { color: var(--text-main); }
+  .top-item { position: relative; min-width: 0; max-width: 148px; height: 30px; padding: 4px 9px 4px 6px; border: 1px solid transparent; border-radius: 11px; overflow: hidden; white-space: nowrap; }
+  .top-item:hover { color: var(--text-main); background: rgba(255,255,255,0.09); border-color: rgba(255,255,255,0.14); }
+  .top-item .enfrok-app-icon { width: 20px !important; height: 20px !important; min-width: 20px; border-radius: 7px; box-shadow: 0 3px 10px rgba(0,0,0,0.26); }
+  .top-item .enfrok-app-icon svg { width: 68%; height: 68%; }
+  .top-item .enfrok-app-icon::after { display: none; }
+  .desktop-grid { top: 18px; left: 18px; bottom: 88px; gap: 12px; }
+  .d-icon { width: 78px; gap: 5px; font-size: 0.72rem; padding: 7px 5px; border-radius: 13px; }
+  .d-icon-box .enfrok-app-icon { width: 44px; height: 44px; border-radius: 14px; }
+  .d-icon-box .enfrok-app-icon svg { width: 56%; height: 56%; }
+  .enfrok-app-icon { position: relative; border: 1px solid rgba(255,255,255,0.28); box-shadow: inset 0 1px 0 rgba(255,255,255,0.42), 0 7px 18px rgba(0,0,0,0.32); }
+  .enfrok-app-icon::before { content: ''; position: absolute; inset: 4px; border: 1px solid rgba(255,255,255,0.24); border-radius: inherit; pointer-events: none; }
+  .enfrok-app-icon::after { content: ''; position: absolute; width: 5px; height: 5px; right: 5px; top: 5px; border-radius: 50%; background: rgba(255,255,255,0.9); box-shadow: 0 0 9px rgba(255,255,255,0.7); pointer-events: none; }
+  .enfrok-app-icon svg { position: relative; z-index: 1; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.28)); }
+  .app-icon-monogram { position: absolute; left: 6px; bottom: 4px; z-index: 2; font: 800 0.52rem var(--font-code); color: rgba(255,255,255,0.88); letter-spacing: -0.04em; text-shadow: 0 1px 3px rgba(0,0,0,0.35); }
+  .dock-launcher-btn { border-radius: 16px; background: linear-gradient(145deg, #0ea5e9, #6366f1 48%, #a855f7); box-shadow: inset 0 1px 0 rgba(255,255,255,0.35), 0 8px 28px rgba(79,70,229,0.45); }
+  .dock-item { width: 44px; height: 44px; border-radius: 14px; }
+  .dock-item .enfrok-app-icon { border-radius: 13px; }
+  .hub-grid .enfrok-app-icon, .fullscreen-start-grid .enfrok-app-icon { width: 46px; height: 46px; border-radius: 14px; }
+  .context-menu { width: 278px; padding: 9px; border-radius: 20px; background: linear-gradient(145deg, rgba(20,28,48,0.72), rgba(9,14,28,0.62)); border-color: rgba(255,255,255,0.24); box-shadow: 0 28px 80px rgba(0,0,0,0.62), inset 0 1px 0 rgba(255,255,255,0.18), 0 0 0 1px rgba(99,102,241,0.08); }
+  .context-menu::before { content: 'ENFROK ACTIONS'; display: block; padding: 4px 10px 7px; color: rgba(191,219,254,0.7); font: 700 0.62rem var(--font-code); letter-spacing: 0.14em; }
+  .context-item { min-height: 36px; padding: 9px 11px; border: 1px solid transparent; border-radius: 11px; font-size: 0.78rem; gap: 9px; }
+  .context-item:hover { border-color: rgba(147,197,253,0.2); background: linear-gradient(110deg, rgba(14,165,233,0.24), rgba(139,92,246,0.22)); transform: translateX(2px); }
+  .context-item.danger:hover { border-color: rgba(248,113,113,0.25); }
+  .context-sep { margin: 5px 8px; background: linear-gradient(90deg, transparent, rgba(147,197,253,0.3), transparent); }
+  body.theme-light .context-menu { background: linear-gradient(145deg, rgba(255,255,255,0.82), rgba(226,232,240,0.76)); border-color: rgba(15,23,42,0.12); }
   .desktop-area { flex: 1; width: 100%; position: relative; overflow: hidden; padding: 24px; }
   .desktop-grid { position: absolute; top: 24px; left: 24px; bottom: 90px; display: flex; flex-direction: column; flex-wrap: wrap; gap: 18px; align-content: flex-start; }
   .d-icon { width: 90px; display: flex; flex-direction: column; align-items: center; gap: 6px; cursor: grab; font-size: 0.78rem; text-align: center; text-shadow: 0 2px 6px rgba(0,0,0,0.9); padding: 8px; border-radius: 14px; border: 1px solid transparent; font-weight: 500; will-change: transform, background-color; transition: background-color 0.15s ease, border-color 0.15s ease; }
@@ -136,24 +194,169 @@
   .d-icon:hover { background: rgba(255, 255, 255, 0.12); border-color: rgba(255, 255, 255, 0.25); }
   body.theme-light .d-icon:hover { background: rgba(0, 0, 0, 0.08); border-color: rgba(0, 0, 0, 0.15); }
   .d-icon.selected { background: rgba(59, 130, 246, 0.2); border-color: var(--accent); }
-  .d-icon-box { font-size: 2.3rem; filter: drop-shadow(0 6px 12px rgba(0,0,0,0.5)); pointer-events: none; }
-  .dock-wrapper { position: absolute; bottom: 14px; background: var(--glass-dock); backdrop-filter: var(--glass-blur); border: 1px solid var(--glass-border); border-radius: var(--radius-dock); padding: 8px 16px; display: flex; align-items: center; gap: 10px; z-index: 8500; box-shadow: var(--glass-shadow); transition: transform 0.3s var(--anim-curve), opacity 0.3s var(--anim-curve), left 0.3s var(--anim-curve) !important; will-change: transform, opacity, left; }
-  .dock-wrapper.dock-pos-middle { left: 50%; transform: translateX(-50%); }
-  .dock-wrapper.dock-pos-left { left: 24px; transform: translateX(0); }
-  .dock-wrapper.dock-pos-right { left: auto; right: 24px; transform: translateX(0); }
-  .dock-wrapper.drag-over { border-color: var(--accent); background: rgba(59, 130, 246, 0.25); }
-  .dock-launcher-btn { width: 48px; height: 48px; border-radius: 16px; background: linear-gradient(135deg, #a855f7, #ec4899, #3b82f6); background-size: 200% 200%; animation: gradientMove 6s ease infinite; border: none; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; font-weight: 800; color: #ffffff; cursor: pointer; box-shadow: 0 0 25px rgba(236, 72, 153, 0.5); transition: transform 0.2s var(--anim-curve); will-change: transform; }
-  .dock-launcher-btn:hover { transform: scale(1.08); }
+  .d-icon-box { display: flex; align-items: center; justify-content: center; pointer-events: none; }
+  .dock-wrapper {
+    position: absolute; bottom: 20px; max-width: calc(100vw - 40px);
+    background: linear-gradient(180deg, rgba(22, 28, 44, 0.55), rgba(10, 14, 24, 0.62));
+    backdrop-filter: blur(30px) saturate(170%);
+    -webkit-backdrop-filter: blur(30px) saturate(170%);
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 30px;
+    padding: 11px 16px;
+    display: flex; align-items: center; gap: 12px; z-index: 8500;
+    box-shadow: 0 22px 55px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.14), 0 0 0 1px rgba(59,130,246,0.08);
+    transition: transform 0.3s var(--anim-curve), opacity 0.3s var(--anim-curve), left 0.3s var(--anim-curve), right 0.3s var(--anim-curve) !important;
+    will-change: transform, opacity, left, right;
+  }
+  body.theme-light .dock-wrapper {
+    background: linear-gradient(180deg, rgba(255,255,255,0.72), rgba(241,245,249,0.65));
+    border-color: rgba(0,0,0,0.1);
+    box-shadow: 0 18px 40px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.9);
+  }
+  .dock-wrapper.dock-pos-middle, .dock-wrapper.dock-pos-center { left: 50%; right: auto; transform: translateX(-50%); }
+  .dock-wrapper.dock-pos-left { left: 20px; right: auto; transform: translateX(0); }
+  .dock-wrapper.dock-pos-right { left: auto; right: 20px; transform: translateX(0); }
+  .dock-wrapper.drag-over { border-color: var(--accent); background: rgba(59, 130, 246, 0.28); }
+  .dock-main-group { display: flex; align-items: center; gap: 10px; min-width: 0; flex: 1 1 auto; }
+  .dock-items-scroll { display: flex; align-items: center; gap: 9px; min-width: 0; max-width: min(62vw, 720px); overflow-x: auto; overflow-y: hidden; scrollbar-width: none; -ms-overflow-style: none; padding: 2px 0; }
+  .dock-items-scroll::-webkit-scrollbar { display: none; }
+  .dock-launcher-btn {
+    width: 50px; height: 50px; flex-shrink: 0; border-radius: 18px;
+    background: linear-gradient(145deg, #7c3aed, #4f46e5 40%, #2563eb 80%, #8b5cf6);
+    background-size: 200% 200%; animation: gradientMove 6s ease infinite;
+    border: 1px solid rgba(255,255,255,0.22);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.35rem; font-weight: 800; color: #ffffff; cursor: pointer;
+    box-shadow: 0 8px 28px rgba(99, 102, 241, 0.45);
+    transition: transform 0.2s var(--anim-curve), box-shadow 0.2s ease; will-change: transform;
+  }
+  .dock-launcher-btn:hover { transform: scale(1.06) translateY(-2px); box-shadow: 0 12px 32px rgba(99,102,241,0.55); }
+  .dock-start-btn {
+    width: 44px; height: 44px; flex-shrink: 0; border-radius: 15px;
+    border: 1px solid rgba(255,255,255,0.16);
+    background: rgba(255,255,255,0.08);
+    color: var(--text-main); display: flex; align-items: center; justify-content: center;
+    font-size: 1.05rem; font-weight: 800; cursor: pointer;
+    transition: background-color 0.15s, border-color 0.15s, transform 0.15s var(--anim-curve);
+  }
+  body.theme-light .dock-start-btn { background: rgba(0,0,0,0.05); }
+  .dock-start-btn:hover { border-color: var(--accent); background: rgba(59,130,246,0.2); transform: translateY(-2px); }
+  .dock-hidden-btn {
+    width: 44px; height: 44px; flex-shrink: 0; border-radius: 15px;
+    border: 1px solid rgba(255,255,255,0.16);
+    background: rgba(255,255,255,0.07);
+    color: var(--text-main); display: flex; align-items: center; justify-content: center;
+    font-size: 1.05rem; cursor: pointer; position: relative;
+    transition: background-color 0.15s, border-color 0.15s, transform 0.15s var(--anim-curve);
+  }
+  body.theme-light .dock-hidden-btn { background: rgba(0,0,0,0.04); }
+  .dock-hidden-btn:hover { border-color: var(--accent); background: rgba(59,130,246,0.18); transform: translateY(-2px); }
+  .dock-hidden-badge {
+    position: absolute; top: -4px; right: -4px; min-width: 16px; height: 16px; padding: 0 4px;
+    border-radius: 99px; background: linear-gradient(135deg, #6366f1, #3b82f6); color: #fff;
+    font-size: 0.65rem; font-weight: 800; display: none; align-items: center; justify-content: center;
+    box-shadow: 0 0 10px var(--accent-glow);
+  }
+  .dock-hidden-badge.show { display: flex; }
   @keyframes gradientMove { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-  .dock-divider { width: 1px; height: 28px; background: var(--glass-border); margin: 0 2px; }
-  .dock-item { width: 46px; height: 46px; border-radius: 14px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); display: flex; align-items: center; justify-content: center; font-size: 1.4rem; cursor: pointer; position: relative; transition: transform 0.15s var(--anim-curve), background-color 0.15s, border-color 0.15s; will-change: transform; }
+  .dock-divider { width: 1px; height: 30px; background: linear-gradient(180deg, transparent, rgba(255,255,255,0.22), transparent); margin: 0 2px; flex-shrink: 0; }
+  .dock-item {
+    width: 48px; height: 48px; flex-shrink: 0; border-radius: 16px;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.12);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; position: relative;
+    transition: transform 0.16s var(--anim-curve), background-color 0.15s, border-color 0.15s, box-shadow 0.15s;
+    will-change: transform;
+  }
   body.theme-light .dock-item { background: rgba(0,0,0,0.04); border-color: rgba(0,0,0,0.08); }
-  .dock-item:hover { border-color: var(--accent); background: rgba(255,255,255,0.18); transform: translateY(-4px); }
-  .dock-item-indicator { position: absolute; bottom: 3px; left: 50%; transform: translateX(-50%) scale(0.4); width: 14px; height: 3px; border-radius: 99px; background: var(--accent); box-shadow: 0 0 10px var(--accent-glow); opacity: 0; transition: width 0.32s var(--anim-curve), height 0.32s var(--anim-curve), border-radius 0.32s var(--anim-curve), opacity 0.24s ease, transform 0.32s var(--anim-curve); }
+  .dock-item:hover {
+    border-color: rgba(99,102,241,0.65);
+    background: rgba(255,255,255,0.14);
+    transform: translateY(-4px);
+    box-shadow: 0 10px 22px rgba(0,0,0,0.28);
+  }
+  .dock-item-indicator {
+    position: absolute; bottom: 3px; left: 50%; transform: translateX(-50%) scale(0.4);
+    width: 14px; height: 3px; border-radius: 99px; background: var(--accent);
+    box-shadow: 0 0 10px var(--accent-glow); opacity: 0;
+    transition: width 0.32s var(--anim-curve), height 0.32s var(--anim-curve), border-radius 0.32s var(--anim-curve), opacity 0.24s ease, transform 0.32s var(--anim-curve);
+  }
   .dock-item.running .dock-item-indicator { opacity: 1; transform: translateX(-50%) scale(1); }
   .dock-item.running.focused-app .dock-item-indicator { width: 14px; height: 3px; border-radius: 99px; }
   .dock-item.running:not(.focused-app) .dock-item-indicator { width: 4px; height: 4px; border-radius: 50%; }
-  .launch-hub-panel { position: absolute; bottom: 82px; width: 680px; height: 530px; background: var(--glass-menu); backdrop-filter: var(--glass-blur) saturate(180%); -webkit-backdrop-filter: var(--glass-blur) saturate(180%); border: 1px solid var(--glass-border); border-radius: 26px; padding: 24px; box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5); display: flex; flex-direction: column; gap: 18px; z-index: 8600; opacity: 0; pointer-events: none; transition: opacity 0.2s var(--anim-curve), transform 0.2s var(--anim-curve), left 0.3s var(--anim-curve); will-change: transform, opacity, left; }
+
+  /* Enfrok custom app logos (SVG tiles — same on every device) */
+  .enfrok-app-icon {
+    width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: inherit; overflow: hidden;
+    pointer-events: none;
+  }
+  .enfrok-app-icon svg { width: 58%; height: 58%; display: block; }
+  .d-icon-box .enfrok-app-icon {
+    width: 52px; height: 52px; border-radius: 16px;
+    box-shadow: 0 8px 18px rgba(0,0,0,0.35);
+  }
+  .dock-item .enfrok-app-icon { width: 100%; height: 100%; border-radius: 15px; }
+  .dock-item .enfrok-app-icon svg { width: 52%; height: 52%; }
+  .m-app-icon .enfrok-app-icon { width: 100%; height: 100%; border-radius: 16px; }
+  .hub-grid .enfrok-app-icon, .fullscreen-start-grid .enfrok-app-icon {
+    width: 52px; height: 52px; border-radius: 16px;
+  }
+
+  .hidden-apps-panel {
+    position: absolute; bottom: 96px; width: min(360px, calc(100vw - 32px)); max-height: 420px;
+    background: rgba(14, 18, 30, 0.55);
+    backdrop-filter: blur(28px) saturate(180%);
+    -webkit-backdrop-filter: blur(28px) saturate(180%);
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 22px; padding: 16px;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.12);
+    display: flex; flex-direction: column; gap: 12px; z-index: 8600;
+    opacity: 0; pointer-events: none; transform: translateY(12px) scale(0.96);
+    transition: opacity 0.2s var(--anim-curve), transform 0.2s var(--anim-curve);
+  }
+  .hidden-apps-panel.open { opacity: 1; pointer-events: auto; transform: translateY(0) scale(1); }
+  .hidden-apps-panel.hap-pos-middle, .hidden-apps-panel.hap-pos-center { left: 50%; transform: translateX(-50%) translateY(12px) scale(0.96); }
+  .hidden-apps-panel.open.hap-pos-middle, .hidden-apps-panel.open.hap-pos-center { transform: translateX(-50%) translateY(0) scale(1); }
+  .hidden-apps-panel.hap-pos-left { left: 18px; }
+  .hidden-apps-panel.hap-pos-right { left: auto; right: 18px; }
+  .hidden-apps-list { display: flex; flex-direction: column; gap: 8px; overflow-y: auto; max-height: 280px; }
+  .hidden-app-row {
+    display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.04); cursor: pointer;
+  }
+  .hidden-app-row:hover { border-color: var(--accent); background: rgba(59,130,246,0.14); }
+  .hidden-app-row .btn-ui { margin-left: auto; }
+  .hidden-apps-panel { position: absolute; bottom: 88px; width: min(360px, calc(100vw - 32px)); max-height: 420px; background: var(--glass-menu); backdrop-filter: var(--glass-blur) saturate(180%); -webkit-backdrop-filter: var(--glass-blur) saturate(180%); border: 1px solid var(--glass-border); border-radius: 22px; padding: 16px; box-shadow: var(--glass-shadow); display: flex; flex-direction: column; gap: 12px; z-index: 8600; opacity: 0; pointer-events: none; transform: translateY(12px) scale(0.96); transition: opacity 0.2s var(--anim-curve), transform 0.2s var(--anim-curve); }
+  .hidden-apps-panel.open { opacity: 1; pointer-events: auto; transform: translateY(0) scale(1); }
+  .hidden-apps-panel.hap-pos-middle, .hidden-apps-panel.hap-pos-center { left: 50%; transform: translateX(-50%) translateY(12px) scale(0.96); }
+  .hidden-apps-panel.open.hap-pos-middle, .hidden-apps-panel.open.hap-pos-center { transform: translateX(-50%) translateY(0) scale(1); }
+  .hidden-apps-panel.hap-pos-left { left: 18px; }
+  .hidden-apps-panel.hap-pos-right { left: auto; right: 18px; }
+  .hidden-apps-list { display: flex; flex-direction: column; gap: 8px; overflow-y: auto; max-height: 280px; }
+  .hidden-app-row { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 12px; border: 1px solid var(--glass-border); background: rgba(255,255,255,0.04); cursor: pointer; }
+  .hidden-app-row:hover { border-color: var(--accent); background: rgba(59,130,246,0.14); }
+  .hidden-app-row .btn-ui { margin-left: auto; }
+  .launch-hub-panel {
+    position: absolute; bottom: 92px; width: 700px; height: 540px;
+    background: rgba(14, 18, 30, 0.48);
+    backdrop-filter: blur(32px) saturate(190%);
+    -webkit-backdrop-filter: blur(32px) saturate(190%);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 28px; padding: 24px;
+    box-shadow: 0 36px 90px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.14);
+    display: flex; flex-direction: column; gap: 18px; z-index: 8600;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.22s var(--anim-curve), transform 0.22s var(--anim-curve), left 0.3s var(--anim-curve);
+    will-change: transform, opacity, left;
+  }
+  body.theme-light .launch-hub-panel {
+    background: rgba(255,255,255,0.55);
+    border-color: rgba(0,0,0,0.1);
+    box-shadow: 0 30px 70px rgba(0,0,0,0.16), inset 0 1px 0 rgba(255,255,255,0.85);
+  }
   .launch-hub-panel.hub-pos-middle { left: 50%; transform: translateX(-50%) translateY(20px) scale(0.96); }
   .launch-hub-panel.hub-pos-left { left: 24px; transform: translateX(0) translateY(20px) scale(0.96); }
   .launch-hub-panel.hub-pos-right { left: auto; right: 24px; transform: translateX(0) translateY(20px) scale(0.96); }
@@ -164,12 +367,51 @@
   .hub-user { display: flex; align-items: center; gap: 14px; }
   .hub-avatar { width: 42px; height: 42px; border-radius: 14px; background: linear-gradient(135deg, var(--accent), var(--accent-purple)); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.1rem; color: #fff; }
   .hub-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px; overflow-y: auto; flex: 1; align-content: start; }
-  .context-menu { position: fixed; width: 220px; background: var(--glass-menu); backdrop-filter: var(--glass-blur); border: 1px solid var(--glass-border); border-radius: 16px; padding: 8px; box-shadow: var(--glass-shadow); z-index: 999999; display: flex; flex-direction: column; gap: 4px; opacity: 0; pointer-events: none; transform: scale(0.92); transition: opacity 0.15s var(--anim-curve), transform 0.15s var(--anim-curve); will-change: transform, opacity; }
-  .context-menu.open { opacity: 1; pointer-events: auto; transform: scale(1); }
-  .context-item { padding: 9px 14px; border-radius: 10px; font-size: 0.84rem; color: var(--text-main); cursor: pointer; display: flex; align-items: center; gap: 10px; font-weight: 500; }
-  .context-item:hover { background: rgba(255,255,255,0.15); color: var(--accent); }
-  body.theme-light .context-item:hover { background: rgba(0,0,0,0.06); }
-  .context-item.danger:hover { background: rgba(239, 68, 68, 0.3); color: #fca5a5; }
+  .context-menu {
+    position: fixed; width: 240px;
+    background: rgba(16, 20, 34, 0.55);
+    backdrop-filter: blur(28px) saturate(180%);
+    -webkit-backdrop-filter: blur(28px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 18px;
+    padding: 8px;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.12);
+    z-index: 999999;
+    display: flex; flex-direction: column; gap: 3px;
+    opacity: 0; pointer-events: none;
+    transform: scale(0.94) translateY(4px);
+    transition: opacity 0.18s var(--anim-curve), transform 0.18s var(--anim-curve);
+    will-change: transform, opacity;
+  }
+  body.theme-light .context-menu {
+    background: rgba(255,255,255,0.62);
+    border-color: rgba(0,0,0,0.1);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.8);
+  }
+  .context-menu.open { opacity: 1; pointer-events: auto; transform: scale(1) translateY(0); }
+  .context-item {
+    padding: 10px 14px; border-radius: 12px; font-size: 0.84rem;
+    color: var(--text-main); cursor: pointer; display: flex; align-items: center; gap: 10px;
+    font-weight: 560; letter-spacing: 0.01em;
+    transition: background-color 0.14s ease, color 0.14s ease, transform 0.14s ease;
+  }
+  .context-item:hover {
+    background: linear-gradient(135deg, rgba(59,130,246,0.22), rgba(139,92,246,0.18));
+    color: #fff;
+    transform: translateX(2px);
+  }
+  body.theme-light .context-item:hover {
+    background: linear-gradient(135deg, rgba(59,130,246,0.16), rgba(139,92,246,0.12));
+    color: #0f172a;
+  }
+  .context-item.danger:hover {
+    background: rgba(239, 68, 68, 0.28);
+    color: #fecaca;
+  }
+  .context-sep {
+    height: 1px; margin: 4px 8px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.16), transparent);
+  }
   .notification-center { position: absolute; top: 42px; right: -380px; bottom: 0; width: 360px; background: var(--glass-menu); backdrop-filter: var(--glass-blur); border-left: 1px solid var(--glass-border); padding: 24px; display: flex; flex-direction: column; gap: 20px; z-index: 8400; box-shadow: -15px 0 40px rgba(0,0,0,0.3); transition: right 0.25s var(--anim-curve); will-change: right; }
   .notification-center.open { right: 0; }
   .os-window { position: absolute; background: var(--glass-window); backdrop-filter: var(--glass-blur); border: 1px solid var(--glass-border); border-radius: var(--radius-window); box-shadow: var(--glass-shadow); display: flex; flex-direction: column; overflow: hidden; min-width: 320px; min-height: 200px; contain: layout style; opacity: 0; pointer-events: none; transform: scale(0.94) translateY(10px); transition: opacity 0.25s var(--anim-curve), transform 0.25s var(--anim-curve), border-color 0.15s ease, border-radius 0.35s var(--anim-curve); will-change: transform, opacity; }
@@ -190,7 +432,12 @@
   .win-resize-handle.rh-sw { bottom: 0; left: 0; width: 10px; height: 10px; cursor: nesw-resize; }
   .win-resize-handle.rh-se { bottom: 0; right: 0; width: 10px; height: 10px; cursor: nwse-resize; }
   body.has-fullscreen-app .top-bar { transform: translateY(-100%); opacity: 0; pointer-events: none; }
-  body.has-fullscreen-app .dock-wrapper { transform: translateX(-50%) translateY(120px); opacity: 0; pointer-events: none; }
+  body.has-fullscreen-app .dock-wrapper { opacity: 0; pointer-events: none; }
+  body.has-fullscreen-app .dock-wrapper.dock-pos-middle,
+  body.has-fullscreen-app .dock-wrapper.dock-pos-center { transform: translateX(-50%) translateY(120px); }
+  body.has-fullscreen-app .dock-wrapper.dock-pos-left,
+  body.has-fullscreen-app .dock-wrapper.dock-pos-right { transform: translateY(120px); }
+  body.has-fullscreen-app .hidden-apps-panel { opacity: 0 !important; pointer-events: none !important; }
   #calcApp .win-resize-handle { display: none; }
   #calcApp .window-topbar { cursor: default; }
   .window-topbar { height: 44px; background: rgba(255,255,255,0.04); border-bottom: 1px solid var(--glass-border); display: flex; align-items: center; justify-content: space-between; padding: 0 18px; cursor: move; flex-shrink: 0; }
@@ -229,10 +476,25 @@
   .word-document-paper { width: 100%; max-width: 800px; min-height: 580px; background: #ffffff; color: #1e293b; border-radius: 8px; padding: 48px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); outline: none; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1rem; line-height: 1.6; }
   .word-statusbar { height: 28px; background: var(--glass-topbar); border-top: 1px solid var(--glass-border); padding: 0 16px; display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-sub); flex-shrink: 0; }
   .files-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 16px; align-content: start; }
+  .file-toolbar { display:flex; align-items:center; gap:6px; margin-bottom:8px; flex-wrap:wrap; }
+  .file-toolbar-secondary { border-top:1px solid var(--glass-border); padding-top:8px; }
+  .file-toolbar-secondary .input-ui:first-child { flex:1; min-width:150px; }
+  .file-toolbar-secondary select { width:135px; padding:8px 10px; }
+  .file-breadcrumbs { display:flex; gap:5px; align-items:center; flex-wrap:wrap; font-size:.78rem; color:var(--text-sub); }
+  .file-breadcrumb { cursor:pointer; color:var(--accent); }
+  .files-grid.file-list-view { display:flex; flex-direction:column; gap:6px; }
+  .files-grid.file-list-view .file-item { flex-direction:row; text-align:left; padding:8px 12px; min-height:48px; }
+  .files-grid.file-list-view .file-item > span:last-of-type { flex:1; }
+  .file-item.file-selected { border-color:var(--accent); background:rgba(59,130,246,.18); box-shadow:0 0 0 1px var(--accent) inset; }
+  .file-item[draggable="true"] { cursor:grab; }
+
   .file-item { border: 1px solid transparent; border-radius: 12px; padding: 12px; display: flex; flex-direction: column; align-items: center; gap: 8px; font-size: 0.8rem; text-align: center; cursor: pointer; background: rgba(255,255,255,0.03); position: relative; }
   .file-item:hover { border-color: var(--accent); background: rgba(255,255,255,0.08); }
-  .file-item-actions { position: absolute; top: 6px; right: 6px; display: flex; gap: 4px; opacity: 0; transition: opacity 0.15s; }
+  .file-item-actions { position: absolute; top: 6px; left: 6px; right: 6px; display: flex; justify-content: space-between; gap: 4px; opacity: 0; transition: opacity 0.15s; pointer-events: none; }
   .file-item:hover .file-item-actions { opacity: 1; }
+  .file-item-actions .btn-ui { pointer-events: auto; padding: 2px 6px; font-size: 0.72rem; min-width: 0; }
+  .file-item-actions .file-delete-btn { margin-right: auto; }
+  .file-item-actions .file-fav-btn { margin-left: auto; }
   .file-preview-thumb { width: 100%; height: 70px; object-fit: cover; border-radius: 8px; }
   .settings-section { display: none; flex-direction: column; gap: 20px; }
   .settings-section.active { display: flex; }
@@ -376,6 +638,7 @@
   body.mobile-mode #launchHubPanel,
   body.mobile-mode .start-menu-fullscreen,
   body.mobile-mode .context-menu,
+  body.mobile-mode .hidden-apps-panel,
   body.mobile-mode .win-resize-handle { display: none !important; }
 
   body.mobile-mode .desktop-area { padding: 0; }
@@ -454,6 +717,50 @@
     .setup-theme-choices { grid-template-columns: 1fr; }
     .custom-popup-card { width: 92vw; }
   }
+
+  /* ===== Media Viewer (premium dark) ===== */
+  .media-viewer-body { background: #070b14; padding: 0 !important; }
+  .mv-layout { display: flex; height: 100%; min-height: 0; }
+  .mv-sidebar { width: 240px; flex-shrink: 0; border-right: 1px solid rgba(255,255,255,0.08); background: rgba(8,12,22,0.92); display: flex; flex-direction: column; gap: 10px; padding: 14px; }
+  .mv-side-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .mv-side-title { font-weight: 800; letter-spacing: 0.04em; }
+  .mv-filter-row { display: flex; flex-wrap: wrap; gap: 6px; }
+  .mv-filter { padding: 4px 8px !important; font-size: 0.72rem !important; }
+  .mv-filter.active { background: rgba(59,130,246,0.25); border-color: var(--accent); }
+  .mv-library-list { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
+  .mv-lib-item { display: flex; align-items: center; gap: 10px; padding: 10px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.03); cursor: pointer; transition: border-color 0.15s, background 0.15s; }
+  .mv-lib-item:hover, .mv-lib-item.active { border-color: var(--accent); background: rgba(59,130,246,0.14); }
+  .mv-lib-item .mv-lib-name { font-size: 0.78rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .mv-lib-item .mv-lib-sub { font-size: 0.68rem; color: var(--text-sub); }
+  .mv-stage { flex: 1; min-width: 0; display: flex; flex-direction: column; background: radial-gradient(ellipse at 50% 0%, #121a2e 0%, #070b14 55%); }
+  .mv-viewport { flex: 1; position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; min-height: 0; }
+  .mv-viewport img, .mv-viewport video, .mv-viewport canvas, .mv-viewport iframe, .mv-viewport embed { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 8px; transition: transform 0.2s var(--anim-curve); }
+  .mv-empty { display: flex; flex-direction: column; align-items: center; gap: 6px; color: var(--text-main); opacity: 0.9; }
+  .mv-toolbar { display: flex; align-items: center; gap: 12px; padding: 10px 14px; border-top: 1px solid rgba(255,255,255,0.08); background: rgba(10,14,24,0.88); backdrop-filter: blur(12px); }
+  .mv-toolbar-left { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+  .mv-time { font-family: var(--font-code); font-size: 0.75rem; color: var(--text-sub); white-space: nowrap; }
+  .mv-meta { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; padding: 10px 14px 14px; border-top: 1px solid rgba(255,255,255,0.06); background: rgba(6,9,16,0.95); }
+  .mv-meta-row { display: flex; flex-direction: column; gap: 2px; font-size: 0.72rem; color: var(--text-sub); }
+  .mv-meta-row strong { color: var(--text-main); font-size: 0.8rem; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  /* ===== PDF Viewer ===== */
+  .pdf-viewer-body { background: #080c14; padding: 0 !important; }
+  .pdfv-layout { display: flex; height: 100%; min-height: 0; }
+  .pdfv-sidebar { width: 250px; flex-shrink: 0; border-right: 1px solid rgba(255,255,255,0.08); background: rgba(8,12,22,0.95); padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+  .pdfv-side-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .pdfv-hint { font-size: 0.72rem; color: var(--text-sub); }
+  .pdfv-list { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
+  .pdfv-item { display: flex; align-items: center; gap: 10px; padding: 10px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08); cursor: pointer; background: rgba(255,255,255,0.03); }
+  .pdfv-item:hover, .pdfv-item.active { border-color: var(--accent); background: rgba(59,130,246,0.14); }
+  .pdfv-item .pdfv-name { font-size: 0.8rem; font-weight: 700; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .pdfv-stage { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+  .pdfv-toolbar { display: flex; align-items: center; gap: 8px; padding: 10px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(10,14,24,0.9); flex-wrap: wrap; }
+  .pdfv-page-label { font-family: var(--font-code); font-size: 0.8rem; color: var(--accent); font-weight: 700; min-width: 90px; text-align: center; }
+  .pdfv-preview { flex: 1; display: flex; align-items: center; justify-content: center; overflow: auto; background: radial-gradient(ellipse at 50% 30%, #121a2e 0%, #070b14 60%); padding: 16px; min-height: 0; }
+  .pdfv-preview canvas, .pdfv-preview iframe, .pdfv-preview embed { max-width: 100%; max-height: 100%; background: #fff; border-radius: 6px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+  .pdfv-empty { display: flex; flex-direction: column; align-items: center; gap: 6px; color: var(--text-main); }
+  .pdfv-meta { display: flex; gap: 18px; flex-wrap: wrap; padding: 10px 14px; border-top: 1px solid rgba(255,255,255,0.08); font-size: 0.76rem; color: var(--text-sub); background: rgba(6,9,16,0.95); }
+
 </style>
 </head>
 <body>
@@ -481,9 +788,9 @@
   </div>
 
   <div id="boot-screen" class="os-screen">
-    <div class="boot-logo-orb">E</div>
-    <h1 style="font-family:var(--font-ui); font-size:2.2rem; font-weight:800; margin-top:18px; letter-spacing:0.05em;">Enfrok OS 5.2</h1>
-    <div style="margin-top:18px; font-family:var(--font-code); font-size:0.85rem; color:var(--text-sub);" id="bootLog">Loading System Kernel...</div>
+    <div class="boot-logo-orb boot-logo-premium">E</div>
+    <h1 class="boot-title-premium">Enfrok OS 5.3</h1>
+    <div id="bootLog" style="display:none;" aria-hidden="true"></div>
   </div>
 
   <div id="setup-screen" class="os-screen hidden">
@@ -495,12 +802,12 @@
       </div>
       <div class="setup-main">
         <div class="setup-page active" id="page1">
-          <h2>Welcome to Enfrok OS 5.2</h2>
+          <h2>Welcome to Enfrok OS 5.3</h2>
           <p>Set up your administrator profile and access password.</p>
           <div style="margin-top:10px; display:flex; flex-direction:column; gap:12px;">
             <div>
               <label style="font-size:0.85rem; color:var(--text-sub);">Administrator Username</label>
-              <input type="text" class="input-ui" id="setupUsername" value="Developer" style="margin-top:4px;" />
+              <input type="text" class="input-ui" id="setupUsername" value="" placeholder="Enter your name..." style="margin-top:4px;" />
             </div>
             <div>
               <label style="font-size:0.85rem; color:var(--text-sub);">Set Account Password (Required)</label>
@@ -579,7 +886,7 @@
     </div>
   </div>
 
-  <div id="desktop-screen" class="os-screen hidden" onclick="closeContextMenus()">
+  <div id="desktop-screen" class="os-screen hidden" onclick="closeContextMenus(); closeHiddenAppsPanel()">
     
     <div class="top-bar" id="topBarElement" oncontextmenu="handleTopBarContextMenu(event)">
       <div class="top-bar-section">
@@ -777,13 +1084,13 @@
           <div class="word-editor-page">
             <div class="word-document-paper" id="wordPaper" contenteditable="true" oninput="updateWordStats()" spellcheck="true">
               <h2>Welcome to Enfrok Text Studio Pro</h2>
-              <p>This is your advanced rich text editor with over 20 productivity tools in <b>Enfrok OS 5.2</b>.</p>
+              <p>This is your advanced rich text editor with over 20 productivity tools in <b>Enfrok OS 5.3</b>.</p>
             </div>
           </div>
 
           <div class="word-statusbar">
             <div>Page 1 of 1 &nbsp;|&nbsp; <span id="wordDocWords">0 words</span> &nbsp;|&nbsp; <span id="wordDocChars">0 characters</span></div>
-            <div>Reading Time: <span id="wordDocTime">~1 min</span> &nbsp;|&nbsp; Enfrok Text Engine v5.2</div>
+            <div>Reading Time: <span id="wordDocTime">~1 min</span> &nbsp;|&nbsp; Enfrok Text Engine v5.3</div>
           </div>
         </div>
       </div>
@@ -800,20 +1107,32 @@
         <div class="window-body">
           <div class="os-split-layout">
             <div class="os-sidebar">
-              <div class="os-nav-item active" onclick="filterFiles('all', this)">📂 All Storage</div>
+              <div class="os-nav-item active" onclick="navigateFiles('home', this)">🏠 Home</div>
+              <div class="os-nav-item" onclick="navigateFiles('recent', this)">🕘 Recent</div>
+              <div class="os-nav-item" onclick="navigateFiles('favorites', this)">⭐ Favorites</div>
+              <div class="os-nav-item" onclick="navigateFiles('trash', this)">🗑️ Trash</div>
+              <div class="os-nav-item" onclick="filterFiles('all', this)">📂 All Storage</div>
               <div class="os-nav-item" onclick="filterFiles('sheets', this)">📊 Spreadsheets</div>
               <div class="os-nav-item" onclick="filterFiles('docs', this)">📄 Documents</div>
               <div class="os-nav-item" onclick="filterFiles('media', this)">🎬 Videos & Photos</div>
-              <div class="os-nav-item" onclick="filterFiles('uninstalled', this)">🗑️ Uninstalled Apps</div>
-              <input type="file" id="mediaUploadInput" accept="image/*,video/*" style="display:none;" onchange="handleMediaUpload(event)" multiple />
+              <div class="os-nav-item" onclick="filterFiles('pdfs', this)">📄 PDFs</div>
+              <div class="os-nav-item" onclick="filterFiles('uninstalled', this)">🧩 Uninstalled Apps</div>
+              <input type="file" id="mediaUploadInput" accept="image/*,video/*,application/pdf,.pdf" style="display:none;" onchange="handleMediaUpload(event)" multiple />
               <button class="btn-ui btn-accent" style="margin-top:auto;" onclick="document.getElementById('mediaUploadInput').click()">📤 Upload Media</button>
-              <button class="btn-ui" onclick="createNewFilePrompt()">➕ New Document</button>
+              <button class="btn-ui" onclick="createNewFilePrompt()">➕ New File</button>
+              <button class="btn-ui" onclick="createFolderPrompt()">📁 New Folder</button>
             </div>
-            <div class="os-content-pane" ondragover="event.preventDefault()" ondrop="handleMediaDrop(event)">
-              <div style="margin-bottom:12px; font-size:0.85rem; color:var(--text-sub); display:flex; justify-content:space-between; align-items:center;">
-                <span id="filesPaneSubtitle">Click any saved document or media file to open:</span>
-                <button class="btn-ui" onclick="renderFolders()">🔄 Refresh</button>
+            <div class="os-content-pane" ondragover="handleFileDragOver(event)" ondrop="handleFileDrop(event)">
+              <div class="file-toolbar">
+                <button class="btn-ui" onclick="fileNavigateBack()" title="Back">←</button><button class="btn-ui" onclick="fileNavigateForward()" title="Forward">→</button><button class="btn-ui" onclick="navigateFiles('home')">⌂</button>
+                <div id="fileBreadcrumbs" class="file-breadcrumbs"></div>
               </div>
+              <div class="file-toolbar file-toolbar-secondary">
+                <input id="fileSearchInput" class="input-ui" placeholder="Search files..." oninput="setFileSearch(this.value)" />
+                <select id="fileSortSelect" class="input-ui" onchange="setFileSort(this.value)"><option value="name">Name</option><option value="size">Size</option><option value="modified">Date Modified</option><option value="type">Type</option></select>
+                <button class="btn-ui" onclick="toggleFileSortDirection()" id="fileSortDirection">↑</button><button class="btn-ui" onclick="selectAllFiles()">☑ Select All</button><button class="btn-ui" onclick="setFileView('grid')" id="fileGridBtn">▦</button><button class="btn-ui" onclick="setFileView('list')" id="fileListBtn">☷</button>
+              </div>
+              <div style="margin-bottom:12px; font-size:0.85rem; color:var(--text-sub); display:flex; justify-content:space-between; align-items:center;"><span id="filesPaneSubtitle">Click any saved document or media file to open:</span><span id="fileSelectionSummary"></span><button class="btn-ui" onclick="renderFolders()">🔄</button></div>
               <div class="files-grid" id="folderView"></div>
             </div>
           </div>
@@ -831,7 +1150,7 @@
         </div>
         <div class="window-body">
           <div class="term-body" id="termContainer">
-            <div class="term-output" id="termOutput">Enfrok OS Command Console v5.2
+            <div class="term-output" id="termOutput">Enfrok OS Command Console v5.3
 Type 'help' or 'bringback reinstall /appnameApp' to manage apps.</div>
             <div class="term-row">
               <span style="color:var(--accent); font-weight:600;">enfrok@root:~$</span>
@@ -906,6 +1225,40 @@ Type 'help' or 'bringback reinstall /appnameApp' to manage apps.</div>
             <input type="text" id="browserUrl" class="input-ui" value="https://www.wikipedia.org" style="padding:6px 12px; font-size:0.85rem;" onkeydown="if(event.key==='Enter') navBrowser()" placeholder="Type any URL and press Enter..." />
             <button class="btn-ui btn-accent" style="padding:6px 14px; font-size:0.8rem;" onclick="navBrowser()">Go</button>
             <button class="btn-ui" style="padding:6px 10px;" onclick="addBrowserTab()">➕ New Tab</button>
+          </div>
+          <div id="browserQuickLinks" class="browser-quick-links" style="display:flex; flex-wrap:wrap; gap:6px; padding:6px 12px; border-bottom:1px solid var(--glass-border); background:rgba(0,0,0,0.12); flex-shrink:0;">
+            <button class="btn-ui" style="padding:4px 10px; font-size:0.72rem;" onclick="navBrowserTo('https://www.wikipedia.org')">Wikipedia</button>
+            <button class="btn-ui" style="padding:4px 10px; font-size:0.72rem;" onclick="navBrowserTo('https://www.bing.com')">Bing</button>
+            <button class="btn-ui" style="padding:4px 10px; font-size:0.72rem;" onclick="navBrowserTo('https://www.duckduckgo.com')">DuckDuckGo</button>
+            <button class="btn-ui" style="padding:4px 10px; font-size:0.72rem;" onclick="navBrowserTo('https://www.archive.org')">Internet Archive</button>
+            <button class="btn-ui" style="padding:4px 10px; font-size:0.72rem;" onclick="navBrowserTo('https://www.reddit.com')">Reddit</button>
+            <button class="btn-ui" style="padding:4px 10px; font-size:0.72rem;" onclick="navBrowserTo('https://news.ycombinator.com')">HN</button>
+            <button class="btn-ui" style="padding:4px 10px; font-size:0.72rem;" onclick="navBrowserTo('https://www.bbc.com')">BBC</button>
+            <button class="btn-ui" style="padding:4px 10px; font-size:0.72rem;" onclick="navBrowserTo('https://www.cnn.com')">CNN</button>
+            <button class="btn-ui" style="padding:4px 10px; font-size:0.72rem;" onclick="navBrowserTo('https://www.nytimes.com')">NYTimes</button>
+            <button class="btn-ui" style="padding:4px 10px; font-size:0.72rem;" onclick="navBrowserTo('https://www.theguardian.com')">Guardian</button>
+            <button class="btn-ui" style="padding:4px 10px; font-size:0.72rem;" onclick="navBrowserTo('https://www.github.com')">GitHub</button>
+            <button class="btn-ui" style="padding:4px 10px; font-size:0.72rem;" onclick="navBrowserTo('https://stackoverflow.com')">Stack Overflow</button>
+            <button class="btn-ui" style="padding:4px 10px; font-size:0.72rem;" onclick="navBrowserTo('https://developer.mozilla.org')">MDN</button>
+            <button class="btn-ui" style="padding:4px 10px; font-size:0.72rem;" onclick="navBrowserTo('https://www.w3schools.com')">W3Schools</button>
+            <button class="btn-ui" style="padding:4px 10px; font-size:0.72rem;" onclick="navBrowserTo('https://www.khanacademy.org')">Khan Academy</button>
+            <button class="btn-ui" style="padding:4px 10px; font-size:0.72rem;" onclick="navBrowserTo('https://www.coursera.org')">Coursera</button>
+            <button class="btn-ui" style="padding:4px 10px; font-size:0.72rem;" onclick="navBrowserTo('https://www.youtube.com')">YouTube</button>
+            <button class="btn-ui" style="padding:4px 10px; font-size:0.72rem;" onclick="navBrowserTo('https://www.vimeo.com')">Vimeo</button>
+            <button class="btn-ui" style="padding:4px 10px; font-size:0.72rem;" onclick="navBrowserTo('https://open.spotify.com')">Spotify</button>
+            <button class="btn-ui" style="padding:4px 10px; font-size:0.72rem;" onclick="navBrowserTo('https://www.soundcloud.com')">SoundCloud</button>
+            <button class="btn-ui" style="padding:4px 10px; font-size:0.72rem;" onclick="navBrowserTo('https://www.unsplash.com')">Unsplash</button>
+            <button class="btn-ui" style="padding:4px 10px; font-size:0.72rem;" onclick="navBrowserTo('https://www.pinterest.com')">Pinterest</button>
+            <button class="btn-ui" style="padding:4px 10px; font-size:0.72rem;" onclick="navBrowserTo('https://www.imdb.com')">IMDb</button>
+            <button class="btn-ui" style="padding:4px 10px; font-size:0.72rem;" onclick="navBrowserTo('https://www.weather.com')">Weather</button>
+            <button class="btn-ui" style="padding:4px 10px; font-size:0.72rem;" onclick="navBrowserTo('https://www.amazon.com')">Amazon</button>
+            <button class="btn-ui" style="padding:4px 10px; font-size:0.72rem;" onclick="navBrowserTo('https://www.ebay.com')">eBay</button>
+            <button class="btn-ui" style="padding:4px 10px; font-size:0.72rem;" onclick="navBrowserTo('https://www.etsy.com')">Etsy</button>
+            <button class="btn-ui" style="padding:4px 10px; font-size:0.72rem;" onclick="navBrowserTo('https://www.ted.com')">TED</button>
+            <button class="btn-ui" style="padding:4px 10px; font-size:0.72rem;" onclick="navBrowserTo('https://www.nasa.gov')">NASA</button>
+            <button class="btn-ui" style="padding:4px 10px; font-size:0.72rem;" onclick="navBrowserTo('https://www.nationalgeographic.com')">NatGeo</button>
+            <button class="btn-ui" style="padding:4px 10px; font-size:0.72rem;" onclick="navBrowserTo('https://www.arxiv.org')">arXiv</button>
+            <button class="btn-ui" style="padding:4px 10px; font-size:0.72rem;" onclick="navBrowserTo('https://www.wolframalpha.com')">Wolfram</button>
           </div>
           <div id="browserTabPanes" style="flex:1; position:relative;"></div>
         </div>
@@ -982,24 +1335,6 @@ Type 'help' or 'bringback reinstall /appnameApp' to manage apps.</div>
         </div>
       </div>
 
-      <div class="os-window" id="passApp" style="width: 480px; height: 360px; top: 90px; left: 280px;">
-        <div class="window-topbar" onmousedown="dragWindow(event, 'passApp')">
-          <div class="window-title">🔑 Password Studio</div>
-          <div class="win-controls-pills">
-            <span class="win-pill-btn" onclick="minimizeWindow('passApp')">─</span>
-            <span class="win-pill-btn pill-close" onclick="closeWindow('passApp')">✕</span>
-          </div>
-        </div>
-        <div class="window-body" style="padding:22px; display:flex; flex-direction:column; gap:14px;">
-          <input type="text" class="input-ui" id="passOutput" readonly style="font-family:var(--font-code); font-size:1.1rem; text-align:center; color:var(--accent);" />
-          <div style="display:flex; align-items:center; justify-content:space-between; font-size:0.85rem;">
-            <span>Length: <b id="passLenText">16</b></span>
-            <input type="range" min="8" max="32" value="16" oninput="document.getElementById('passLenText').textContent=this.value; generatePass();" />
-          </div>
-          <button class="btn-ui btn-accent" style="justify-content:center; padding:12px;" onclick="generatePass()">⚡ Generate Secure Password</button>
-        </div>
-      </div>
-
       <div class="os-window" id="concertApp" style="width: 700px; height: 520px; top: 70px; left: 200px;">
         <div class="window-topbar" onmousedown="dragWindow(event, 'concertApp')">
           <div class="window-title">🎤 RappingConcert — Dynamic Light & Smoke Stage</div>
@@ -1069,10 +1404,10 @@ Type 'help' or 'bringback reinstall /appnameApp' to manage apps.</div>
                 <div class="setting-row">
                   <div class="setting-label">
                     <span class="setting-title">Taskbar & Start Menu Position</span>
-                    <span class="setting-desc">Align taskbar and normal start menu to Left, Middle, or Right.</span>
+                    <span class="setting-desc">Align the taskbar group (E + Apps + Start Menu) to Left, Center, or Right.</span>
                   </div>
                   <select class="input-ui" id="dockPositionSelect" style="width:160px;" onchange="setDockPosition(this.value)">
-                    <option value="middle">Middle</option>
+                    <option value="middle">Center</option>
                     <option value="left">Left</option>
                     <option value="right">Right</option>
                   </select>
@@ -1169,7 +1504,7 @@ Type 'help' or 'bringback reinstall /appnameApp' to manage apps.</div>
                 <h3 style="font-size:1.05rem; font-weight:700;">System Notes</h3>
                 <div style="padding:16px; background:rgba(255,255,255,0.04); border:1px solid var(--glass-border); border-radius:14px; display:flex; flex-direction:column; gap:8px; font-size:0.85rem;">
                   <div><b>Viewer & Handler:</b> UMBRELLA VWER</div>
-                  <div><b>OS:</b> Enfrok Operating System 5.2</div>
+                  <div><b>OS:</b> Enfrok Operating System 5.3</div>
                   <div><b>Shower:</b> Enfrok/UmbrellaOS/AryaDoes/SQBIGP</div>
                   <div><b>V&H Security:</b> 100% Verified and Safe</div>
                   <div><b>UMBRELLA-VWER:</b> Enfrok V&H Operator (G,S,P,E)</div>
@@ -1178,17 +1513,17 @@ Type 'help' or 'bringback reinstall /appnameApp' to manage apps.</div>
                 <div style="padding:16px; background:rgba(255,255,255,0.04); border:1px solid var(--glass-border); border-radius:14px; display:flex; flex-direction:column; gap:12px;">
                   <div style="display:flex; justify-content:space-between; align-items:baseline;">
                     <span class="setting-title">VRAM Usage</span>
-                    <span class="vram-tag" id="vramUsageLabel">0 MB / 2 GB</span>
+                    <span class="vram-tag" id="vramUsageLabel">0 MB / 4 GB</span>
                   </div>
                   <div class="vram-meter-track"><div class="vram-meter-fill" id="vramMeterFill" style="width:0%;"></div></div>
-                  <span class="setting-desc" id="vramCapacityDesc">Total capacity: 2 GB (1.96 GB usable by apps)</span>
+                  <span class="setting-desc" id="vramCapacityDesc">Total capacity: 4 GB (3.92 GB usable by apps)</span>
                   <div style="margin-top:6px; font-size:0.82rem; font-weight:700; color:var(--text-sub);">Apps currently using VRAM</div>
                   <div id="vramActiveAppsList" style="display:flex; flex-direction:column; gap:8px;"></div>
                 </div>
                 <div style="padding:16px; background:rgba(255,255,255,0.04); border:1px solid var(--glass-border); border-radius:14px; display:flex; flex-direction:column; gap:12px;">
                   <div style="display:flex; justify-content:space-between; align-items:baseline;">
                     <span class="setting-title">Storage Usage</span>
-                    <span class="vram-tag" id="storageUsageLabel">0 MB / 4 GB</span>
+                    <span class="vram-tag" id="storageUsageLabel">0 MB / 5 GB</span>
                   </div>
                   <div class="vram-meter-track"><div class="vram-meter-fill" id="storageMeterFill" style="width:0%;"></div></div>
                 </div>
@@ -1283,7 +1618,7 @@ Type 'help' or 'bringback reinstall /appnameApp' to manage apps.</div>
           </div>
           <div class="word-statusbar">
             <div id="notesAppStats">0 words | 0 characters</div>
-            <div>Notes Engine v5.2</div>
+            <div>Notes Engine v5.3</div>
           </div>
         </div>
       </div>
@@ -1431,17 +1766,6 @@ Type 'help' or 'bringback reinstall /appnameApp' to manage apps.</div>
         </div>
       </div>
 
-      <div class="os-window" id="loremApp" style="width: 540px; height: 380px; top: 100px; left: 230px;">
-        <div class="window-topbar" onmousedown="dragWindow(event, 'loremApp')">
-          <div class="window-title">📝 Lorem Ipsum Generator</div>
-          <div class="win-controls-pills"><span class="win-pill-btn pill-close" onclick="closeWindow('loremApp')">✕</span></div>
-        </div>
-        <div class="window-body" style="padding:20px; display:flex; flex-direction:column; gap:12px;">
-          <button class="btn-ui btn-accent" onclick="generateLoremIpsum()">Generate Paragraphs</button>
-          <textarea class="code-area" id="loremOutputText" readonly style="flex:1;"></textarea>
-        </div>
-      </div>
-
       <div class="os-window" id="htmlEscapeApp" style="width: 520px; height: 360px; top: 90px; left: 210px;">
         <div class="window-topbar" onmousedown="dragWindow(event, 'htmlEscapeApp')">
           <div class="window-title">🛡️ HTML Entity Escaper</div>
@@ -1530,27 +1854,107 @@ Write **Markdown** on the left and see a clean preview here.
         </div>
       </div>
 
-      <div class="os-window" id="mediaPlayerApp" style="width: 720px; height: 480px; top: 70px; left: 180px;">
+      <div class="os-window" id="mediaPlayerApp" style="width: 920px; height: 600px; top: 50px; left: 120px;">
         <div class="window-topbar" onmousedown="dragWindow(event, 'mediaPlayerApp')">
-          <div class="window-title">🎬 Media Viewer — <span id="mediaViewerTitle" style="color:var(--accent);">Media.mp4</span></div>
+          <div class="window-title">🎬 Media Viewer — <span id="mediaViewerTitle" style="color:var(--accent);">Library</span></div>
           <div class="win-controls-pills">
             <span class="win-pill-btn" onclick="minimizeWindow('mediaPlayerApp')">─</span>
             <span class="win-pill-btn" onclick="toggleFullscreen('mediaPlayerApp')">▢</span>
             <span class="win-pill-btn pill-close" onclick="closeWindow('mediaPlayerApp')">✕</span>
           </div>
         </div>
-        <div class="window-body">
-          <div class="media-player-container">
-            <div class="media-viewport" id="mediaViewport">
-            </div>
-            <div class="media-controls" id="mediaControlsArea">
-              <button class="btn-ui" id="mediaPlayBtn" onclick="toggleMediaPlay()">▶ Play</button>
-              <input type="range" class="media-timeline" id="mediaTimeline" value="0" min="0" max="100" oninput="seekMedia(this.value)" />
-              <span id="mediaTimeDisplay" style="font-family:var(--font-code); font-size:0.75rem; color:var(--text-sub);">00:00 / 00:00</span>
-            </div>
+        <div class="window-body media-viewer-body">
+          <div class="mv-layout">
+            <aside class="mv-sidebar">
+              <div class="mv-side-head">
+                <div class="mv-side-title">Library</div>
+                <button class="btn-ui btn-accent" style="padding:4px 10px; font-size:0.72rem;" onclick="document.getElementById('mvImportInput').click()">＋ Import</button>
+                <input type="file" id="mvImportInput" accept="image/*,video/*,application/pdf" multiple hidden onchange="handleMediaViewerImport(event)" />
+              </div>
+              <div class="mv-filter-row">
+                <button class="btn-ui mv-filter active" data-mvf="all" onclick="setMediaViewerFilter('all', this)">All</button>
+                <button class="btn-ui mv-filter" data-mvf="photo" onclick="setMediaViewerFilter('photo', this)">Photos</button>
+                <button class="btn-ui mv-filter" data-mvf="video" onclick="setMediaViewerFilter('video', this)">Videos</button>
+                <button class="btn-ui mv-filter" data-mvf="pdf" onclick="setMediaViewerFilter('pdf', this)">PDFs</button>
+              </div>
+              <div class="mv-library-list" id="mvLibraryList" ondragover="event.preventDefault()" ondrop="handleMediaViewerDrop(event)"></div>
+            </aside>
+            <section class="mv-stage">
+              <div class="mv-viewport" id="mediaViewport">
+                <div class="mv-empty" id="mvEmptyState">
+                  <div style="font-size:2.4rem;">🎬</div>
+                  <div style="font-weight:700; margin-top:8px;">Media Viewer</div>
+                  <div style="font-size:0.82rem; color:var(--text-sub); max-width:280px; text-align:center;">Import photos, videos, or PDFs — or open them from Document storage.</div>
+                </div>
+              </div>
+              <div class="mv-toolbar" id="mediaControlsArea">
+                <div class="mv-toolbar-left">
+                  <button class="btn-ui" id="mediaPlayBtn" onclick="toggleMediaPlay()">▶ Play</button>
+                  <button class="btn-ui" id="mvZoomOutBtn" onclick="mediaViewerZoom(-0.15)">−</button>
+                  <button class="btn-ui" id="mvZoomInBtn" onclick="mediaViewerZoom(0.15)">＋</button>
+                  <button class="btn-ui" id="mvPdfPrevBtn" onclick="mediaViewerPdfPage(-1)">◀ Page</button>
+                  <button class="btn-ui" id="mvPdfNextBtn" onclick="mediaViewerPdfPage(1)">Page ▶</button>
+                </div>
+                <input type="range" class="media-timeline" id="mediaTimeline" value="0" min="0" max="100" oninput="seekMedia(this.value)" />
+                <span id="mediaTimeDisplay" class="mv-time">00:00 / 00:00</span>
+              </div>
+              <div class="mv-meta" id="mvMetaPanel">
+                <div class="mv-meta-row"><span>Name</span><strong id="mvMetaName">—</strong></div>
+                <div class="mv-meta-row"><span>Type</span><strong id="mvMetaType">—</strong></div>
+                <div class="mv-meta-row"><span>Size</span><strong id="mvMetaSize">—</strong></div>
+                <div class="mv-meta-row"><span>Info</span><strong id="mvMetaInfo">—</strong></div>
+              </div>
+            </section>
           </div>
         </div>
       </div>
+
+      <div class="os-window" id="pdfViewerApp" style="width: 900px; height: 620px; top: 40px; left: 140px;">
+        <div class="window-topbar" onmousedown="dragWindow(event, 'pdfViewerApp')">
+          <div class="window-title">📄 PDF Viewer — <span id="pdfViewerTitle" style="color:var(--accent);">No document</span></div>
+          <div class="win-controls-pills">
+            <span class="win-pill-btn" onclick="minimizeWindow('pdfViewerApp')">─</span>
+            <span class="win-pill-btn" onclick="toggleFullscreen('pdfViewerApp')">▢</span>
+            <span class="win-pill-btn pill-close" onclick="closeWindow('pdfViewerApp')">✕</span>
+          </div>
+        </div>
+        <div class="window-body pdf-viewer-body">
+          <div class="pdfv-layout">
+            <aside class="pdfv-sidebar">
+              <div class="pdfv-side-head">
+                <div style="font-weight:800;">Documents</div>
+                <button class="btn-ui btn-accent" style="padding:4px 10px; font-size:0.72rem;" onclick="document.getElementById('pdfImportInput').click()">＋ Add PDF</button>
+                <input type="file" id="pdfImportInput" accept="application/pdf,.pdf" multiple hidden onchange="handlePdfViewerImport(event)" />
+              </div>
+              <div class="pdfv-hint">Max 11 MB per PDF · Drag & drop supported</div>
+              <div class="pdfv-list" id="pdfViewerList" ondragover="event.preventDefault()" ondrop="handlePdfViewerDrop(event)"></div>
+            </aside>
+            <section class="pdfv-stage">
+              <div class="pdfv-toolbar">
+                <button class="btn-ui" onclick="pdfViewerPrevPage()">◀ Prev</button>
+                <span id="pdfPageLabel" class="pdfv-page-label">Page 0 / 0</span>
+                <button class="btn-ui" onclick="pdfViewerNextPage()">Next ▶</button>
+                <input type="number" class="input-ui" id="pdfPageJump" min="1" value="1" style="width:70px; padding:6px 8px;" onkeydown="if(event.key==='Enter')pdfViewerJumpPage()" />
+                <button class="btn-ui" onclick="pdfViewerJumpPage()">Go</button>
+                <button class="btn-ui btn-danger" style="margin-left:auto;" onclick="removeActivePdf()">Remove</button>
+              </div>
+              <div class="pdfv-preview" id="pdfPreviewPane">
+                <div class="pdfv-empty" id="pdfEmptyState">
+                  <div style="font-size:2.2rem;">📄</div>
+                  <div style="font-weight:700; margin-top:8px;">PDF Viewer</div>
+                  <div style="font-size:0.82rem; color:var(--text-sub); text-align:center; max-width:260px;">Import PDFs from your device or open them from the File Manager.</div>
+                </div>
+              </div>
+              <div class="pdfv-meta" id="pdfMetaBar">
+                <span id="pdfMetaName">Name: —</span>
+                <span id="pdfMetaSize">Size: —</span>
+                <span id="pdfMetaPages">Pages: —</span>
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+
 
     </div>
 
@@ -1562,7 +1966,7 @@ Write **Markdown** on the left and see a clean preview here.
       </div>
       <div class="m-header">
         <h1>Enfrok OS</h1>
-        <p id="mHeaderSub">Mobile experience · 5.2</p>
+        <p id="mHeaderSub">Mobile experience · 5.3</p>
       </div>
       <div class="m-search"><input id="mAppSearch" placeholder="Search apps..." oninput="renderMobileHome(this.value)" /></div>
       <div class="m-app-scroll"><div class="m-app-grid" id="mobileAppGrid"></div></div>
@@ -1587,9 +1991,27 @@ Write **Markdown** on the left and see a clean preview here.
     <div class="context-menu" id="desktopContextMenu"></div>
 
     <div class="dock-wrapper dock-pos-middle" id="dockWrapper" ondragover="event.preventDefault(); this.classList.add('drag-over');" ondragleave="this.classList.remove('drag-over');" ondrop="handleDockDrop(event)">
-      <button class="dock-launcher-btn" onclick="openStartMenu()" title="Open Glass Start Menu">E</button>
+      <div class="dock-main-group" id="dockMainGroup">
+        <button class="dock-launcher-btn" onclick="openStartMenu()" title="Enfrok Start">E</button>
+        <div class="dock-divider"></div>
+        <div class="dock-items-scroll" id="dockItemsArea"></div>
+        <div class="dock-divider"></div>
+        <button class="dock-start-btn" onclick="openStartMenu()" title="Start Menu">☰</button>
+      </div>
       <div class="dock-divider"></div>
-      <div id="dockItemsArea" style="display:flex; gap:10px;"></div>
+      <button class="dock-hidden-btn" id="hiddenAppsBtn" onclick="openHiddenAppsAccess()" title="Hidden Apps">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>
+        <span class="dock-hidden-badge" id="hiddenAppsBadge">0</span>
+      </button>
+    </div>
+
+    <div class="hidden-apps-panel hap-pos-middle" id="hiddenAppsPanel">
+      <div style="display:flex; align-items:center; justify-content:space-between; gap:10px;">
+        <div style="font-weight:800; font-size:0.95rem;">Hidden Apps</div>
+        <button class="btn-ui" style="padding:4px 10px;" onclick="closeHiddenAppsPanel()">✕</button>
+      </div>
+      <div style="font-size:0.78rem; color:var(--text-sub);">Password-protected. Right-click an app → Hide from Taskbar.</div>
+      <div class="hidden-apps-list" id="hiddenAppsList"></div>
     </div>
 
     <div class="start-menu-fullscreen" id="fullscreenStartMenu" aria-label="Full-screen Start menu">
@@ -1627,7 +2049,7 @@ Write **Markdown** on the left and see a clean preview here.
   const SYSTEM_APPS = ['terminalApp', 'documentCore', 'settingsApp'];
 
   const WALLPAPERS = [
-    'https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=1920',
+    'https://images.unsplash.com/photo-1519608487953-e999c86e7455?q=80&w=1920&auto=format&fit=crop',
     'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1920',
     'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1920',
     'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=1920',
@@ -1681,7 +2103,24 @@ Write **Markdown** on the left and see a clean preview here.
     'https://images.unsplash.com/photo-1505322022379-7c3353ee6291?q=80&w=1920',
     'https://images.unsplash.com/photo-1512273222628-4daea6e55abb?q=80&w=1920',
     'https://images.unsplash.com/photo-1497436072909-60f360e1d4b1?q=80&w=1920',
-    'https://images.unsplash.com/photo-1531306728370-e2ebd9d7bb99?q=80&w=1920'
+    'https://images.unsplash.com/photo-1531306728370-e2ebd9d7bb99?q=80&w=1920',
+    'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=1920',
+    'https://images.unsplash.com/photo-1472214103451-9374bd1c798e?q=80&w=1920',
+    'https://images.unsplash.com/photo-1511300636408-a63a89df3482?q=80&w=1920',
+    'https://images.unsplash.com/photo-1531366936337-7c912a4589a7?q=80&w=1920',
+    'https://images.unsplash.com/photo-1483728642387-6c3bdd6c93e5?q=80&w=1920',
+    'https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=1920',
+    'https://images.unsplash.com/photo-1511884642898-4c92249e20b6?q=80&w=1920',
+    'https://images.unsplash.com/photo-1494500764479-0c8f2919a3d8?q=80&w=1920',
+    'https://images.unsplash.com/photo-1482192505345-5655af888cc4?q=80&w=1920',
+    'https://images.unsplash.com/photo-1475924156734-496f6cac6ec1?q=80&w=1920',
+    'https://images.unsplash.com/photo-1505144808411-6b0b1a8a8c8c?q=80&w=1920',
+    'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=1920&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1920&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1920&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1433086966358-54859d0ed716?q=80&w=1920&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?q=80&w=1920&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1493246507139-91e8fad9978e?q=80&w=1920&auto=format&fit=crop'
   ];
 
   const ALL_APPS = [
@@ -1694,7 +2133,6 @@ Write **Markdown** on the left and see a clean preview here.
     { id: 'calcApp', name: 'Calculator', icon: '🧮', pinnedDock: true, pinnedDesktop: true },
     { id: 'todoApp', name: 'Tasks', icon: '✅', pinnedDock: true, pinnedDesktop: true },
     { id: 'soundboardApp', name: 'Funny Sounds', icon: '🔊', pinnedDock: true, pinnedDesktop: true },
-    { id: 'passApp', name: 'Passwords', icon: '🔑', pinnedDock: true, pinnedDesktop: true },
     { id: 'concertApp', name: 'Concert', icon: '🎤', pinnedDock: true, pinnedDesktop: true },
     { id: 'settingsApp', name: 'Settings', icon: '⚙️', pinnedDock: true, pinnedDesktop: true },
     { id: 'notesApp', name: 'Quick Notes', icon: '📝', pinnedDock: false, pinnedDesktop: false },
@@ -1707,7 +2145,6 @@ Write **Markdown** on the left and see a clean preview here.
     { id: 'pianoApp', name: 'Synth Piano', icon: '🎹', pinnedDock: false, pinnedDesktop: false },
     { id: 'jsonApp', name: 'JSON Formatter', icon: '🛠️', pinnedDock: false, pinnedDesktop: false },
     { id: 'hashGenApp', name: 'Hash Generator', icon: '🔑', pinnedDock: false, pinnedDesktop: false },
-    { id: 'loremApp', name: 'Lorem Ipsum', icon: '📝', pinnedDock: false, pinnedDesktop: false },
     { id: 'htmlEscapeApp', name: 'HTML Escaper', icon: '🛡️', pinnedDock: false, pinnedDesktop: false },
     { id: 'qrGenApp', name: 'QR Code Studio', icon: '📲', pinnedDock: false, pinnedDesktop: false },
     { id: 'mathLabApp', name: 'Math Lab Studio', icon: '🔬', pinnedDock: false, pinnedDesktop: false },
@@ -1716,12 +2153,67 @@ Write **Markdown** on the left and see a clean preview here.
     { id: 'dateDiffApp', name: 'Date Calculator', icon: '📅', pinnedDock: false, pinnedDesktop: false },
     { id: 'regexApp', name: 'Regex Tester', icon: '🧪', pinnedDock: false, pinnedDesktop: false },
     { id: 'mediaPlayerApp', name: 'Media Viewer', icon: '🎬', pinnedDock: false, pinnedDesktop: false },
+    { id: 'pdfViewerApp', name: 'PDF Viewer', icon: '📄', pinnedDock: false, pinnedDesktop: false },
     { id: 'htmlTesterApp', name: 'HTML Code Tester', icon: '⚒️', pinnedDock: false, pinnedDesktop: false }
   ];
 
-  const VRAM_BASE_TOTAL_MB = 2048;
+
+  /* ===================== ENFROK APP LOGOS (device-consistent SVG) ===================== */
+  const APP_LOGO_META = {
+    sheetApp:       { g: ['#0ea5e9', '#0369a1'], path: 'M6 4h12v16H6z M9 8h6 M9 12h6 M9 16h4' },
+    wordApp:        { g: ['#3b82f6', '#1d4ed8'], path: 'M7 6h10v12H7z M9 9h6 M9 13h6 M9 17h4' },
+    paintApp:       { g: ['#f97316', '#ea580c'], path: 'M12 4c4 0 7 3 7 7 0 4-3 5-5 7l-2 2-2-2c-2-2-5-3-5-7 0-4 3-7 7-7z' },
+    documentCore:   { g: ['#6366f1', '#4338ca'], path: 'M6 5h9l3 3v11H6z M14 5v3h3' },
+    terminalApp:    { g: ['#22c55e', '#15803d'], path: 'M5 7l5 5-5 5 M12 17h7' },
+    browserApp:     { g: ['#06b6d4', '#0891b2'], path: 'M12 4a8 8 0 100 16 8 8 0 000-16z M4 12h16 M12 4c2.5 2.5 2.5 11 0 16 M12 4c-2.5 2.5-2.5 11 0 16' },
+    calcApp:        { g: ['#a855f7', '#7e22ce'], path: 'M7 4h10v16H7z M9 8h6 M9 12h2 M13 12h2 M9 16h2 M13 16h2' },
+    todoApp:        { g: ['#14b8a6', '#0f766e'], path: 'M6 7h12 M6 12h12 M6 17h8 M18 16l1.5 1.5L22 15' },
+    soundboardApp:  { g: ['#ec4899', '#be185d'], path: 'M11 6v12l-4-3H4V9h3z M15 9a3 3 0 010 6 M17 7a5 5 0 010 10' },
+    concertApp:     { g: ['#f43f5e', '#be123c'], path: 'M9 18V6l10-2v12 M9 18a2 2 0 11-4 0 2 2 0 014 0z M19 16a2 2 0 11-4 0 2 2 0 014 0z' },
+    settingsApp:    { g: ['#94a3b8', '#475569'], path: 'M12 9a3 3 0 100 6 3 3 0 000-6z M12 3v2 M12 19v2 M4.9 6.3l1.4 1.4 M17.7 16.3l1.4 1.4 M3 12h2 M19 12h2 M4.9 17.7l1.4-1.4 M17.7 7.7l1.4-1.4' },
+    notesApp:       { g: ['#eab308', '#ca8a04'], path: 'M7 4h10v16H7z M10 8h4 M10 12h4 M10 16h3' },
+    voiceRecorderApp:{ g: ['#ef4444', '#b91c1c'], path: 'M12 4a3 3 0 00-3 3v5a3 3 0 006 0V7a3 3 0 00-3-3z M8 12a4 4 0 008 0 M12 16v3' },
+    whiteboardApp:  { g: ['#64748b', '#334155'], path: 'M5 6h14v10H5z M8 20h8 M12 16v4' },
+    budgetApp:      { g: ['#22c55e', '#166534'], path: 'M12 4v16 M8 8c0-1.5 1.8-2.5 4-2.5s4 1 4 2.5-1.8 2.5-4 2.5-4 1-4 2.5 1.8 2.5 4 2.5 4-1 4-2.5' },
+    habitApp:       { g: ['#f59e0b', '#d97706'], path: 'M12 3l2.5 5 5.5.8-4 3.9.9 5.5L12 16.2 7.1 18.2l.9-5.5-4-3.9 5.5-.8z' },
+    stickyApp:      { g: ['#facc15', '#eab308'], path: 'M7 5h10v10l-4 4H7z M13 15v4l4-4z' },
+    colorPickerApp: { g: ['#d946ef', '#a21caf'], path: 'M12 4a5 5 0 015 5c0 4-5 9-5 9S7 13 7 9a5 5 0 015-5z M12 9a1.5 1.5 0 100-3 1.5 1.5 0 000 3z' },
+    pianoApp:       { g: ['#1e293b', '#0f172a'], path: 'M5 6h14v12H5z M9 6v7 M13 6v7 M17 6v7' },
+    jsonApp:        { g: ['#84cc16', '#4d7c0f'], path: 'M8 6c-2 0-3 1-3 3v2c0 1-.5 2-2 2 1.5 0 2 1 2 2v2c0 2 1 3 3 3 M16 6c2 0 3 1 3 3v2c0 1 .5 2 2 2-1.5 0-2 1-2 2v2c0 2-1 3-3 3' },
+    hashGenApp:     { g: ['#8b5cf6', '#6d28d9'], path: 'M10 5v14 M14 5v14 M6 9h12 M6 15h12' },
+    htmlEscapeApp:  { g: ['#f97316', '#c2410c'], path: 'M9 8L5 12l4 4 M15 8l4 4-4 4' },
+    qrGenApp:       { g: ['#0f172a', '#334155'], path: 'M5 5h6v6H5z M13 5h6v6h-6z M5 13h6v6H5z M14 14h2v2h-2z M18 14h1v1h-1z M14 18h1v1h-1z M17 17h2v2h-2z' },
+    mathLabApp:     { g: ['#3b82f6', '#1e40af'], path: 'M7 8h4 M9 6v4 M14 8h4 M7 16h4 M14 14v4 M14 16h4' },
+    markdownApp:    { g: ['#64748b', '#1e293b'], path: 'M5 7h14v10H5z M8 14V10l2 2 2-2v4 M15 14v-2l2 2 1-1v3' },
+    base64App:      { g: ['#10b981', '#047857'], path: 'M7 8c0-1.5 1.5-2.5 3.5-2.5S14 6.5 14 8s-1.5 2.5-3.5 2.5h-1C8 10.5 6.5 12 6.5 13.5S8 16 10 16s3.5-1 3.5-2.5 M17 7v10' },
+    dateDiffApp:    { g: ['#0ea5e9', '#0369a1'], path: 'M7 5h10v14H7z M7 9h10 M10 5V3 M14 5V3 M10 13h4' },
+    regexApp:       { g: ['#e11d48', '#9f1239'], path: 'M6 8h4l2 8 2-8h4 M8 12h8' },
+    mediaPlayerApp: { g: ['#8b5cf6', '#5b21b6'], path: 'M6 6h12v12H6z M10 9l5 3-5 3z' },
+    pdfViewerApp:   { g: ['#ef4444', '#991b1b'], path: 'M7 4h7l3 3v13H7z M14 4v3h3 M9 12h6 M9 15h5' },
+    htmlTesterApp:  { g: ['#f59e0b', '#b45309'], path: 'M8 8L4 12l4 4 M16 8l4 4-4 4 M13 7l-2 10' },
+    oscddApp:       { g: ['#6366f1', '#3730a3'], path: 'M6 6h12v4H6z M6 14h12v4H6z' },
+    messagesApp:    { g: ['#3b82f6', '#1d4ed8'], path: 'M5 6h14v10H9l-4 3V6z' }
+  };
+
+  function appIconHtml(appOrId, size) {
+    const app = typeof appOrId === 'string' ? ALL_APPS.find(a => a.id === appOrId) : appOrId;
+    const id = typeof appOrId === 'string' ? appOrId : (appOrId && appOrId.id);
+    const meta = APP_LOGO_META[id] || { g: ['#0ea5e9', '#6366f1'], path: 'M8 8h8v8H8z' };
+    const [c1, c2] = meta.g;
+    const label = String((app && app.name) || id || 'E').replace(/[^a-zA-Z0-9]/g, '').slice(0, 1).toUpperCase() || 'E';
+    const gid = 'lg_' + String(id || 'x').replace(/[^a-zA-Z0-9]/g, '') + '_' + Math.random().toString(36).slice(2, 6);
+    const segments = String(meta.path).trim().split(/(?=M)/).map(s => s.trim()).filter(Boolean);
+    const paths = segments.map(d => `<path d="${d}" stroke="url(#${gid})" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" fill="none"/>`).join('');
+    return `<span class="enfrok-app-icon" aria-label="${label}" style="background:linear-gradient(145deg,${c1},${c2});">` +
+      `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs><linearGradient id="${gid}" x1="0" y1="0" x2="24" y2="24"><stop stop-color="#ffffff" stop-opacity="0.98"/><stop offset="1" stop-color="#dbeafe" stop-opacity="0.88"/></linearGradient></defs>${paths}</svg>` +
+      `<span class="app-icon-monogram">${label}</span></span>`;
+  }
+
+
+
+  const VRAM_BASE_TOTAL_MB = 4096; // 4 GB
   const VRAM_RESERVED_MB = 80;
-  const STORAGE_BASE_TOTAL_MB = 4096;
+  const STORAGE_BASE_TOTAL_MB = 5120; // 5 GB
   const IMAGE_STORAGE_COST_MB = 100;
   const VIDEO_STORAGE_COST_MB = 150;
   const DOCUMENT_STORAGE_COST_MB = 180;
@@ -1766,10 +2258,11 @@ Write **Markdown** on the left and see a clean preview here.
 
   let osData = {
     installed: false,
-    username: 'Developer',
+    username: '',
     password: '',
     themeMode: 'dark',
     dockPosition: 'middle',
+    hiddenApps: [],
     wallpaper: WALLPAPERS[0],
     customWallpapers: [],
     accentColor: '#3b82f6',
@@ -1780,10 +2273,10 @@ Write **Markdown** on the left and see a clean preview here.
     topBarEnabled: true,
     topBarApps: ['sheetApp', 'wordApp', 'paintApp'],
     uninstalledApps: [],
-    desktopApps: ['sheetApp', 'wordApp', 'paintApp', 'documentCore', 'terminalApp', 'browserApp', 'calcApp', 'todoApp', 'soundboardApp', 'passApp', 'concertApp', 'settingsApp'],
-    dockApps: ['sheetApp', 'wordApp', 'paintApp', 'documentCore', 'terminalApp', 'browserApp', 'calcApp', 'todoApp', 'soundboardApp', 'passApp', 'concertApp', 'settingsApp'],
+    desktopApps: ['sheetApp', 'wordApp', 'paintApp', 'documentCore', 'terminalApp', 'browserApp', 'calcApp', 'todoApp', 'soundboardApp', 'concertApp', 'settingsApp'],
+    dockApps: ['sheetApp', 'wordApp', 'paintApp', 'documentCore', 'terminalApp', 'browserApp', 'calcApp', 'todoApp', 'soundboardApp', 'concertApp', 'settingsApp'],
     savedFiles: [
-      { name: 'Welcome_Guide.doc', content: '<h2>Welcome to Enfrok OS 5.2</h2><p>This is your saved document in Files storage.</p>' }
+      { name: 'Welcome_Guide.doc', content: '<h2>Welcome to Enfrok OS 5.3</h2><p>This is your saved document in Files storage.</p>' }
     ],
     savedMedia: [],
     vseRedeemedCode: null,
@@ -1851,21 +2344,23 @@ Write **Markdown** on the left and see a clean preview here.
   }
 
   function loadData() {
-    const saved = localStorage.getItem('enfrok_os_v52_fullsuite');
+    const saved = localStorage.getItem('enfrok_os_v53_fullsuite') || localStorage.getItem('enfrok_os_v52_fullsuite');
     if (saved) {
       try { osData = Object.assign(osData, JSON.parse(saved)); } catch(e) {}
     }
     if (!osData.messagesContacts) osData.messagesContacts = [];
     if (!osData.messagesThreads) osData.messagesThreads = {};
+    if (!Array.isArray(osData.hiddenApps)) osData.hiddenApps = [];
+    ensureFileModel();
   }
 
   function saveData() {
-    localStorage.setItem('enfrok_os_v52_fullsuite', JSON.stringify(osData));
+    localStorage.setItem('enfrok_os_v53_fullsuite', JSON.stringify(osData));
   }
 
   function eraseSystemData() {
     showGlassConfirm("Are you sure you want to factory reset Enfrok OS? All local data, user profiles, and saved files will be cleared.", () => {
-      localStorage.removeItem('enfrok_os_v52_fullsuite');
+      localStorage.removeItem('enfrok_os_v53_fullsuite'); localStorage.removeItem('enfrok_os_v52_fullsuite');
       location.reload();
     }, "⚠️ Factory Reset OS");
   }
@@ -1891,19 +2386,29 @@ Write **Markdown** on the left and see a clean preview here.
   }
 
   function setDockPosition(pos) {
+    if (pos === 'center') pos = 'middle';
+    const allowed = ['left', 'middle', 'right'];
+    pos = allowed.includes(pos) ? pos : 'middle';
     osData.dockPosition = pos;
     saveData();
     const dock = document.getElementById('dockWrapper');
     const hub = document.getElementById('launchHubPanel');
+    const hiddenPanel = document.getElementById('hiddenAppsPanel');
     const select = document.getElementById('dockPositionSelect');
     if (select) select.value = pos;
     if (dock) {
-      dock.classList.remove('dock-pos-middle', 'dock-pos-left', 'dock-pos-right');
+      dock.classList.remove('dock-pos-middle', 'dock-pos-center', 'dock-pos-left', 'dock-pos-right');
       dock.classList.add(`dock-pos-${pos}`);
+      // Keep E launcher + apps + start menu grouped as a single dock unit
+      dock.style.display = 'flex';
     }
     if (hub) {
       hub.classList.remove('hub-pos-middle', 'hub-pos-left', 'hub-pos-right');
       hub.classList.add(`hub-pos-${pos}`);
+    }
+    if (hiddenPanel) {
+      hiddenPanel.classList.remove('hap-pos-middle', 'hap-pos-center', 'hap-pos-left', 'hap-pos-right');
+      hiddenPanel.classList.add(`hap-pos-${pos}`);
     }
   }
 
@@ -2039,7 +2544,7 @@ Write **Markdown** on the left and see a clean preview here.
     const apps = getInstalledApps().filter(a => a.name.toLowerCase().includes(q));
     const tile = (app) => `
       <div class="m-app ${isAppOpenOnScreen(app.id) || getRunningAppIds().includes(app.id) ? 'running' : ''}" onclick="openMobileApp('${app.id}')">
-        <div class="m-app-icon">${app.icon}<span class="m-app-dot"></span></div>
+        <div class="m-app-icon">${appIconHtml(app)}<span class="m-app-dot"></span></div>
         <div class="m-app-name">${app.name}</div>
       </div>`;
     grid.innerHTML = apps.map(tile).join('');
@@ -2099,7 +2604,7 @@ Write **Markdown** on the left and see a clean preview here.
       const app = ALL_APPS.find(a => a.id === id);
       if (!app) return '';
       return `<div class="m-run-row">
-        <span class="m-run-icon">${app.icon}</span>
+        <span class="m-run-icon" style="width:36px;height:36px;display:inline-flex;">${appIconHtml(app)}</span>
         <span class="m-run-name" onclick="openMobileApp('${app.id}')">${app.name}</span>
         <span class="m-run-close" onclick="closeWindow('${app.id}'); renderMobileRunningApps(); updateMobileHomeVisibility(); renderMobileHome();">Close</span>
       </div>`;
@@ -2118,6 +2623,8 @@ Write **Markdown** on the left and see a clean preview here.
     setSystemAccent(osData.accentColor || '#3b82f6');
     setSystemTheme(osData.themeMode || 'dark');
     setDockPosition(osData.dockPosition || 'middle');
+    ensureHiddenAppsModel();
+    updateHiddenAppsBadge();
     setStartMenuMode(osData.startMenuMode || 'normal', false);
 
     setTimeout(() => {
@@ -2227,7 +2734,7 @@ Write **Markdown** on the left and see a clean preview here.
       if (app) {
         const item = document.createElement('div');
         item.className = 'top-item';
-        item.innerHTML = `${app.icon} ${app.name}`;
+        item.innerHTML = `${appIconHtml(app)} <span>${app.name}</span>`;
         item.onclick = () => openWindow(app.id);
         item.oncontextmenu = (e) => {
           e.preventDefault();
@@ -2288,7 +2795,7 @@ Write **Markdown** on the left and see a clean preview here.
         ${installed.map(a => `
           <label class="app-picker-item">
             <input type="checkbox" class="topbar-app-check" value="${a.id}" ${selected.includes(a.id) ? 'checked' : ''} style="accent-color:var(--accent);">
-            <span style="font-size:1.2rem;">${a.icon}</span>
+            <span style="width:28px;height:28px;display:inline-flex;">${appIconHtml(a)}</span>
             <div style="display:flex; flex-direction:column;">
               <span style="font-weight:600; font-size:0.85rem;">${a.name}</span>
             </div>
@@ -2340,11 +2847,14 @@ Write **Markdown** on the left and see a clean preview here.
     if (!osData.dockApps) osData.dockApps = [];
     if (osData.dockApps.includes(appId)) {
       osData.dockApps = osData.dockApps.filter(id => id !== appId);
-    } else {
+    } else if (!osData.dockApps.includes(appId)) {
       osData.dockApps.push(appId);
     }
+    // Dedupe to prevent duplicate taskbar entries after reload
+    osData.dockApps = [...new Set(osData.dockApps)];
     saveData();
     initDesktop();
+    updateDockState();
   }
 
   function handleContextMenuEvent(e, appId) {
@@ -2355,17 +2865,27 @@ Write **Markdown** on the left and see a clean preview here.
       const isPinnedToDock = (osData.dockApps || []).includes(appId);
       const isDesktopPinned = (osData.desktopApps || []).includes(appId);
       const isProtected = SYSTEM_APPS.includes(appId);
+      const isHidden = (osData.hiddenApps || []).includes(appId);
       menu.innerHTML = `
-        <div class="context-item" onclick="openWindow('${appId}')">▶ Launch ${app ? app.name : ''}</div>
-        <div class="context-item" onclick="togglePinToDock('${appId}')">${isPinnedToDock ? '📌 Unpin from Taskbar' : '📌 Pin to Taskbar'}</div>
-        ${!isProtected && isDesktopPinned ? `<div class="context-item danger" onclick="removeFromDesktop('${appId}')">🗑️ Remove from Desktop</div>` : (!isDesktopPinned ? `<div class="context-item" onclick="addToDesktop('${appId}')">🖥️ Add to Desktop</div>` : '')}
-        ${!isProtected ? `<div class="context-item danger" onclick="uninstallApp('${appId}')">⚠️ Uninstall App</div>` : ''}
+        <div class="context-item" onclick="openWindow('${appId}'); closeContextMenus();">▶ Launch ${app ? app.name : ''}</div>
+        <div class="context-item" onclick="openWindow('${appId}'); closeContextMenus();">↗ Open New Window</div>
+        <div class="context-sep"></div>
+        <div class="context-item" onclick="togglePinToDock('${appId}'); closeContextMenus();">${isPinnedToDock ? '⊖ Unpin from Taskbar' : '⊕ Pin to Taskbar'}</div>
+        <div class="context-item" onclick="toggleHideFromTaskbar('${appId}'); closeContextMenus();">${isHidden ? '◉ Show in Taskbar' : '◌ Hide from Taskbar'}</div>
+        ${!isProtected && isDesktopPinned ? `<div class="context-item danger" onclick="removeFromDesktop('${appId}'); closeContextMenus();">⌑ Remove from Desktop</div>` : (!isDesktopPinned ? `<div class="context-item" onclick="addToDesktop('${appId}'); closeContextMenus();">⌗ Add to Desktop</div>` : '')}
+        <div class="context-item" onclick="promptCustomTopBarApps(); closeContextMenus();">⌁ Manage Upper Menu Apps</div>
+        <div class="context-sep"></div>
+        <div class="context-item" onclick="openPersonalizeSettings(); closeContextMenus();">⚙ App Appearance</div>
+        ${!isProtected ? `<div class="context-item danger" onclick="uninstallApp('${appId}'); closeContextMenus();">⌫ Uninstall App</div>` : ''}
       `;
     } else {
       menu.innerHTML = `
-        <div class="context-item" onclick="openPersonalizeSettings()">🎨 Personalize</div>
-        <div class="context-item" onclick="openWindow('documentCore')">📁 Open Document Storage</div>
-        <div class="context-item" onclick="location.reload()">🔄 Refresh OS</div>
+        <div class="context-item" onclick="openPersonalizeSettings(); closeContextMenus();">🎨 Personalize Workspace</div>
+        <div class="context-item" onclick="openWindow('documentCore'); closeContextMenus();">📁 Open Document Storage</div>
+        <div class="context-item" onclick="promptCustomTopBarApps(); closeContextMenus();">⌁ Configure Upper Menu</div>
+        <div class="context-item" onclick="setDockPosition(osData.dockPosition === 'middle' ? 'left' : 'middle'); closeContextMenus();">◫ Move Taskbar Position</div>
+        <div class="context-sep"></div>
+        <div class="context-item" onclick="location.reload()">⟳ Refresh Workspace</div>
       `;
     }
     positionContextMenu(menu, e.clientX, e.clientY);
@@ -2516,7 +3036,7 @@ Write **Markdown** on the left and see a clean preview here.
       if (app) {
         desktopGrid.innerHTML += `
           <div class="d-icon" onclick="openWindow('${app.id}')" oncontextmenu="handleContextMenuEvent(event, '${app.id}')">
-            <div class="d-icon-box">${app.icon}</div>
+            <div class="d-icon-box">${appIconHtml(app)}</div>
             <span style="font-weight:600;">${app.name}</span>
           </div>
         `;
@@ -2526,7 +3046,7 @@ Write **Markdown** on the left and see a clean preview here.
     activeApps.forEach(app => {
       hubGrid.innerHTML += `
         <div class="d-icon" draggable="true" ondragstart="handleAppDragStart(event, '${app.id}')" onclick="openWindow('${app.id}'); toggleLaunchHub();" oncontextmenu="handleContextMenuEvent(event, '${app.id}')">
-          <div class="d-icon-box">${app.icon}</div>
+          <div class="d-icon-box">${appIconHtml(app)}</div>
           <span style="font-weight:600;">${app.name}</span>
         </div>
       `;
@@ -2539,9 +3059,15 @@ Write **Markdown** on the left and see a clean preview here.
   }
 
   function getVramCapacityMB() {
+    if (osData.vseRedeemedCode && VSE_CODES[osData.vseRedeemedCode]) {
+      return VSE_CODES[osData.vseRedeemedCode].vramGB * 1024;
+    }
     return VRAM_BASE_TOTAL_MB;
   }
   function getStorageCapacityMB() {
+    if (osData.vseRedeemedCode && VSE_CODES[osData.vseRedeemedCode]) {
+      return VSE_CODES[osData.vseRedeemedCode].storageGB * 1024;
+    }
     return STORAGE_BASE_TOTAL_MB;
   }
   function getUsableVramMB() { return getVramCapacityMB() - VRAM_RESERVED_MB; }
@@ -2614,7 +3140,7 @@ Write **Markdown** on the left and see a clean preview here.
       running.forEach(id => {
         const app = ALL_APPS.find(a => a.id === id);
         if (!app) return;
-        let label = `${app.icon} ${app.name}`;
+        let label = `${app.name}`;
         if (id === 'browserApp' && browserTabs) label += ` (${browserTabs.length} tab${browserTabs.length === 1 ? '' : 's'})`;
         rows += `
           <div class="vram-app-row">
@@ -2649,7 +3175,7 @@ Write **Markdown** on the left and see a clean preview here.
 
   function getUsedStorageMB() {
     let used = 0;
-    (osData.savedMedia || []).forEach(m => { used += m.type === 'video' ? VIDEO_STORAGE_COST_MB : IMAGE_STORAGE_COST_MB; });
+    (osData.savedMedia || []).forEach(m => { used += m.type === 'video' ? VIDEO_STORAGE_COST_MB : (m.type === 'pdf' ? IMAGE_STORAGE_COST_MB * 2 : IMAGE_STORAGE_COST_MB); });
     (osData.savedFiles || []).forEach(f => { used += DOCUMENT_STORAGE_COST_MB; });
     return used;
   }
@@ -2664,7 +3190,7 @@ Write **Markdown** on the left and see a clean preview here.
         return `
           <div class="app-picker-item" style="justify-content:space-between;">
             <div style="display:flex; align-items:center; gap:10px;">
-              <span style="font-size:1.2rem;">${app.icon}</span>
+              <span style="width:28px;height:28px;display:inline-flex;flex-shrink:0;">${appIconHtml(app)}</span>
               <div style="display:flex; flex-direction:column;">
                 <span style="font-weight:600; font-size:0.85rem;">${app.name}</span>
                 <span style="font-size:0.72rem; color:var(--text-sub);">${getAppVramCost(id)} MB</span>
@@ -2768,7 +3294,17 @@ Write **Markdown** on the left and see a clean preview here.
   function minimizeWindow(id) {
     const win = document.getElementById(id);
     if (win) {
+      if (win.classList.contains('fullscreen')) {
+        win.classList.remove('fullscreen');
+        if (win.dataset.prevTop) {
+          win.style.top = win.dataset.prevTop;
+          win.style.left = win.dataset.prevLeft;
+          win.style.width = win.dataset.prevWidth;
+          win.style.height = win.dataset.prevHeight;
+        }
+      }
       win.classList.add('minimized');
+      document.body.classList.toggle('has-fullscreen-app', !!document.querySelector('.os-window.fullscreen'));
       updateDockState();
       refreshStorageVramPanel();
       if (typeof updateMobileHomeVisibility === 'function') { updateMobileHomeVisibility(); renderMobileHome(); }
@@ -2808,6 +3344,8 @@ Write **Markdown** on the left and see a clean preview here.
     const win = document.getElementById(id);
     if (win) {
       win.classList.remove('open-active', 'focused', 'fullscreen', 'minimized');
+      // Restore top bar + taskbar when no fullscreen windows remain
+      document.body.classList.toggle('has-fullscreen-app', !!document.querySelector('.os-window.fullscreen'));
       updateDockState();
       if (typeof updateMobileHomeVisibility === 'function') { updateMobileHomeVisibility(); renderMobileHome(); }
       refreshStorageVramPanel();
@@ -2827,35 +3365,153 @@ Write **Markdown** on the left and see a clean preview here.
     }
   }
 
+
+  /* ===================== HIDDEN APPS (TASKBAR) ===================== */
+  function ensureHiddenAppsModel() {
+    if (!Array.isArray(osData.hiddenApps)) osData.hiddenApps = [];
+    // Keep only valid installed app ids
+    const valid = new Set((typeof ALL_APPS !== 'undefined' ? ALL_APPS : []).map(a => a.id));
+    osData.hiddenApps = [...new Set(osData.hiddenApps.filter(id => valid.has(id)))];
+  }
+
+  function updateHiddenAppsBadge() {
+    ensureHiddenAppsModel();
+    const badge = document.getElementById('hiddenAppsBadge');
+    if (!badge) return;
+    const n = (osData.hiddenApps || []).length;
+    badge.textContent = String(n);
+    badge.classList.toggle('show', n > 0);
+  }
+
+  function toggleHideFromTaskbar(appId) {
+    ensureHiddenAppsModel();
+    closeContextMenus();
+    if ((osData.hiddenApps || []).includes(appId)) {
+      osData.hiddenApps = osData.hiddenApps.filter(id => id !== appId);
+      saveData();
+      updateDockState();
+      renderHiddenAppsList();
+      showGlassAlert('App is visible on the taskbar again.', '👁 Unhidden');
+      return;
+    }
+    osData.hiddenApps.push(appId);
+    osData.hiddenApps = [...new Set(osData.hiddenApps)];
+    saveData();
+    updateDockState();
+    renderHiddenAppsList();
+    showGlassAlert('App hidden from the taskbar. Open Hidden Apps (eye button) to access it.', '🙈 Hidden');
+  }
+
+  function openHiddenAppsAccess() {
+    ensureHiddenAppsModel();
+    // Require account password to view hidden apps
+    document.getElementById('popupTitle').textContent = '👁 Hidden Apps';
+    document.getElementById('popupBody').textContent = 'Enter your account password to open Hidden Apps:';
+    document.getElementById('popupInputContainer').innerHTML = `
+      <input type="password" class="input-ui" id="glassPromptInput" value="" style="margin-top:8px;" onkeydown="if(event.key==='Enter') triggerGlassPopupSubmit()" />
+    `;
+    popupCallback = (pw) => {
+      if (pw === null || pw === undefined) return;
+      if (String(pw) !== String(osData.password || '')) {
+        // Defer so closeGlassPopup does not immediately dismiss the error alert
+        setTimeout(() => showGlassAlert('Incorrect password. Hidden Apps remain locked.', '🔒 Access Denied'), 40);
+        return;
+      }
+      setTimeout(() => openHiddenAppsPanel(), 40);
+    };
+    document.getElementById('popupActions').innerHTML = `
+      <button class="btn-ui" onclick="closeGlassPopup()">Cancel</button>
+      <button class="btn-ui btn-accent" onclick="triggerGlassPopupSubmit()">Unlock</button>
+    `;
+    document.getElementById('globalGlassPopup').classList.add('active');
+    setTimeout(() => {
+      const inp = document.getElementById('glassPromptInput');
+      if (inp) { inp.focus(); }
+    }, 100);
+  }
+
+  function openHiddenAppsPanel() {
+    ensureHiddenAppsModel();
+    renderHiddenAppsList();
+    const panel = document.getElementById('hiddenAppsPanel');
+    if (panel) panel.classList.add('open');
+  }
+
+  function closeHiddenAppsPanel() {
+    const panel = document.getElementById('hiddenAppsPanel');
+    if (panel) panel.classList.remove('open');
+  }
+
+  function renderHiddenAppsList() {
+    ensureHiddenAppsModel();
+    const list = document.getElementById('hiddenAppsList');
+    if (!list) return;
+    const ids = osData.hiddenApps || [];
+    if (!ids.length) {
+      list.innerHTML = '<div style="font-size:0.82rem; color:var(--text-sub); padding:12px 4px;">No hidden apps. Right-click a taskbar or desktop app and choose Hide from Taskbar.</div>';
+      updateHiddenAppsBadge();
+      return;
+    }
+    list.innerHTML = ids.map(id => {
+      const app = ALL_APPS.find(a => a.id === id);
+      if (!app) return '';
+      const safe = String(id).replace(/'/g, "\\'");
+      return `<div class="hidden-app-row" onclick="openWindow('${safe}'); closeHiddenAppsPanel();">
+        <span style="width:32px;height:32px;display:inline-flex;flex-shrink:0;">${appIconHtml(app)}</span>
+        <span style="font-weight:700; font-size:0.88rem; flex:1;">${app.name}</span>
+        <button class="btn-ui" style="padding:4px 8px; font-size:0.72rem;" onclick="event.stopPropagation(); toggleHideFromTaskbar('${safe}')">Unhide</button>
+      </div>`;
+    }).join('');
+    updateHiddenAppsBadge();
+  }
+
   function updateDockState() {
     const dockItemsArea = document.getElementById('dockItemsArea');
     if (!dockItemsArea) return;
     dockItemsArea.innerHTML = '';
+    ensureHiddenAppsModel();
     const activeApps = getInstalledApps();
-    let dockAppIds = [...(osData.dockApps || [])];
+    const hiddenSet = new Set(osData.hiddenApps || []);
+    // Dedupe pinned dock apps while preserving order; then append running apps not already listed
+    const seen = new Set();
+    let dockAppIds = [];
+    (osData.dockApps || []).forEach(id => {
+      if (hiddenSet.has(id)) return;
+      if (!seen.has(id) && activeApps.some(a => a.id === id)) {
+        seen.add(id);
+        dockAppIds.push(id);
+      }
+    });
     ALL_APPS.forEach(app => {
       const win = document.getElementById(app.id);
-      if (win && (win.classList.contains('open-active') || win.classList.contains('minimized'))) {
-        if (!dockAppIds.includes(app.id)) dockAppIds.push(app.id);
+      if (!win) return;
+      if (hiddenSet.has(app.id)) return;
+      const isOpen = win.classList.contains('open-active') || win.classList.contains('minimized');
+      if (isOpen && !seen.has(app.id) && activeApps.some(a => a.id === app.id)) {
+        seen.add(app.id);
+        dockAppIds.push(app.id);
       }
     });
     dockAppIds.forEach(appId => {
       const app = activeApps.find(a => a.id === appId);
       const win = document.getElementById(appId);
-      if (app && win) {
-        const isOpen = win.classList.contains('open-active');
-        const isMinimized = win.classList.contains('minimized');
-        const isRunning = isOpen || isMinimized;
-        const isFocused = isOpen && !isMinimized && win.classList.contains('focused');
-        const dockItem = document.createElement('div');
-        dockItem.className = `dock-item ${isRunning ? 'running' : ''} ${isOpen && !isMinimized ? 'active' : ''} ${isFocused ? 'focused-app' : ''}`;
-        dockItem.id = `dock-${app.id}`;
-        dockItem.innerHTML = `${app.icon}<div class="dock-item-indicator"></div>`;
-        dockItem.onclick = () => toggleWindow(app.id);
-        dockItem.oncontextmenu = (e) => { e.preventDefault(); handleContextMenuEvent(e, app.id); };
-        dockItemsArea.appendChild(dockItem);
-      }
+      if (!app || !win) return;
+      // Avoid duplicate dock entries if updateDockState is called rapidly
+      if (document.getElementById('dock-' + app.id)) return;
+      const isOpen = win.classList.contains('open-active');
+      const isMinimized = win.classList.contains('minimized');
+      const isRunning = isOpen || isMinimized;
+      const isFocused = isOpen && !isMinimized && win.classList.contains('focused');
+      const dockItem = document.createElement('div');
+      dockItem.className = `dock-item ${isRunning ? 'running' : ''} ${isOpen && !isMinimized ? 'active' : ''} ${isFocused ? 'focused-app' : ''}`;
+      dockItem.id = `dock-${app.id}`;
+      dockItem.title = app.name;
+      dockItem.innerHTML = `${appIconHtml(app)}<div class="dock-item-indicator"></div>`;
+      dockItem.onclick = () => toggleWindow(app.id);
+      dockItem.oncontextmenu = (e) => { e.preventDefault(); e.stopPropagation(); handleContextMenuEvent(e, app.id); };
+      dockItemsArea.appendChild(dockItem);
     });
+    updateHiddenAppsBadge();
     if (typeof renderMobileRunningApps === 'function') renderMobileRunningApps();
   }
 
@@ -3492,221 +4148,164 @@ Write **Markdown** on the left and see a clean preview here.
   }
 
   /* ===================== DOCUMENTS / FILES ENGINE ===================== */
-  function filterFiles(category, navEl) {
-    currentFileFilter = category;
-    if (navEl) { document.querySelectorAll('#documentCore .os-nav-item').forEach(el => el.classList.remove('active')); navEl.classList.add('active'); }
-    renderFolders();
+  let fileState = { path: '/', history: ['/'], historyIndex: 0, query: '', sort: 'name', direction: 'asc', view: 'grid', selected: [] };
+  function ensureFileModel() {
+    if (!osData.savedFiles) osData.savedFiles = [];
+    if (!osData.fileFolders) osData.fileFolders = [];
+    if (!osData.fileTrash) osData.fileTrash = [];
+    if (!osData.fileFavorites) osData.fileFavorites = [];
+    if (!osData.fileRecent) osData.fileRecent = [];
+    if (!osData.fileView) osData.fileView = 'grid';
+    osData.savedFiles.forEach(f => { if (!f.id) f.id = 'file_' + Math.random().toString(36).slice(2); if (!f.path) f.path = '/'; if (!f.createdAt) f.createdAt = Date.now(); if (!f.modifiedAt) f.modifiedAt = f.createdAt; if (f.size == null) f.size = Math.max(1, JSON.stringify(f.content || f.data || '').length); if (f.favorite == null) f.favorite = false; });
+    osData.fileFolders.forEach(f => { if (!f.id) f.id = 'folder_' + Math.random().toString(36).slice(2); if (!f.path) f.path = '/'; if (!f.createdAt) f.createdAt = Date.now(); if (!f.modifiedAt) f.modifiedAt = f.createdAt; if (f.favorite == null) f.favorite = false; });
+    fileState.view = osData.fileView || 'grid';
   }
-
-  function handleMediaUpload(e) { const files = Array.from(e.target.files); processUploadedFiles(files); e.target.value = ''; }
+  function allFileItems(includeTrash = false) { ensureFileModel(); const items = [...osData.fileFolders, ...osData.savedFiles]; return includeTrash ? [...items, ...osData.fileTrash] : items; }
+  function fileItemById(id, includeTrash = false) { return allFileItems(includeTrash).find(x => x.id === id); }
+  function fileParent(path) { const p = path === '/' ? '/' : path.replace(/\/$/, ''); const i = p.lastIndexOf('/'); return i <= 0 ? '/' : p.slice(0, i); }
+  function fileBase(path) { return path === '/' ? 'Home' : path.split('/').filter(Boolean).pop(); }
+  function itemPath(item) { return item.kind === 'folder' ? item.path + item.name + '/' : item.path + item.name; }
+  function uniqueFileName(name, path, kind) { const list = allFileItems().filter(x => x.path === path && x.kind === kind); if (!list.some(x => x.name === name)) return name; const dot = name.lastIndexOf('.'); const base = dot > 0 ? name.slice(0, dot) : name, ext = dot > 0 ? name.slice(dot) : ''; let i = 2; while (list.some(x => x.name === `${base} (${i})${ext}`)) i++; return `${base} (${i})${ext}`; }
+  function saveFileState() { osData.fileView = fileState.view; saveData(); }
+  function navigateFiles(path, navEl, push = true) { ensureFileModel(); if (path === 'trash' || path === 'favorites' || path === 'recent') { currentFileFilter = path; fileState.path = '/'; } else { fileState.path = path === 'home' ? '/' : path; currentFileFilter = 'all'; } fileState.selected = []; if (push) { fileState.history = fileState.history.slice(0, fileState.historyIndex + 1); fileState.history.push(fileState.path); fileState.historyIndex++; } if (navEl) { document.querySelectorAll('#documentCore .os-nav-item').forEach(el => el.classList.remove('active')); navEl.classList.add('active'); } renderFolders(); }
+  function fileNavigateBack() { if (fileState.historyIndex > 0) { fileState.historyIndex--; fileState.path = fileState.history[fileState.historyIndex]; renderFolders(); } }
+  function fileNavigateForward() { if (fileState.historyIndex < fileState.history.length - 1) { fileState.historyIndex++; fileState.path = fileState.history[fileState.historyIndex]; renderFolders(); } }
+  function filterFiles(category, navEl) { currentFileFilter = category; if (category === 'all') fileState.path = '/'; fileState.selected = []; if (navEl) { document.querySelectorAll('#documentCore .os-nav-item').forEach(el => el.classList.remove('active')); navEl.classList.add('active'); } renderFolders(); }
+  function setFileSearch(value) { fileState.query = value || ''; renderFolders(); }
+  function setFileSort(value) { fileState.sort = value; renderFolders(); }
+  function toggleFileSortDirection() { fileState.direction = fileState.direction === 'asc' ? 'desc' : 'asc'; const b = document.getElementById('fileSortDirection'); if (b) b.textContent = fileState.direction === 'asc' ? '↑' : '↓'; renderFolders(); }
+  function setFileView(view) { fileState.view = view; saveFileState(); renderFolders(); }
+  function selectAllFiles() { const visible = getVisibleFileItems(); fileState.selected = visible.map(x => x.id); renderFolders(); }
+  function getVisibleFileItems() { ensureFileModel(); if (currentFileFilter === 'trash') return osData.fileTrash || []; if (currentFileFilter === 'favorites') return allFileItems().filter(x => x.favorite); if (currentFileFilter === 'recent') return allFileItems().filter(x => (osData.fileRecent || []).includes(x.id)); let items = allFileItems().filter(x => x.path === fileState.path); if (currentFileFilter === 'sheets') items = items.filter(f => f.kind === 'file' && f.name.endsWith('.sheet')); if (currentFileFilter === 'docs') items = items.filter(f => f.kind === 'file' && !f.name.endsWith('.sheet') && !/\.pdf$/i.test(f.name)); if (currentFileFilter === 'pdfs') items = items.filter(f => f.kind === 'file' && /\.pdf$/i.test(f.name)); if (fileState.query) items = items.filter(f => f.name.toLowerCase().includes(fileState.query.toLowerCase())); return items; }
+  function fileType(item) { if (item.kind === 'folder') return 'Folder'; return item.name.includes('.') ? item.name.split('.').pop().toUpperCase() + ' file' : 'File'; }
+  function fileIcon(item) { if (item.kind === 'folder') return '📁'; if (item.name.endsWith('.sheet')) return '📊'; if (/\.pdf$/i.test(item.name)) return '📄'; if (item.name.match(/\.(js|html|css|json|md|py|ts)$/i)) return '💻'; if (item.name.match(/\.(png|jpg|jpeg|gif|webp)$/i)) return '🖼️'; return '📄'; }
+  function formatFileSize(bytes) { if (bytes < 1024) return `${bytes} B`; if (bytes < 1048576) return `${(bytes / 1024).toFixed(1)} KB`; return `${(bytes / 1048576).toFixed(1)} MB`; }
+  function renderBreadcrumbs() { const el = document.getElementById('fileBreadcrumbs'); if (!el) return; const parts = fileState.path.split('/').filter(Boolean); let path = '/'; el.innerHTML = `<span class="file-breadcrumb" onclick="navigateFiles('/')">Home</span>` + parts.map(p => { path += p + '/'; const current = path.replace(/\/$/, '') || '/'; return `<span>/</span><span class="file-breadcrumb" onclick="navigateFiles('${current}')">${p}</span>`; }).join(''); }
+  function renderFolders() { ensureFileModel(); const view = document.getElementById('folderView'); if (!view) return; renderBreadcrumbs(); const subtitle = document.getElementById('filesPaneSubtitle'); if (currentFileFilter === 'uninstalled') { if (subtitle) subtitle.textContent = 'Uninstalled System Apps (Click to Reinstall or type in Terminal):'; view.innerHTML = (osData.uninstalledApps || []).map(id => { const app = ALL_APPS.find(a => a.id === id); return app ? `<div class="file-item" onclick="reinstallApp('${app.id}')"><span style="width:44px;height:44px;display:inline-flex;">${appIconHtml(app)}</span><span>${app.name}</span></div>` : ''; }).join('') || '<div style="color:var(--text-sub);padding:20px;">No uninstalled apps.</div>'; return; } if (currentFileFilter === 'media') {
+      if (subtitle) subtitle.textContent = 'Videos, Photos & PDFs in Media Library:';
+      view.classList.remove('file-list-view');
+      const media = osData.savedMedia || [];
+      if (!media.length) {
+        view.innerHTML = '<div style="color:var(--text-sub);padding:20px;grid-column:1/-1;">No media yet. Use Upload Media or Media Viewer / PDF Viewer to import files.</div>';
+        return;
+      }
+      view.innerHTML = media.map(m => {
+        const icon = m.type === 'video' ? '🎥' : (m.type === 'pdf' ? '📄' : '🖼️');
+        const openFn = m.type === 'pdf' ? `openPdfInViewerById('${m.id}')` : `openMediaInViewer('${m.id}')`;
+        return `<div class="file-item" onclick="${openFn}"><span style="font-size:2.2rem;">${icon}</span><span style="word-break:break-word;font-weight:600;">${m.name}</span><span style="font-size:0.7rem;color:var(--text-sub);">${(m.type||'').toUpperCase()} · ${formatBytes(m.size||0)}</span></div>`;
+      }).join('');
+      return;
+    }
+    if (currentFileFilter === 'pdfs') {
+      // fall through to file list of pdf files; also show media pdfs
+    }
+    let items = getVisibleFileItems(); const dir = fileState.direction === 'asc' ? 1 : -1; items.sort((a,b) => { let av = fileState.sort === 'size' ? (a.size || 0) : fileState.sort === 'modified' ? (a.modifiedAt || 0) : fileState.sort === 'type' ? fileType(a) : a.name.toLowerCase(); let bv = fileState.sort === 'size' ? (b.size || 0) : fileState.sort === 'modified' ? (b.modifiedAt || 0) : fileState.sort === 'type' ? fileType(b) : b.name.toLowerCase(); return av < bv ? -dir : av > bv ? dir : 0; });
+    view.classList.toggle('file-list-view', fileState.view === 'list'); view.innerHTML = ''; if (subtitle) subtitle.textContent = currentFileFilter === 'trash' ? 'Recently Deleted — restore or permanently delete items.' : `Path: ${fileState.path} · ${items.length} item${items.length === 1 ? '' : 's'}`; const selectedSummary = document.getElementById('fileSelectionSummary'); if (selectedSummary) selectedSummary.textContent = fileState.selected.length ? `${fileState.selected.length} selected` : '';
+    if (!items.length) { view.innerHTML = '<div style="color:var(--text-sub);font-size:.85rem;padding:20px;grid-column:1 / -1;">This folder is empty.</div>'; return; }
+    items.forEach(item => { const selected = fileState.selected.includes(item.id); const trash = currentFileFilter === 'trash'; const safe = String(item.id).replace(/'/g, "\\'"); const actions = trash ? `<button class="btn-ui" onclick="event.stopPropagation(); restoreFile('${safe}')">↩️</button><button class="btn-ui btn-danger" onclick="event.stopPropagation(); permanentlyDeleteFile('${safe}')">🗑️</button>` : `<button class="btn-ui btn-danger file-delete-btn" title="Move to Trash" onclick="event.stopPropagation(); deleteFile('${safe}')">🗑️</button><button class="btn-ui file-fav-btn" title="Favorite" onclick="event.stopPropagation(); toggleFavoriteFile('${safe}')">${item.favorite ? '★' : '☆'}</button>`; const meta = fileState.view === 'list' ? `<span style="font-size:.7rem;color:var(--text-sub);">${fileType(item)} · ${formatFileSize(item.size || 0)}</span>` : ''; view.innerHTML += `<div class="file-item ${selected ? 'file-selected' : ''}" draggable="true" data-file-id="${safe}" onclick="handleFileClick(event,'${safe}')" oncontextmenu="showFileContextMenu(event,'${safe}')" ondragstart="handleFileDragStart(event,'${safe}')" title="Right-click for actions"><div class="file-item-actions">${actions}</div><span style="font-size:2.2rem;">${fileIcon(item)}</span><span style="word-break:break-word;font-weight:600;">${item.name}</span>${meta}</div>`; }); }
+  function handleFileClick(event, id) { if (event.ctrlKey || event.metaKey) { fileState.selected = fileState.selected.includes(id) ? fileState.selected.filter(x => x !== id) : [...fileState.selected, id]; renderFolders(); return; } if (event.shiftKey) { if (!fileState.selected.includes(id)) fileState.selected.push(id); renderFolders(); return; } const item = fileItemById(id, currentFileFilter === 'trash'); if (!item) return; if (item.kind === 'folder') navigateFiles(itemPath(item)); else openManagedFile(item); }
+  function openManagedFile(item) {
+    if (!item) return;
+    osData.fileRecent = [item.id, ...(osData.fileRecent || []).filter(x => x !== item.id)].slice(0, 20);
+    saveData();
+    if (item.name.endsWith('.sheet')) { openSavedFile(item.name); return; }
+    if (item.mediaType || item.url) {
+      // media/pdf record stored in savedFiles rarely; prefer savedMedia
+    }
+    if (/\.pdf$/i.test(item.name) || item.type === 'pdf') {
+      openPdfInViewer(item);
+      return;
+    }
+    if (/\.(png|jpe?g|gif|webp|bmp|svg)$/i.test(item.name) || /\.(mp4|webm|ogg|mov)$/i.test(item.name)) {
+      // try match savedMedia by name
+      const media = (osData.savedMedia || []).find(m => m.name === item.name);
+      if (media) { openMediaInViewer(media.id); return; }
+    }
+    activeDocFilename = item.name;
+    document.getElementById('wordDocTitle').textContent = item.name;
+    document.getElementById('wordPaper').innerHTML = item.content || '<p></p>';
+    updateWordStats();
+    openWindow('wordApp');
+  }
+  function showFileContextMenu(event, id) {
+    event.preventDefault();
+    event.stopPropagation();
+    const item = fileItemById(id, currentFileFilter === 'trash');
+    if (!item) return;
+    const menu = document.getElementById('desktopContextMenu');
+    if (!menu) return;
+    const isTrash = currentFileFilter === 'trash';
+    if (isTrash) {
+      menu.innerHTML = `
+        <div class="context-item" onclick="restoreFile('${id}'); closeContextMenus()">↩️ Restore</div>
+        <div class="context-item" onclick="showFileProperties('${id}')">ℹ️ Properties</div>
+        <div class="context-item danger" onclick="permanentlyDeleteFile('${id}'); closeContextMenus()">🗑️ Delete Permanently</div>
+      `;
+    } else {
+      menu.innerHTML = `
+        <div class="context-item" onclick="openManagedFile(fileItemById('${id}',true)); closeContextMenus()">▶ Open</div>
+        <div class="context-item" onclick="showFileProperties('${id}')">ℹ️ Properties</div>
+        <div class="context-item" onclick="renameFile('${id}'); closeContextMenus()">✏️ Rename</div>
+        <div class="context-item" onclick="copyFile('${id}'); closeContextMenus()">⧉ Copy</div>
+        <div class="context-item" onclick="duplicateFile('${id}'); closeContextMenus()">⧉ Duplicate</div>
+        <div class="context-item" onclick="moveFile('${id}'); closeContextMenus()">↪ Move</div>
+        <div class="context-item" onclick="toggleFavoriteFile('${id}'); closeContextMenus()">${item.favorite ? '☆ Unfavorite' : '⭐ Favorite'}</div>
+        <div class="context-item danger" onclick="deleteFile('${id}'); closeContextMenus()">🗑️ Delete</div>
+      `;
+    }
+    positionContextMenu(menu, event.clientX, event.clientY);
+  }
+  function createFolderPrompt() { showGlassPrompt('Folder name:', 'New Folder', name => { name = (name || '').trim(); if (!name) return; ensureFileModel(); osData.fileFolders.push({ id:'folder_'+Date.now(), kind:'folder', name:uniqueFileName(name,fileState.path,'folder'), path:fileState.path, createdAt:Date.now(), modifiedAt:Date.now(), size:0, favorite:false }); saveFileState(); renderFolders(); }); }
+  function createNewFilePrompt() { showGlassPrompt("Create new file type (doc, sheet, txt, code):", 'txt', type => { const ext = (type || 'txt').toLowerCase().includes('sheet') ? '.sheet' : (type || 'txt').toLowerCase().includes('doc') ? '.doc' : (type || 'txt').toLowerCase().includes('code') ? '.js' : '.txt'; showGlassPrompt('File name:', 'New_File' + ext, name => { name = (name || '').trim(); if (!name) return; if (!name.includes('.')) name += ext; const item = { id:'file_'+Date.now(), kind:'file', name:uniqueFileName(name,fileState.path,'file'), path:fileState.path, content: ext === '.sheet' ? undefined : '<p>Start writing...</p>', data: ext === '.sheet' ? {} : undefined, createdAt:Date.now(), modifiedAt:Date.now(), size:1, favorite:false }; osData.savedFiles.push(item); saveFileState(); renderFolders(); openManagedFile(item); }, '📄 New File'); }, '📂 Create New File'); }
+  function renameFile(id) { const item = fileItemById(id); if (!item) return; showGlassPrompt('Rename:', item.name, name => { name=(name||'').trim(); if (!name) return; item.name=uniqueFileName(name,item.path,item.kind); item.modifiedAt=Date.now(); saveFileState(); renderFolders(); }); }
+  function duplicateFile(id) { const item = fileItemById(id); if (!item) return; const copy = JSON.parse(JSON.stringify(item)); copy.id = item.kind + '_' + Date.now(); copy.name = uniqueFileName(item.name,item.path,item.kind); copy.createdAt=copy.modifiedAt=Date.now(); if (item.kind === 'folder') osData.fileFolders.push(copy); else osData.savedFiles.push(copy); saveFileState(); renderFolders(); }
+  function moveFile(id) { const item=fileItemById(id); if (!item) return; showGlassPrompt('Move to path:', item.path, path => { path=(path||'/').trim(); if (!path.startsWith('/')) path='/'+path; if (!path.endsWith('/')) path+='/'; item.path=path; item.modifiedAt=Date.now(); saveFileState(); renderFolders(); }); }
+  function copyFile(id) { const item=fileItemById(id); if (!item) return; fileState.clipboard = JSON.parse(JSON.stringify(item)); showGlassAlert(`Copied '${item.name}'. Use Duplicate to create a sibling copy.`, '⧉ File Copied'); }
+  function toggleFavoriteFile(id) { const item=fileItemById(id); if (!item) return; item.favorite=!item.favorite; saveFileState(); renderFolders(); }
+  function deleteFile(id) { const item=fileItemById(id); if (!item) return; showGlassConfirm(`Move '${item.name}' to Recently Deleted?`, () => { osData.savedFiles=osData.savedFiles.filter(x=>x.id!==id); osData.fileFolders=osData.fileFolders.filter(x=>x.id!==id); item.deletedAt=Date.now(); osData.fileTrash.push(item); saveFileState(); renderFolders(); refreshStorageVramPanel(); }, '🗑️ Move to Trash'); }
+  function restoreFile(id) { const item=(osData.fileTrash||[]).find(x=>x.id===id); if (!item) return; osData.fileTrash=osData.fileTrash.filter(x=>x.id!==id); item.path='/'; item.deletedAt=null; (item.kind==='folder'?osData.fileFolders:osData.savedFiles).push(item); saveFileState(); renderFolders(); }
+  function permanentlyDeleteFile(id) { osData.fileTrash=(osData.fileTrash||[]).filter(x=>x.id!==id); saveFileState(); renderFolders(); refreshStorageVramPanel(); }
+  function showFileProperties(id) { const item=fileItemById(id,true); if (!item) return; const ext=item.kind==='folder'?'—':(item.name.includes('.')?item.name.split('.').pop():'—'); showGlassAlert(`Name: ${item.name}\nExtension: ${ext}\nType: ${fileType(item)}\nSize: ${formatFileSize(item.size||0)}\nCreated: ${new Date(item.createdAt||Date.now()).toLocaleString()}\nModified: ${new Date(item.modifiedAt||Date.now()).toLocaleString()}\nPath: ${item.path}\nPermissions: rw-r--r-- (simulated)\nStorage category: ${item.kind === 'folder' ? 'Folder' : 'Documents'}`, 'ℹ️ Properties'); }
+  function handleFileDragOver(event) { event.preventDefault(); event.dataTransfer.dropEffect='move'; }
+  function handleFileDragStart(event,id) { event.dataTransfer.setData('text/enfrok-file',id); }
+  function handleFileDrop(event) { event.preventDefault(); const id=event.dataTransfer.getData('text/enfrok-file'); const item=fileItemById(id); if (!item || item.path===fileState.path) return; item.path=fileState.path; item.modifiedAt=Date.now(); saveFileState(); renderFolders(); }
+  function handleMediaUpload(e) { const files=Array.from(e.target.files||[]); processUploadedFiles(files); e.target.value=''; }
   function handleMediaDrop(e) { e.preventDefault(); if (e.dataTransfer && e.dataTransfer.files) processUploadedFiles(Array.from(e.dataTransfer.files)); }
-
   function processUploadedFiles(files) {
     if (!osData.savedMedia) osData.savedMedia = [];
-    let rejectedForStorage = 0;
-    const acceptedFiles = [];
     files.forEach(file => {
-      const isVideo = file.type.startsWith('video');
-      const isImage = file.type.startsWith('image');
-      if (!isVideo && !isImage) return;
-      const cost = isVideo ? VIDEO_STORAGE_COST_MB : IMAGE_STORAGE_COST_MB;
-      const projected = getUsedStorageMB() + acceptedFiles.reduce((sum, f) => sum + f.cost, 0) + cost;
-      if (projected > getStorageCapacityMB()) { rejectedForStorage++; return; }
-      acceptedFiles.push({ file, isVideo, cost });
-    });
-    acceptedFiles.forEach(({ file, isVideo }) => {
+      const isImg = file.type.startsWith('image');
+      const isVid = file.type.startsWith('video');
+      const isPdf = file.type === 'application/pdf' || /\.pdf$/i.test(file.name);
+      if (!isImg && !isVid && !isPdf) return;
+      if (isPdf && file.size > 11 * 1024 * 1024) {
+        showGlassAlert(`'${file.name}' exceeds the 11 MB PDF limit and was skipped.`, '⚠️ PDF Too Large');
+        return;
+      }
       const reader = new FileReader();
-      reader.onload = (event) => {
-        osData.savedMedia.push({ id: 'media_' + Date.now() + Math.random().toString(36).substr(2, 4), name: file.name, type: isVideo ? 'video' : 'photo', url: event.target.result });
+      reader.onload = ev => {
+        const type = isPdf ? 'pdf' : (isVid ? 'video' : 'photo');
+        osData.savedMedia.push({
+          id: 'media_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
+          name: file.name,
+          type,
+          url: ev.target.result,
+          size: file.size || 0,
+          pageCount: type === 'pdf' ? null : undefined,
+          addedAt: Date.now()
+        });
         saveData();
         renderFolders();
         refreshStorageVramPanel();
+        if (typeof renderMediaViewerLibrary === 'function') renderMediaViewerLibrary();
+        if (typeof renderPdfViewerList === 'function') renderPdfViewerList();
       };
+      reader.onerror = () => showGlassAlert(`Could not read '${file.name}'.`, '⚠️ Import Failed');
       reader.readAsDataURL(file);
     });
-    if (rejectedForStorage > 0) showGlassAlert(`Storage is full. ${rejectedForStorage} file(s) could not be added.`, "⚠️ Storage Full");
   }
-
-  function renderFolders() {
-    const view = document.getElementById('folderView');
-    const subtitle = document.getElementById('filesPaneSubtitle');
-    if (!view) return;
-    view.innerHTML = '';
-
-    if (currentFileFilter === 'uninstalled') {
-      if (subtitle) subtitle.textContent = 'Uninstalled System Apps (Click to Reinstall or type in Terminal):';
-      if (!osData.uninstalledApps || osData.uninstalledApps.length === 0) {
-        view.innerHTML = '<div style="color:var(--text-sub); font-size:0.85rem; padding:20px; grid-column: 1 / -1;">No uninstalled apps. All system applications are active!</div>';
-        return;
-      }
-      osData.uninstalledApps.forEach(appId => {
-        const app = ALL_APPS.find(a => a.id === appId);
-        if (app) {
-          view.innerHTML += `
-            <div class="file-item" onclick="reinstallApp('${app.id}')" title="Click to reinstall">
-              <span style="font-size:2.2rem;">${app.icon}</span>
-              <span>${app.name}</span>
-              <span style="font-size:0.7rem; color:var(--accent);">➕ Reinstall</span>
-            </div>
-          `;
-        }
-      });
-      return;
-    }
-
-    if (currentFileFilter === 'media') {
-      if (subtitle) subtitle.textContent = 'Videos & Photos Storage (Click to Play or View):';
-      const mediaList = osData.savedMedia || [];
-      if (mediaList.length === 0) {
-        view.innerHTML = '<div style="color:var(--text-sub); font-size:0.85rem; padding:20px; grid-column: 1 / -1;">No Videos or Photos uploaded yet. Drag & drop or click "Upload Media".</div>';
-        return;
-      }
-      mediaList.forEach(m => {
-        const icon = m.type === 'video' ? '🎥' : '🖼️';
-        view.innerHTML += `
-          <div class="file-item" onclick="openMediaViewer('${m.id}')" title="Click to view">
-            <div class="file-item-actions">
-              <button class="btn-ui" style="padding:2px 6px; font-size:0.7rem;" onclick="event.stopPropagation(); renameMediaFile('${m.id}')">✏️</button>
-              <button class="btn-ui btn-danger" style="padding:2px 6px; font-size:0.7rem;" onclick="event.stopPropagation(); deleteMediaFile('${m.id}')">🗑️</button>
-            </div>
-            ${m.type === 'photo' ? `<img src="${m.url}" class="file-preview-thumb" />` : `<span style="font-size:2.2rem;">${icon}</span>`}
-            <span style="word-break:break-word; font-weight:600;">${m.name}</span>
-          </div>
-        `;
-      });
-      return;
-    }
-
-    if (subtitle) subtitle.textContent = 'Click any saved document or spreadsheet to open:';
-    let files = osData.savedFiles || [];
-    if (currentFileFilter === 'sheets') files = files.filter(f => f.name.endsWith('.sheet'));
-    else if (currentFileFilter === 'docs') files = files.filter(f => f.name.endsWith('.doc') || f.name.endsWith('.txt') || (!f.name.endsWith('.sheet')));
-
-    if (files.length === 0) {
-      view.innerHTML = '<div style="color:var(--text-sub); font-size:0.85rem; padding:20px; grid-column: 1 / -1;">No documents found. Click "New Document" to create one.</div>';
-      return;
-    }
-
-    files.forEach(f => {
-      const isSheet = f.name.endsWith('.sheet');
-      const safeName = f.name.replace(/'/g, "\\'");
-      view.innerHTML += `
-        <div class="file-item" onclick="openSavedFile('${safeName}')" title="Click to open file">
-          <div class="file-item-actions">
-            <button class="btn-ui btn-danger" style="padding:2px 6px; font-size:0.7rem;" onclick="event.stopPropagation(); deleteSavedFile('${safeName}')">🗑️</button>
-          </div>
-          <span style="font-size:2.2rem;">${isSheet ? '📊' : '📄'}</span>
-          <span style="word-break:break-word;">${f.name}</span>
-        </div>
-      `;
-    });
-  }
-
-  function openMediaViewer(mediaId) {
-    const item = (osData.savedMedia || []).find(m => m.id === mediaId);
-    if (!item) return;
-    document.getElementById('mediaViewerTitle').textContent = item.name;
-    const viewport = document.getElementById('mediaViewport');
-    const controls = document.getElementById('mediaControlsArea');
-    if (item.type === 'video') {
-      viewport.innerHTML = `<video id="activeVideoElem" src="${item.url}" style="width:100%; height:100%;"></video>`;
-      controls.style.display = 'flex';
-      const vid = document.getElementById('activeVideoElem');
-      vid.ontimeupdate = () => {
-        const timeline = document.getElementById('mediaTimeline');
-        const display = document.getElementById('mediaTimeDisplay');
-        if (vid.duration) {
-          timeline.value = (vid.currentTime / vid.duration) * 100;
-          display.textContent = `${formatMediaTime(vid.currentTime)} / ${formatMediaTime(vid.duration)}`;
-        }
-      };
-      vid.onended = () => { document.getElementById('mediaPlayBtn').textContent = '▶ Play'; };
-    } else {
-      viewport.innerHTML = `<img src="${item.url}" style="max-width:100%; max-height:100%; object-fit:contain;" />`;
-      controls.style.display = 'none';
-    }
-    openWindow('mediaPlayerApp');
-  }
-
-  function toggleMediaPlay() {
-    const vid = document.getElementById('activeVideoElem');
-    const btn = document.getElementById('mediaPlayBtn');
-    if (vid) {
-      if (vid.paused) { vid.play(); btn.textContent = '⏸ Pause'; }
-      else { vid.pause(); btn.textContent = '▶ Play'; }
-    }
-  }
-
-  function seekMedia(val) { const vid = document.getElementById('activeVideoElem'); if (vid && vid.duration) vid.currentTime = (val / 100) * vid.duration; }
-  function formatMediaTime(s) { const mins = Math.floor(s / 60).toString().padStart(2, '0'); const secs = Math.floor(s % 60).toString().padStart(2, '0'); return `${mins}:${secs}`; }
-
-  function renameMediaFile(mediaId) {
-    const item = osData.savedMedia.find(m => m.id === mediaId);
-    if (!item) return;
-    showGlassPrompt("Rename Media File:", item.name, (newName) => { if (newName) { item.name = newName; saveData(); renderFolders(); } }, "✏️ Rename Media");
-  }
-
-  function deleteMediaFile(mediaId) {
-    showGlassConfirm("Delete this media file permanently?", () => {
-      osData.savedMedia = osData.savedMedia.filter(m => m.id !== mediaId);
-      saveData(); renderFolders(); refreshStorageVramPanel();
-    }, "🗑️ Delete Media");
-  }
-
-  function openSavedFile(fileName) {
-    const file = osData.savedFiles.find(f => f.name === fileName);
-    if (!file) return;
-    if (fileName.endsWith('.sheet')) {
-      activeSheetFilename = fileName;
-      document.getElementById('sheetDocTitle').textContent = fileName;
-      sheetData = file.data ? JSON.parse(JSON.stringify(file.data)) : {};
-      recalcSpreadsheet();
-      openWindow('sheetApp');
-    } else {
-      activeDocFilename = fileName;
-      document.getElementById('wordDocTitle').textContent = fileName;
-      document.getElementById('wordPaper').innerHTML = file.content || file.data || '<p></p>';
-      updateWordStats();
-      openWindow('wordApp');
-    }
-  }
-
-  function deleteSavedFile(fileName) {
-    showGlassConfirm(`Delete '${fileName}' permanently?`, () => {
-      osData.savedFiles = osData.savedFiles.filter(f => f.name !== fileName);
-      saveData(); renderFolders(); refreshStorageVramPanel();
-    }, "🗑️ Delete File");
-  }
-
-  function createNewFilePrompt() {
-    showGlassPrompt("Create new file type (type 'doc' or 'sheet'):", "doc", (type) => {
-      if (!type) return;
-      if (type.toLowerCase().includes('sheet')) {
-        showGlassPrompt("Enter Spreadsheet Name:", "New_Sheet.sheet", (name) => {
-          if (!name) return;
-          const sheetName = name.endsWith('.sheet') ? name : name + '.sheet';
-          activeSheetFilename = sheetName;
-          document.getElementById('sheetDocTitle').textContent = sheetName;
-          sheetData = {};
-          initSpreadsheetGrid();
-          osData.savedFiles.push({ name: sheetName, data: {} });
-          saveData(); renderFolders(); refreshStorageVramPanel(); openWindow('sheetApp');
-        }, "📊 New Spreadsheet");
-      } else {
-        showGlassPrompt("Enter Document Name:", "New_Document.doc", (name) => {
-          if (!name) return;
-          const docName = name.endsWith('.doc') ? name : name + '.doc';
-          activeDocFilename = docName;
-          document.getElementById('wordDocTitle').textContent = docName;
-          document.getElementById('wordPaper').innerHTML = '<h2>' + docName + '</h2><p>Start writing...</p>';
-          updateWordStats();
-          osData.savedFiles.push({ name: docName, content: '<h2>' + docName + '</h2><p>Start writing...</p>' });
-          saveData(); renderFolders(); refreshStorageVramPanel(); openWindow('wordApp');
-        }, "📄 New Document");
-      }
-    }, "📂 Create New File");
-  }
-
+  function openSavedFile(fileName) { ensureFileModel(); const file=osData.savedFiles.find(f=>f.name===fileName); if(!file) return; openManagedFile(file); }
+  function deleteSavedFile(fileName) { const item=osData.savedFiles.find(f=>f.name===fileName); if(item) deleteFile(item.id); }
   function reinstallApp(appId) {
     osData.uninstalledApps = osData.uninstalledApps.filter(id => id !== appId);
     if (!osData.desktopApps.includes(appId)) osData.desktopApps.push(appId);
@@ -3727,7 +4326,7 @@ Write **Markdown** on the left and see a clean preview here.
       if (app) {
         container.innerHTML += `
           <div class="setting-row">
-            <div class="setting-label"><span class="setting-title">${app.icon} ${app.name}</span></div>
+            <div class="setting-label"><span class="setting-title" style="display:flex;align-items:center;gap:8px;"><span style="width:28px;height:28px;display:inline-flex;">${appIconHtml(app)}</span> ${app.name}</span></div>
             <button class="btn-ui btn-accent" onclick="reinstallApp('${app.id}')">➕ Re-install App</button>
           </div>
         `;
@@ -3759,7 +4358,7 @@ Write **Markdown** on the left and see a clean preview here.
     if (tabId === 'systemConfigTab') refreshStorageVramPanel();
   }
 
-  function closeContextMenus() { document.getElementById('desktopContextMenu').classList.remove('open'); }
+  function closeContextMenus() { const m = document.getElementById('desktopContextMenu'); if (m) m.classList.remove('open'); }
   function toggleLaunchHub() { document.getElementById('launchHubPanel').classList.toggle('open'); }
 
   function previewOscddHtml() {
@@ -3853,7 +4452,7 @@ Write **Markdown** on the left and see a clean preview here.
 
   function recoverLocalAccess() {
     showGlassConfirm('Reset the local Enfrok OS profile? This clears the saved username, password, wallpaper, and app preferences for this browser.', () => {
-      localStorage.removeItem('enfrok_os_v52_fullsuite');
+      localStorage.removeItem('enfrok_os_v53_fullsuite'); localStorage.removeItem('enfrok_os_v52_fullsuite');
       location.reload();
     }, "⚠️ Reset Account Profile");
   }
@@ -3865,7 +4464,7 @@ Write **Markdown** on the left and see a clean preview here.
     const apps = getInstalledApps().filter(app => !term || `${app.name} ${app.id}`.toLowerCase().includes(term));
     grid.innerHTML = apps.map(app => `
       <div class="d-icon" draggable="true" ondragstart="handleAppDragStart(event, '${app.id}')" onclick="openWindow('${app.id}'); closeFullscreenStartMenu();" oncontextmenu="handleContextMenuEvent(event, '${app.id}')">
-        <div class="d-icon-box">${app.icon}</div>
+        <div class="d-icon-box">${appIconHtml(app)}</div>
         <span style="font-weight:600;">${app.name}</span>
       </div>`).join('');
     const subtitle = document.getElementById('fullscreenStartSubtitle');
@@ -3881,8 +4480,27 @@ Write **Markdown** on the left and see a clean preview here.
   }
 
   window.addEventListener('keydown', event => {
-    if (event.key === 'Escape') { closeFullscreenStartMenu(); closeGlassPopup(); closeVramLimitPopup(); }
+    if (event.key === 'Escape') {
+      closeFullscreenStartMenu(); closeGlassPopup(); closeVramLimitPopup(); closeHiddenAppsPanel();
+    }
+    // Alt+Z (Windows/Linux) or Option+Z (Mac): close all apps
+    if ((event.key === 'z' || event.key === 'Z') && event.altKey && !event.ctrlKey && !event.metaKey && !event.shiftKey) {
+      event.preventDefault();
+      closeAllEnfrokApps();
+    }
   });
+
+  function closeAllEnfrokApps() {
+    document.querySelectorAll('.os-window.open-active, .os-window.minimized, .os-window.fullscreen').forEach(win => {
+      if (win.id) closeWindow(win.id);
+    });
+    document.body.classList.remove('has-fullscreen-app');
+    closeFullscreenStartMenu();
+    closeHiddenAppsPanel();
+    const hub = document.getElementById('launchHubPanel');
+    if (hub) hub.classList.remove('open');
+    updateDockState();
+  }
 
   setInterval(() => { document.getElementById('sysClock').textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); }, 1000);
 
@@ -4345,6 +4963,12 @@ Write **Markdown** on the left and see a clean preview here.
     `).join('');
   }
 
+  function navBrowserTo(url) {
+    const urlInput = document.getElementById('browserUrl');
+    if (urlInput) urlInput.value = url;
+    navBrowser();
+  }
+
   function navBrowser() {
     const urlInput = document.getElementById('browserUrl');
     const activeTab = browserTabs.find(t => t.id === activeBrowserTabId);
@@ -4387,9 +5011,9 @@ Write **Markdown** on the left and see a clean preview here.
       } else if (cmdStr === 'help') {
         out.textContent += `\nAvailable Commands:\n- bringback reinstall /appnameApp\n- clear\n- systeminfo`;
       } else if (cmdStr === 'clear') {
-        out.textContent = `Enfrok OS Command Console v5.2`;
+        out.textContent = `Enfrok OS Command Console v5.3`;
       } else if (cmdStr === 'systeminfo') {
-        out.textContent += `\nOS: Enfrok OS 5.2\nUser: ${osData.username}\nKernel: v5.2 WebOS Core`;
+        out.textContent += `\nOS: Enfrok OS 5.3\nUser: ${osData.username}\nKernel: v5.3 WebOS Core`;
       } else {
         out.textContent += `\nCommand '${cmdStr}' not recognized. Type 'help' for options.`;
       }
@@ -4691,12 +5315,378 @@ Write **Markdown** on the left and see a clean preview here.
     const toIso = date => { const offset = date.getTimezoneOffset(); return new Date(date.getTime() - offset * 60000).toISOString().slice(0, 10); };
     const start = document.getElementById('dateStartInput'), endInput = document.getElementById('dateEndInput');
     if (start && endInput) { start.value = toIso(today); endInput.value = toIso(end); calculateDateDifference(); }
-    renderMarkdownPreview(); runRegexTest(); renderHabitList(); renderBudgetList(); generatePass();
+    renderMarkdownPreview(); runRegexTest(); renderHabitList(); renderBudgetList();
     refreshStorageVramPanel();
   }
 
   const originalLaunchDesktop = launchDesktop;
   launchDesktop = function() { originalLaunchDesktop(); initAdditiveApps(); };
+
+
+  /* ===================== MEDIA VIEWER + PDF VIEWER ===================== */
+  const PDF_MAX_BYTES = 11 * 1024 * 1024;
+  let mvFilter = 'all';
+  let mvActiveId = null;
+  let mvZoom = 1;
+  let mvPdfPage = 1;
+  let mvPdfPageCount = 1;
+  let pdfActiveId = null;
+  let pdfPage = 1;
+  let pdfPageCount = 1;
+  let mediaTimeTimer = null;
+
+  function formatBytes(n) {
+    n = n || 0;
+    if (n < 1024) return n + ' B';
+    if (n < 1048576) return (n / 1024).toFixed(1) + ' KB';
+    return (n / 1048576).toFixed(2) + ' MB';
+  }
+
+  function ensureMediaModel() {
+    if (!osData.savedMedia) osData.savedMedia = [];
+  }
+
+  function setMediaViewerFilter(f, el) {
+    mvFilter = f || 'all';
+    document.querySelectorAll('.mv-filter').forEach(b => b.classList.remove('active'));
+    if (el) el.classList.add('active');
+    renderMediaViewerLibrary();
+  }
+
+  function renderMediaViewerLibrary() {
+    ensureMediaModel();
+    const list = document.getElementById('mvLibraryList');
+    if (!list) return;
+    let items = osData.savedMedia || [];
+    if (mvFilter !== 'all') items = items.filter(m => m.type === mvFilter);
+    if (!items.length) {
+      list.innerHTML = '<div style="font-size:0.78rem;color:var(--text-sub);padding:10px;">No items. Import media or PDFs.</div>';
+      return;
+    }
+    list.innerHTML = items.map(m => {
+      const icon = m.type === 'video' ? '🎥' : (m.type === 'pdf' ? '📄' : '🖼️');
+      const active = m.id === mvActiveId ? 'active' : '';
+      return `<div class="mv-lib-item ${active}" onclick="openMediaInViewer('${m.id}')">
+        <span style="font-size:1.2rem;">${icon}</span>
+        <div style="min-width:0;flex:1;">
+          <div class="mv-lib-name">${m.name}</div>
+          <div class="mv-lib-sub">${(m.type || '').toUpperCase()} · ${formatBytes(m.size)}</div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  function handleMediaViewerImport(e) {
+    processUploadedFiles(Array.from(e.target.files || []));
+    e.target.value = '';
+    setTimeout(renderMediaViewerLibrary, 200);
+  }
+  function handleMediaViewerDrop(e) {
+    e.preventDefault();
+    if (e.dataTransfer && e.dataTransfer.files) processUploadedFiles(Array.from(e.dataTransfer.files));
+    setTimeout(renderMediaViewerLibrary, 200);
+  }
+
+  function openMediaInViewer(id) {
+    ensureMediaModel();
+    const item = (osData.savedMedia || []).find(m => m.id === id);
+    if (!item) { showGlassAlert('Media item not found.', '⚠️ Missing'); return; }
+    mvActiveId = id;
+    mvZoom = 1;
+    mvPdfPage = 1;
+    openWindow('mediaPlayerApp');
+    renderMediaViewerLibrary();
+    const title = document.getElementById('mediaViewerTitle');
+    if (title) title.textContent = item.name;
+    const vp = document.getElementById('mediaViewport');
+    const playBtn = document.getElementById('mediaPlayBtn');
+    const timeline = document.getElementById('mediaTimeline');
+    const timeDisp = document.getElementById('mediaTimeDisplay');
+    const empty = document.getElementById('mvEmptyState');
+    if (empty) empty.style.display = 'none';
+    // clear previous
+    Array.from(vp.querySelectorAll('img,video,canvas,iframe,embed,.mv-empty')).forEach(n => {
+      if (n.id === 'mvEmptyState') return;
+      n.remove();
+    });
+    if (mediaTimeTimer) { clearInterval(mediaTimeTimer); mediaTimeTimer = null; }
+
+    document.getElementById('mvMetaName').textContent = item.name;
+    document.getElementById('mvMetaType').textContent = (item.type || 'file').toUpperCase();
+    document.getElementById('mvMetaSize').textContent = formatBytes(item.size);
+    document.getElementById('mvMetaInfo').textContent = '—';
+
+    if (item.type === 'photo') {
+      playBtn.style.display = 'none';
+      timeline.style.display = 'none';
+      timeDisp.style.display = 'none';
+      document.getElementById('mvPdfPrevBtn').style.display = 'none';
+      document.getElementById('mvPdfNextBtn').style.display = 'none';
+      document.getElementById('mvZoomOutBtn').style.display = '';
+      document.getElementById('mvZoomInBtn').style.display = '';
+      const img = document.createElement('img');
+      img.src = item.url;
+      img.alt = item.name;
+      img.id = 'mvActiveImage';
+      img.style.transform = 'scale(1)';
+      img.onload = () => {
+        document.getElementById('mvMetaInfo').textContent = `${img.naturalWidth}×${img.naturalHeight}px`;
+      };
+      vp.appendChild(img);
+    } else if (item.type === 'video') {
+      playBtn.style.display = '';
+      timeline.style.display = '';
+      timeDisp.style.display = '';
+      document.getElementById('mvPdfPrevBtn').style.display = 'none';
+      document.getElementById('mvPdfNextBtn').style.display = 'none';
+      document.getElementById('mvZoomOutBtn').style.display = 'none';
+      document.getElementById('mvZoomInBtn').style.display = 'none';
+      const vid = document.createElement('video');
+      vid.src = item.url;
+      vid.controls = false;
+      vid.id = 'mvActiveVideo';
+      vid.style.maxWidth = '100%';
+      vid.style.maxHeight = '100%';
+      vid.onloadedmetadata = () => {
+        document.getElementById('mvMetaInfo').textContent = `Duration ${formatMediaTime(vid.duration)}`;
+        timeDisp.textContent = `00:00 / ${formatMediaTime(vid.duration)}`;
+      };
+      vid.ontimeupdate = () => {
+        if (!vid.duration) return;
+        timeline.value = Math.floor((vid.currentTime / vid.duration) * 100);
+        timeDisp.textContent = `${formatMediaTime(vid.currentTime)} / ${formatMediaTime(vid.duration)}`;
+      };
+      vid.onended = () => { playBtn.textContent = '▶ Play'; };
+      vp.appendChild(vid);
+      playBtn.textContent = '▶ Play';
+    } else if (item.type === 'pdf') {
+      playBtn.style.display = 'none';
+      timeline.style.display = 'none';
+      timeDisp.style.display = 'none';
+      document.getElementById('mvPdfPrevBtn').style.display = '';
+      document.getElementById('mvPdfNextBtn').style.display = '';
+      document.getElementById('mvZoomOutBtn').style.display = 'none';
+      document.getElementById('mvZoomInBtn').style.display = 'none';
+      // Prefer native embed; fall back gracefully
+      try {
+        const emb = document.createElement('iframe');
+        emb.src = item.url;
+        emb.title = item.name;
+        emb.style.width = '92%';
+        emb.style.height = '92%';
+        emb.style.border = 'none';
+        emb.style.background = '#fff';
+        emb.style.borderRadius = '8px';
+        vp.appendChild(emb);
+        document.getElementById('mvMetaInfo').textContent = 'PDF preview';
+        // Also sync into dedicated PDF viewer state
+        pdfActiveId = item.id;
+        pdfPage = 1;
+      } catch (err) {
+        vp.innerHTML = '<div class="mv-empty"><div>Could not preview this PDF.</div></div>';
+      }
+    }
+  }
+
+  function mediaViewerZoom(delta) {
+    const img = document.getElementById('mvActiveImage');
+    if (!img) return;
+    mvZoom = Math.min(4, Math.max(0.4, mvZoom + delta));
+    img.style.transform = `scale(${mvZoom})`;
+  }
+
+  function mediaViewerPdfPage(dir) {
+    // With native iframe we cannot control pages; open dedicated viewer
+    if (mvActiveId) openPdfInViewer((osData.savedMedia || []).find(m => m.id === mvActiveId));
+  }
+
+  function formatMediaTime(sec) {
+    sec = Math.max(0, Math.floor(sec || 0));
+    const m = Math.floor(sec / 60).toString().padStart(2, '0');
+    const s = (sec % 60).toString().padStart(2, '0');
+    return `${m}:${s}`;
+  }
+
+  function toggleMediaPlay() {
+    const vid = document.getElementById('mvActiveVideo');
+    const btn = document.getElementById('mediaPlayBtn');
+    if (!vid) return;
+    if (vid.paused) { vid.play(); if (btn) btn.textContent = '⏸ Pause'; }
+    else { vid.pause(); if (btn) btn.textContent = '▶ Play'; }
+  }
+
+  function seekMedia(val) {
+    const vid = document.getElementById('mvActiveVideo');
+    if (!vid || !vid.duration) return;
+    vid.currentTime = (parseFloat(val) / 100) * vid.duration;
+  }
+
+  /* ---- PDF Viewer ---- */
+  function renderPdfViewerList() {
+    ensureMediaModel();
+    const list = document.getElementById('pdfViewerList');
+    if (!list) return;
+    const items = (osData.savedMedia || []).filter(m => m.type === 'pdf');
+    if (!items.length) {
+      list.innerHTML = '<div style="font-size:0.78rem;color:var(--text-sub);padding:10px;">No PDFs yet. Add or drag files here (max 11 MB).</div>';
+      return;
+    }
+    list.innerHTML = items.map(m => {
+      const active = m.id === pdfActiveId ? 'active' : '';
+      return `<div class="pdfv-item ${active}" onclick="openPdfInViewerById('${m.id}')">
+        <span>📄</span>
+        <div class="pdfv-name" title="${m.name}">${m.name}</div>
+        <span style="font-size:0.68rem;color:var(--text-sub);">${formatBytes(m.size)}</span>
+      </div>`;
+    }).join('');
+  }
+
+  function handlePdfViewerImport(e) {
+    const files = Array.from(e.target.files || []).filter(f => f.type === 'application/pdf' || /\.pdf$/i.test(f.name));
+    processUploadedFiles(files);
+    e.target.value = '';
+    setTimeout(renderPdfViewerList, 250);
+  }
+  function handlePdfViewerDrop(e) {
+    e.preventDefault();
+    if (e.dataTransfer && e.dataTransfer.files) {
+      const files = Array.from(e.dataTransfer.files).filter(f => f.type === 'application/pdf' || /\.pdf$/i.test(f.name));
+      processUploadedFiles(files);
+      setTimeout(renderPdfViewerList, 250);
+    }
+  }
+
+  function openPdfInViewer(item) {
+    if (!item) return;
+    if (item.type && item.type !== 'pdf' && !/\.pdf$/i.test(item.name || '')) {
+      showGlassAlert('This file is not a PDF.', '⚠️ Unsupported');
+      return;
+    }
+    // Ensure in savedMedia
+    ensureMediaModel();
+    let media = item.id ? (osData.savedMedia || []).find(m => m.id === item.id) : null;
+    if (!media && item.url) {
+      media = {
+        id: item.id || ('media_pdf_' + Date.now()),
+        name: item.name || 'Document.pdf',
+        type: 'pdf',
+        url: item.url,
+        size: item.size || 0,
+        pageCount: item.pageCount || null
+      };
+      if (!(osData.savedMedia || []).some(m => m.id === media.id)) {
+        osData.savedMedia.push(media);
+        saveData();
+      }
+    }
+    if (!media) {
+      // try by name
+      media = (osData.savedMedia || []).find(m => m.name === item.name && m.type === 'pdf');
+    }
+    if (!media || !media.url) {
+      showGlassAlert('Could not open this PDF. Import it first.', '⚠️ PDF Unavailable');
+      return;
+    }
+    if (media.size && media.size > PDF_MAX_BYTES) {
+      showGlassAlert('PDF exceeds the 11 MB limit.', '⚠️ Too Large');
+      return;
+    }
+    openPdfInViewerById(media.id);
+  }
+
+  function openPdfInViewerById(id) {
+    ensureMediaModel();
+    const item = (osData.savedMedia || []).find(m => m.id === id && m.type === 'pdf');
+    if (!item) { showGlassAlert('PDF not found.', '⚠️ Missing'); return; }
+    pdfActiveId = id;
+    pdfPage = 1;
+    pdfPageCount = item.pageCount || 1;
+    openWindow('pdfViewerApp');
+    renderPdfViewerList();
+    const title = document.getElementById('pdfViewerTitle');
+    if (title) title.textContent = item.name;
+    document.getElementById('pdfMetaName').textContent = 'Name: ' + item.name;
+    document.getElementById('pdfMetaSize').textContent = 'Size: ' + formatBytes(item.size);
+    document.getElementById('pdfMetaPages').textContent = 'Pages: ' + (item.pageCount || '—');
+    const pane = document.getElementById('pdfPreviewPane');
+    pane.innerHTML = '';
+    try {
+      const emb = document.createElement('iframe');
+      emb.src = item.url;
+      emb.title = item.name;
+      emb.style.width = 'min(720px, 100%)';
+      emb.style.height = '100%';
+      emb.style.minHeight = '420px';
+      emb.style.border = 'none';
+      emb.style.borderRadius = '8px';
+      emb.style.background = '#fff';
+      emb.onerror = () => {
+        pane.innerHTML = '<div class="pdfv-empty"><div style="font-weight:700;">Unsupported or invalid PDF</div><div style="font-size:0.8rem;color:var(--text-sub);">The file could not be previewed.</div></div>';
+      };
+      pane.appendChild(emb);
+      // Simulated page count if unknown
+      if (!item.pageCount) {
+        item.pageCount = Math.max(1, Math.min(40, Math.ceil((item.size || 50000) / 45000)));
+        pdfPageCount = item.pageCount;
+        document.getElementById('pdfMetaPages').textContent = 'Pages: ~' + pdfPageCount;
+        saveData();
+      } else {
+        pdfPageCount = item.pageCount;
+      }
+      updatePdfPageLabel();
+    } catch (err) {
+      pane.innerHTML = '<div class="pdfv-empty"><div style="font-weight:700;">Could not open PDF</div><div style="font-size:0.8rem;color:var(--text-sub);">Invalid or unsupported file.</div></div>';
+    }
+  }
+
+  function updatePdfPageLabel() {
+    const el = document.getElementById('pdfPageLabel');
+    if (el) el.textContent = `Page ${pdfPage} / ${pdfPageCount}`;
+    const jump = document.getElementById('pdfPageJump');
+    if (jump) jump.value = pdfPage;
+  }
+
+  function pdfViewerPrevPage() {
+    if (pdfPage > 1) { pdfPage--; updatePdfPageLabel(); }
+  }
+  function pdfViewerNextPage() {
+    if (pdfPage < pdfPageCount) { pdfPage++; updatePdfPageLabel(); }
+  }
+  function pdfViewerJumpPage() {
+    const jump = document.getElementById('pdfPageJump');
+    let n = parseInt(jump && jump.value, 10);
+    if (isNaN(n)) return;
+    n = Math.max(1, Math.min(pdfPageCount, n));
+    pdfPage = n;
+    updatePdfPageLabel();
+  }
+
+  function removeActivePdf() {
+    if (!pdfActiveId) return;
+    showGlassConfirm('Remove this PDF from the library?', () => {
+      osData.savedMedia = (osData.savedMedia || []).filter(m => m.id !== pdfActiveId);
+      pdfActiveId = null;
+      saveData();
+      renderPdfViewerList();
+      renderMediaViewerLibrary();
+      refreshStorageVramPanel();
+      const pane = document.getElementById('pdfPreviewPane');
+      if (pane) pane.innerHTML = '<div class="pdfv-empty" id="pdfEmptyState"><div style="font-size:2.2rem;">📄</div><div style="font-weight:700;margin-top:8px;">PDF Viewer</div></div>';
+      document.getElementById('pdfViewerTitle').textContent = 'No document';
+      document.getElementById('pdfMetaName').textContent = 'Name: —';
+      document.getElementById('pdfMetaSize').textContent = 'Size: —';
+      document.getElementById('pdfMetaPages').textContent = 'Pages: —';
+    }, '🗑️ Remove PDF');
+  }
+
+  // Hook openWindow to refresh libraries
+  const __origOpenWindow = openWindow;
+  openWindow = function(id) {
+    __origOpenWindow(id);
+    if (id === 'mediaPlayerApp') renderMediaViewerLibrary();
+    if (id === 'pdfViewerApp') renderPdfViewerList();
+  };
+
 
 </script>
 </body>
