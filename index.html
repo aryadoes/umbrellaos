@@ -2,7 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="theme-color" content="#030508" />
 <title>Enfrok OS 5.3</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -259,7 +263,7 @@
   }
   .dock-hidden-badge.show { display: flex; }
   @keyframes gradientMove { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-  .dock-divider { width: 1px; height: 30px; background: linear-gradient(180deg, transparent, rgba(255,255,255,0.22), transparent); margin: 0 2px; flex-shrink: 0; }
+  .dock-divider { display: none !important; width: 1px; height: 30px; background: linear-gradient(180deg, transparent, rgba(255,255,255,0.22), transparent); margin: 0 2px; flex-shrink: 0; }
   .dock-item {
     width: 48px; height: 48px; flex-shrink: 0; border-radius: 16px;
     background: rgba(255,255,255,0.07);
@@ -276,15 +280,20 @@
     transform: translateY(-4px);
     box-shadow: 0 10px 22px rgba(0,0,0,0.28);
   }
+  /* App-state markers stay system-blue even when the user changes the accent. */
   .dock-item-indicator {
-    position: absolute; bottom: 3px; left: 50%; transform: translateX(-50%) scale(0.4);
-    width: 14px; height: 3px; border-radius: 99px; background: var(--accent);
-    box-shadow: 0 0 10px var(--accent-glow); opacity: 0;
+    position: absolute; bottom: 1px; left: 50%; transform: translateX(-50%) scale(0.4);
+    width: 14px; height: 3px; border-radius: 99px; background: #3b82f6 !important;
+    box-shadow: 0 0 10px rgba(59,130,246,0.75); opacity: 0;
     transition: width 0.32s var(--anim-curve), height 0.32s var(--anim-curve), border-radius 0.32s var(--anim-curve), opacity 0.24s ease, transform 0.32s var(--anim-curve);
   }
   .dock-item.running .dock-item-indicator { opacity: 1; transform: translateX(-50%) scale(1); }
-  .dock-item.running.focused-app .dock-item-indicator { width: 14px; height: 3px; border-radius: 99px; }
-  .dock-item.running:not(.focused-app) .dock-item-indicator { width: 4px; height: 4px; border-radius: 50%; }
+  .dock-item.running.focused-app .dock-item-indicator { width: 14px; height: 3px; border-radius: 99px; background: #3b82f6 !important; }
+  .dock-item.running:not(.focused-app) .dock-item-indicator { width: 4px; height: 4px; border-radius: 50%; background: #3b82f6 !important; }
+  /* Markers sit under the app logo, not on top of it. */
+  .dock-item { height: 54px !important; padding-bottom: 10px; }
+  .dock-item .enfrok-app-icon { height: 44px; }
+  .m-app-icon .m-app-dot { background: #3b82f6 !important; }
 
   /* Enfrok custom app logos (SVG tiles — same on every device) */
   .enfrok-app-icon {
@@ -644,7 +653,7 @@
   body.mobile-mode .desktop-area { padding: 0; }
 
   body.mobile-mode #mobileShell {
-    display: flex; flex-direction: column; position: absolute; inset: 0; z-index: 300;
+    display: flex; flex-direction: column; position: fixed; inset: 0; height: 100dvh; z-index: 300;
     padding: env(safe-area-inset-top, 0px) 0 env(safe-area-inset-bottom, 0px);
   }
 
@@ -662,11 +671,11 @@
   .m-search input { width: 100%; padding: 11px 14px; border-radius: 14px; border: 1px solid var(--glass-border); background: var(--glass-dock); backdrop-filter: var(--glass-blur); color: var(--text-main); font-family: var(--font-ui); font-size: 0.85rem; outline: none; }
 
   .m-app-scroll { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 12px 14px 20px; }
-  .m-app-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px 10px; }
+  .m-app-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(76px, 1fr)); gap: 18px 10px; }
   .m-app { display: flex; flex-direction: column; align-items: center; gap: 7px; -webkit-tap-highlight-color: transparent; }
   .m-app-icon { width: 60px; height: 60px; border-radius: 18px; background: var(--glass-window); backdrop-filter: var(--glass-blur); border: 1px solid var(--glass-border); display: flex; align-items: center; justify-content: center; font-size: 1.65rem; box-shadow: 0 10px 24px rgba(0,0,0,0.35); transition: transform 0.16s var(--anim-curve); position: relative; }
   .m-app:active .m-app-icon { transform: scale(0.9); }
-  .m-app-icon .m-app-dot { position: absolute; bottom: -7px; left: 50%; transform: translateX(-50%); width: 5px; height: 5px; border-radius: 50%; background: var(--accent); opacity: 0; transition: opacity 0.2s ease; }
+  .m-app-icon .m-app-dot { position: absolute; bottom: -7px; left: 50%; transform: translateX(-50%); width: 5px; height: 5px; border-radius: 50%; background: #3b82f6; box-shadow: 0 0 8px rgba(59,130,246,0.75); opacity: 0; transition: opacity 0.2s ease; }
   .m-app.running .m-app-icon .m-app-dot { opacity: 1; }
   .m-app-name { font-size: 0.68rem; font-weight: 600; color: #fff; text-align: center; line-height: 1.2; text-shadow: 0 2px 6px rgba(0,0,0,0.75); max-width: 74px; }
   body.theme-light .m-app-name { color: #0f172a; text-shadow: none; }
@@ -679,7 +688,7 @@
   /* Fullscreen app windows on mobile */
   body.mobile-mode .os-window {
     position: fixed !important; inset: 0 !important; top: 0 !important; left: 0 !important;
-    width: 100% !important; height: 100% !important; max-width: none !important; max-height: none !important;
+    width: 100vw !important; height: 100dvh !important; max-width: none !important; max-height: none !important;
     border-radius: 0 !important; border: none !important; z-index: 9200 !important;
     padding-top: env(safe-area-inset-top, 0px);
   }
@@ -716,6 +725,20 @@
     .setup-main { padding: 24px 20px 34px; overflow-y: auto; }
     .setup-theme-choices { grid-template-columns: 1fr; }
     .custom-popup-card { width: 92vw; }
+  }
+
+  /* Keep every built-in app usable on narrow phones and touch tablets. */
+  @media (max-width: 820px), (pointer: coarse) {
+    body.mobile-mode .window-title { min-width: 0; max-width: calc(100vw - 86px); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    body.mobile-mode .window-topbar { min-height: 46px; }
+    body.mobile-mode .os-content-pane { padding: 14px; }
+    body.mobile-mode .os-sidebar { width: 100%; max-height: 132px; border-right: 0; border-bottom: 1px solid var(--glass-border); }
+    body.mobile-mode .os-split-layout { flex-direction: column; overflow: auto; }
+    body.mobile-mode .msg-layout, body.mobile-mode .mv-layout, body.mobile-mode .pdfv-layout { flex-direction: column; }
+    body.mobile-mode .msg-sidebar, body.mobile-mode .mv-sidebar, body.mobile-mode .pdfv-sidebar { width: 100%; max-height: 160px; border-right: 0; border-bottom: 1px solid var(--glass-border); }
+    body.mobile-mode .word-document-paper { padding: 24px; min-height: 420px; }
+    body.mobile-mode .m-app-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    body.mobile-mode .m-app-icon { width: min(60px, 17vw); height: min(60px, 17vw); }
   }
 
   /* ===== Media Viewer (premium dark) ===== */
@@ -761,6 +784,28 @@
   .pdfv-empty { display: flex; flex-direction: column; align-items: center; gap: 6px; color: var(--text-main); }
   .pdfv-meta { display: flex; gap: 18px; flex-wrap: wrap; padding: 10px 14px; border-top: 1px solid rgba(255,255,255,0.08); font-size: 0.76rem; color: var(--text-sub); background: rgba(6,9,16,0.95); }
 
+
+  /* ---- Mobile usability hardening ---- */
+  html, body { height: 100%; }
+  body.mobile-mode, body.mobile-mode html { height: 100dvh; min-height: 100dvh; overscroll-behavior: none; touch-action: manipulation; }
+  input, textarea, select, [contenteditable="true"], .term-input, .word-document-paper {
+    user-select: text !important; -webkit-user-select: text !important; -ms-user-select: text !important;
+  }
+  input, textarea, select { font-size: 16px; } /* stops iOS zoom-on-focus */
+  body.mobile-mode * { -webkit-tap-highlight-color: transparent; }
+  body.mobile-mode .window-body, body.mobile-mode .m-app-scroll, body.mobile-mode .os-content-pane,
+  body.mobile-mode .mv-library-list, body.mobile-mode .files-grid { -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
+  body.mobile-mode .files-grid { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)) !important; }
+  body.mobile-mode .file-toolbar { flex-wrap: wrap; gap: 6px; }
+  body.mobile-mode .btn-ui, body.mobile-mode .m-bar-btn, body.mobile-mode .os-nav-item { min-height: 40px; }
+  body.mobile-mode table { display: block; overflow-x: auto; max-width: 100%; }
+  body.mobile-mode img, body.mobile-mode video, body.mobile-mode canvas, body.mobile-mode iframe { max-width: 100%; }
+  body.mobile-mode .glass-dialog, body.mobile-mode .dialog-card { max-width: calc(100vw - 28px) !important; }
+  body.mobile-mode #boot-screen, body.mobile-mode #lockScreen, body.mobile-mode #login-screen, body.mobile-mode #desktop-screen { height: 100dvh; }
+  @media (max-width: 420px) {
+    body.mobile-mode .m-app-icon { width: min(56px, 16vw); height: min(56px, 16vw); }
+    body.mobile-mode .m-header h1 { font-size: 1.35rem; }
+  }
 </style>
 </head>
 <body>
@@ -1117,8 +1162,8 @@
               <div class="os-nav-item" onclick="filterFiles('media', this)">🎬 Videos & Photos</div>
               <div class="os-nav-item" onclick="filterFiles('pdfs', this)">📄 PDFs</div>
               <div class="os-nav-item" onclick="filterFiles('uninstalled', this)">🧩 Uninstalled Apps</div>
-              <input type="file" id="mediaUploadInput" accept="image/*,video/*,application/pdf,.pdf" style="display:none;" onchange="handleMediaUpload(event)" multiple />
-              <button class="btn-ui btn-accent" style="margin-top:auto;" onclick="document.getElementById('mediaUploadInput').click()">📤 Upload Media</button>
+              <input type="file" id="mediaUploadInput" accept="image/*,video/*,audio/*,.mp3,.wav,.m4a,.ogg,.aac,.flac,application/pdf,.pdf" style="display:none;" onchange="handleMediaUpload(event)" multiple />
+              <button class="btn-ui btn-accent" style="margin-top:auto;" onclick="document.getElementById('mediaUploadInput').click()">📤 Upload Media & Audio</button>
               <button class="btn-ui" onclick="createNewFilePrompt()">➕ New File</button>
               <button class="btn-ui" onclick="createFolderPrompt()">📁 New Folder</button>
             </div>
@@ -1869,12 +1914,13 @@ Write **Markdown** on the left and see a clean preview here.
               <div class="mv-side-head">
                 <div class="mv-side-title">Library</div>
                 <button class="btn-ui btn-accent" style="padding:4px 10px; font-size:0.72rem;" onclick="document.getElementById('mvImportInput').click()">＋ Import</button>
-                <input type="file" id="mvImportInput" accept="image/*,video/*,application/pdf" multiple hidden onchange="handleMediaViewerImport(event)" />
+                <input type="file" id="mvImportInput" accept="image/*,video/*,audio/*,application/pdf" multiple hidden onchange="handleMediaViewerImport(event)" />
               </div>
               <div class="mv-filter-row">
                 <button class="btn-ui mv-filter active" data-mvf="all" onclick="setMediaViewerFilter('all', this)">All</button>
                 <button class="btn-ui mv-filter" data-mvf="photo" onclick="setMediaViewerFilter('photo', this)">Photos</button>
                 <button class="btn-ui mv-filter" data-mvf="video" onclick="setMediaViewerFilter('video', this)">Videos</button>
+                <button class="btn-ui mv-filter" data-mvf="audio" onclick="setMediaViewerFilter('audio', this)">Audio</button>
                 <button class="btn-ui mv-filter" data-mvf="pdf" onclick="setMediaViewerFilter('pdf', this)">PDFs</button>
               </div>
               <div class="mv-library-list" id="mvLibraryList" ondragover="event.preventDefault()" ondrop="handleMediaViewerDrop(event)"></div>
@@ -1995,8 +2041,6 @@ Write **Markdown** on the left and see a clean preview here.
         <button class="dock-launcher-btn" onclick="openStartMenu()" title="Enfrok Start">E</button>
         <div class="dock-divider"></div>
         <div class="dock-items-scroll" id="dockItemsArea"></div>
-        <div class="dock-divider"></div>
-        <button class="dock-start-btn" onclick="openStartMenu()" title="Start Menu">☰</button>
       </div>
       <div class="dock-divider"></div>
       <button class="dock-hidden-btn" id="hiddenAppsBtn" onclick="openHiddenAppsAccess()" title="Hidden Apps">
@@ -2120,7 +2164,27 @@ Write **Markdown** on the left and see a clean preview here.
     'https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1920&auto=format&fit=crop',
     'https://images.unsplash.com/photo-1433086966358-54859d0ed716?q=80&w=1920&auto=format&fit=crop',
     'https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?q=80&w=1920&auto=format&fit=crop',
-    'https://images.unsplash.com/photo-1493246507139-91e8fad9978e?q=80&w=1920&auto=format&fit=crop'
+    'https://images.unsplash.com/photo-1493246507139-91e8fad9978e?q=80&w=1920&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1470115636492-6d2b56f9146d?q=80&w=1920&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1517685352821-92cf88aee5a5?q=80&w=1920&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1418985991508-e47386d96a71?q=80&w=1920&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1490604001847-b712b0c2f967?q=80&w=1920&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?q=80&w=1920&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1508615039623-a25605d2b022?q=80&w=1920&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1495616811223-4d98c6e9c869?q=80&w=1920&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1507400492013-162706c8c05e?q=80&w=1920&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1517483000871-1dbf64a6e1c6?q=80&w=1920&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1504198266287-1659872e6590?q=80&w=1920&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1498462440456-0dba182e775b?q=80&w=1920&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1509316785289-025f5b846b35?q=80&w=1920&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1504198453319-5ce911bafcde?q=80&w=1920&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=1920&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1451481454041-104da9464204?q=80&w=1920&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1441829266145-6d4bfbd33e77?q=80&w=1920&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1527482797697-8795b05a13fe?q=80&w=1920&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1516569422671-49ed4d0b0b4c?q=80&w=1920&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?q=80&w=1920&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1454391304352-2bf4678b1a7a?q=80&w=1920&auto=format&fit=crop'
   ];
 
   const ALL_APPS = [
@@ -2495,8 +2559,9 @@ Write **Markdown** on the left and see a clean preview here.
   function detectMobileMode() {
     const w = window.innerWidth;
     const touch = window.matchMedia('(pointer: coarse)').matches;
-    // Phones get the mobile interface; tablets and computers keep the desktop one.
-    return w <= 700 || (w <= 820 && touch);
+    // Touch-capable devices should not be forced through the desktop shell.
+    const coarseOnly = touch && !window.matchMedia('(pointer: fine)').matches;
+    return w <= 900 || (coarseOnly && w <= 1280);
   }
 
   function applyMobileMode() {
@@ -4182,15 +4247,15 @@ Write **Markdown** on the left and see a clean preview here.
   function formatFileSize(bytes) { if (bytes < 1024) return `${bytes} B`; if (bytes < 1048576) return `${(bytes / 1024).toFixed(1)} KB`; return `${(bytes / 1048576).toFixed(1)} MB`; }
   function renderBreadcrumbs() { const el = document.getElementById('fileBreadcrumbs'); if (!el) return; const parts = fileState.path.split('/').filter(Boolean); let path = '/'; el.innerHTML = `<span class="file-breadcrumb" onclick="navigateFiles('/')">Home</span>` + parts.map(p => { path += p + '/'; const current = path.replace(/\/$/, '') || '/'; return `<span>/</span><span class="file-breadcrumb" onclick="navigateFiles('${current}')">${p}</span>`; }).join(''); }
   function renderFolders() { ensureFileModel(); const view = document.getElementById('folderView'); if (!view) return; renderBreadcrumbs(); const subtitle = document.getElementById('filesPaneSubtitle'); if (currentFileFilter === 'uninstalled') { if (subtitle) subtitle.textContent = 'Uninstalled System Apps (Click to Reinstall or type in Terminal):'; view.innerHTML = (osData.uninstalledApps || []).map(id => { const app = ALL_APPS.find(a => a.id === id); return app ? `<div class="file-item" onclick="reinstallApp('${app.id}')"><span style="width:44px;height:44px;display:inline-flex;">${appIconHtml(app)}</span><span>${app.name}</span></div>` : ''; }).join('') || '<div style="color:var(--text-sub);padding:20px;">No uninstalled apps.</div>'; return; } if (currentFileFilter === 'media') {
-      if (subtitle) subtitle.textContent = 'Videos, Photos & PDFs in Media Library:';
+      if (subtitle) subtitle.textContent = 'Videos, Photos, Music & PDFs in Media Library:';
       view.classList.remove('file-list-view');
       const media = osData.savedMedia || [];
       if (!media.length) {
-        view.innerHTML = '<div style="color:var(--text-sub);padding:20px;grid-column:1/-1;">No media yet. Use Upload Media or Media Viewer / PDF Viewer to import files.</div>';
+        view.innerHTML = '<div style="color:var(--text-sub);padding:20px;grid-column:1/-1;">No media yet. Use Upload Media & Audio to add photos, videos, music or voice recordings.</div>';
         return;
       }
       view.innerHTML = media.map(m => {
-        const icon = m.type === 'video' ? '🎥' : (m.type === 'pdf' ? '📄' : '🖼️');
+        const icon = m.type === 'video' ? '🎥' : (m.type === 'pdf' ? '📄' : (m.type === 'audio' ? '🎵' : '🖼️'));
         const openFn = m.type === 'pdf' ? `openPdfInViewerById('${m.id}')` : `openMediaInViewer('${m.id}')`;
         return `<div class="file-item" onclick="${openFn}"><span style="font-size:2.2rem;">${icon}</span><span style="word-break:break-word;font-weight:600;">${m.name}</span><span style="font-size:0.7rem;color:var(--text-sub);">${(m.type||'').toUpperCase()} · ${formatBytes(m.size||0)}</span></div>`;
       }).join('');
@@ -4276,15 +4341,16 @@ Write **Markdown** on the left and see a clean preview here.
     files.forEach(file => {
       const isImg = file.type.startsWith('image');
       const isVid = file.type.startsWith('video');
+      const isAudio = file.type.startsWith('audio') || /\.(mp3|wav|m4a|ogg|oga|aac|flac|weba)$/i.test(file.name);
       const isPdf = file.type === 'application/pdf' || /\.pdf$/i.test(file.name);
-      if (!isImg && !isVid && !isPdf) return;
+      if (!isImg && !isVid && !isAudio && !isPdf) return;
       if (isPdf && file.size > 11 * 1024 * 1024) {
         showGlassAlert(`'${file.name}' exceeds the 11 MB PDF limit and was skipped.`, '⚠️ PDF Too Large');
         return;
       }
       const reader = new FileReader();
       reader.onload = ev => {
-        const type = isPdf ? 'pdf' : (isVid ? 'video' : 'photo');
+        const type = isPdf ? 'pdf' : (isVid ? 'video' : (isAudio ? 'audio' : 'photo'));
         osData.savedMedia.push({
           id: 'media_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
           name: file.name,
@@ -5364,7 +5430,7 @@ Write **Markdown** on the left and see a clean preview here.
       return;
     }
     list.innerHTML = items.map(m => {
-      const icon = m.type === 'video' ? '🎥' : (m.type === 'pdf' ? '📄' : '🖼️');
+      const icon = m.type === 'video' ? '🎥' : (m.type === 'pdf' ? '📄' : (m.type === 'audio' ? '🎵' : '🖼️'));
       const active = m.id === mvActiveId ? 'active' : '';
       return `<div class="mv-lib-item ${active}" onclick="openMediaInViewer('${m.id}')">
         <span style="font-size:1.2rem;">${icon}</span>
@@ -5433,7 +5499,7 @@ Write **Markdown** on the left and see a clean preview here.
         document.getElementById('mvMetaInfo').textContent = `${img.naturalWidth}×${img.naturalHeight}px`;
       };
       vp.appendChild(img);
-    } else if (item.type === 'video') {
+    } else if (item.type === 'video' || item.type === 'audio') {
       playBtn.style.display = '';
       timeline.style.display = '';
       timeDisp.style.display = '';
@@ -5441,12 +5507,14 @@ Write **Markdown** on the left and see a clean preview here.
       document.getElementById('mvPdfNextBtn').style.display = 'none';
       document.getElementById('mvZoomOutBtn').style.display = 'none';
       document.getElementById('mvZoomInBtn').style.display = 'none';
-      const vid = document.createElement('video');
+      const isAudioItem = item.type === 'audio';
+      const vid = document.createElement(isAudioItem ? 'audio' : 'video');
       vid.src = item.url;
-      vid.controls = false;
+      vid.controls = isAudioItem;
       vid.id = 'mvActiveVideo';
       vid.style.maxWidth = '100%';
       vid.style.maxHeight = '100%';
+      if (isAudioItem) { vid.style.width = '86%'; }
       vid.onloadedmetadata = () => {
         document.getElementById('mvMetaInfo').textContent = `Duration ${formatMediaTime(vid.duration)}`;
         timeDisp.textContent = `00:00 / ${formatMediaTime(vid.duration)}`;
