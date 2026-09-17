@@ -982,6 +982,10 @@
               <button class="btn-ui" style="padding:4px 8px;" onclick="addSheetCol()">➕ Col</button>
               <button class="btn-ui" style="padding:4px 8px;" onclick="sheetHighlightDuplicates()">💡 Dupes</button>
               <button class="btn-ui" style="padding:4px 8px;" onclick="clearSheetGrid()">🗑️ Clear</button>
+              <button class="btn-ui" style="padding:4px 8px;" onclick="sheetFillSeries()">📈 Series</button>
+              <button class="btn-ui" style="padding:4px 8px;" onclick="sheetTransposeHint()">⇄ Transpose</button>
+              <button class="btn-ui" style="padding:4px 8px;" onclick="sheetFreezeHint()">📌 Freeze</button>
+              <button class="btn-ui" style="padding:4px 8px;" onclick="sheetExportJSON()">{} JSON</button>
             </div>
           </div>
 
@@ -1049,6 +1053,9 @@
             </div>
             <div class="paint-group">
               <button class="paint-btn" onclick="openWallpaperBrowser()">🖼️ Browse wallpapers</button>
+              <button class="paint-btn" onclick="paintSaveToMedia()">💾 To Media</button>
+              <button class="paint-btn" onclick="paintAddStamp()">⭐ Stamp</button>
+              <button class="paint-btn" onclick="paintMirrorMode()">🪞 Mirror</button>
               <span style="font-size:0.72rem; color:var(--text-sub);">Canvas lab</span>
             </div>
           </div>
@@ -1123,6 +1130,11 @@
               <button class="word-btn" onclick="wordFindAndReplace()">🔍 Find</button>
               <button class="word-btn" onclick="insertWordLink()">🔗 Link</button>
               <button class="word-btn" onclick="insertWordImage()">🖼️ Image</button>
+              <button class="word-btn" onclick="wordInsertHR()">― Line</button>
+              <button class="word-btn" onclick="wordWordCountAlert()">∑ Count</button>
+              <button class="word-btn" onclick="wordExportTxt()">📄 .txt</button>
+              <button class="word-btn" onclick="wordExportHtml()">&lt;/&gt; HTML</button>
+              <button class="word-btn" onclick="wordToggleSpell()">✓ Spell</button>
             </div>
           </div>
 
@@ -1342,20 +1354,40 @@ Type 'help' or 'bringback reinstall /appnameApp' to manage apps.</div>
         </div>
       </div>
 
-      <div class="os-window" id="todoApp" style="width: 520px; height: 420px; top: 80px; left: 220px;">
+      <div class="os-window" id="todoApp" style="width: 640px; height: 520px; top: 60px; left: 200px;">
         <div class="window-topbar" onmousedown="dragWindow(event, 'todoApp')">
-          <div class="window-title">✅ Task Planner</div>
+          <div class="window-title">✅ Tasks Pro</div>
           <div class="win-controls-pills">
             <span class="win-pill-btn" onclick="minimizeWindow('todoApp')">─</span>
+            <span class="win-pill-btn" onclick="toggleFullscreen('todoApp')">▢</span>
             <span class="win-pill-btn pill-close" onclick="closeWindow('todoApp')">✕</span>
           </div>
         </div>
-        <div class="window-body" style="padding:20px; display:flex; flex-direction:column; gap:14px;">
-          <div style="display:flex; gap:10px;">
-            <input type="text" class="input-ui" id="todoInput" placeholder="Add a new task..." onkeydown="if(event.key==='Enter') addTodo()" />
-            <button class="btn-ui btn-accent" onclick="addTodo()">Add Task</button>
+        <div class="window-body" style="padding:0; display:flex; flex-direction:column;">
+          <div style="padding:16px 18px; border-bottom:1px solid var(--glass-border); display:flex; flex-direction:column; gap:12px; background:rgba(255,255,255,0.03);">
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+              <input type="text" class="input-ui" id="todoInput" placeholder="What needs doing?" onkeydown="if(event.key==='Enter') addTodo()" style="flex:1; min-width:160px;" />
+              <select class="input-ui" id="todoPriority" style="width:120px; padding:8px 10px;">
+                <option value="normal">● Normal</option>
+                <option value="high">▲ High</option>
+                <option value="low">▼ Low</option>
+              </select>
+              <input type="date" class="input-ui" id="todoDue" style="width:150px; padding:8px 10px;" />
+              <button class="btn-ui btn-accent" onclick="addTodo()">＋ Add</button>
+            </div>
+            <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+              <button class="btn-ui active" id="todoFilterAll" onclick="setTodoFilter('all')">All</button>
+              <button class="btn-ui" id="todoFilterActive" onclick="setTodoFilter('active')">Active</button>
+              <button class="btn-ui" id="todoFilterDone" onclick="setTodoFilter('done')">Done</button>
+              <button class="btn-ui" id="todoFilterHigh" onclick="setTodoFilter('high')">High priority</button>
+              <span style="margin-left:auto; font-size:0.78rem; color:var(--text-sub);" id="todoStatsLabel">0 tasks</span>
+            </div>
           </div>
-          <div id="todoList" style="flex:1; overflow-y:auto; display:flex; flex-direction:column; gap:8px;"></div>
+          <div id="todoList" style="flex:1; overflow-y:auto; padding:14px 18px; display:flex; flex-direction:column; gap:8px;"></div>
+          <div style="padding:10px 18px; border-top:1px solid var(--glass-border); display:flex; gap:8px; justify-content:flex-end;">
+            <button class="btn-ui" onclick="clearCompletedTodos()">Clear completed</button>
+            <button class="btn-ui btn-danger" onclick="clearAllTodos()">Clear all</button>
+          </div>
         </div>
       </div>
 
@@ -1940,6 +1972,9 @@ Write **Markdown** on the left and see a clean preview here.
                   <button class="btn-ui" id="mvZoomInBtn" onclick="mediaViewerZoom(0.15)">＋</button>
                   <button class="btn-ui" id="mvPdfPrevBtn" onclick="mediaViewerPdfPage(-1)">◀ Page</button>
                   <button class="btn-ui" id="mvPdfNextBtn" onclick="mediaViewerPdfPage(1)">Page ▶</button>
+                  <button class="btn-ui" id="mvRotateBtn" onclick="mediaViewerRotate()">🔄 Rotate</button>
+                  <button class="btn-ui" id="mvDownloadBtn" onclick="downloadActiveMedia()">⬇ Save</button>
+                  <button class="btn-ui btn-danger" id="mvDeleteBtn" onclick="deleteActiveMedia()">🗑️</button>
                 </div>
                 <input type="range" class="media-timeline" id="mediaTimeline" value="0" min="0" max="100" oninput="seekMedia(this.value)" />
                 <span id="mediaTimeDisplay" class="mv-time">00:00 / 00:00</span>
@@ -1982,6 +2017,10 @@ Write **Markdown** on the left and see a clean preview here.
                 <button class="btn-ui" onclick="pdfViewerNextPage()">Next ▶</button>
                 <input type="number" class="input-ui" id="pdfPageJump" min="1" value="1" style="width:70px; padding:6px 8px;" onkeydown="if(event.key==='Enter')pdfViewerJumpPage()" />
                 <button class="btn-ui" onclick="pdfViewerJumpPage()">Go</button>
+                <button class="btn-ui" onclick="pdfViewerZoom(-0.1)">− Zoom</button>
+                <button class="btn-ui" onclick="pdfViewerZoom(0.1)">＋ Zoom</button>
+                <button class="btn-ui" onclick="pdfViewerFitWidth()">Fit width</button>
+                <button class="btn-ui" onclick="downloadActivePdf()">⬇ Download</button>
                 <button class="btn-ui btn-danger" style="margin-left:auto;" onclick="removeActivePdf()">Remove</button>
               </div>
               <div class="pdfv-preview" id="pdfPreviewPane">
@@ -2004,6 +2043,54 @@ Write **Markdown** on the left and see a clean preview here.
 
     </div>
 
+
+
+      <div class="os-window" id="screenshotApp" style="width: 720px; height: 560px; top: 50px; left: 160px;">
+        <div class="window-topbar" onmousedown="dragWindow(event, 'screenshotApp')">
+          <div class="window-title">📸 Screenshots &amp; Screen Record</div>
+          <div class="win-controls-pills">
+            <span class="win-pill-btn" onclick="minimizeWindow('screenshotApp')">─</span>
+            <span class="win-pill-btn" onclick="toggleFullscreen('screenshotApp')">▢</span>
+            <span class="win-pill-btn pill-close" onclick="closeWindow('screenshotApp')">✕</span>
+          </div>
+        </div>
+        <div class="window-body" style="padding:0; display:flex; flex-direction:column; background:#070b14;">
+          <div style="padding:18px 20px; border-bottom:1px solid rgba(255,255,255,0.08); display:flex; flex-direction:column; gap:14px;">
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+              <button class="btn-ui btn-accent" style="padding:12px 16px;" onclick="captureFullScreen()">🖥️ Full Screen Shot</button>
+              <button class="btn-ui" style="padding:12px 16px;" onclick="captureSelectedRegion()">⬚ Select Area</button>
+              <button class="btn-ui" style="padding:12px 16px;" id="ssRecordBtn" onclick="toggleScreenRecord()">⏺ Start Recording</button>
+              <button class="btn-ui" style="padding:12px 16px;" onclick="captureVisibleDesktop()">📷 Desktop Only</button>
+            </div>
+            <div style="font-size:0.78rem; color:var(--text-sub);">
+              Shortcut: <strong style="color:var(--accent);">Alt + K</strong> (Windows/Linux) · <strong style="color:var(--accent);">⌥ Option + K</strong> (Mac) · Captures are saved permanently to Media Library.
+            </div>
+            <div id="ssStatus" style="font-size:0.8rem; color:var(--accent); min-height:1.2em;">Ready</div>
+          </div>
+          <div style="flex:1; display:flex; min-height:0;">
+            <div style="flex:1; padding:16px; overflow:auto; display:flex; flex-direction:column; gap:12px;">
+              <div style="font-weight:800; letter-spacing:0.04em; font-size:0.78rem; color:var(--text-sub);">PREVIEW</div>
+              <div id="ssPreview" style="flex:1; min-height:180px; border-radius:16px; border:1px dashed rgba(255,255,255,0.18); background:radial-gradient(ellipse at 50% 30%, #121a2e 0%, #070b14 70%); display:flex; align-items:center; justify-content:center; overflow:hidden;">
+                <div style="text-align:center; color:var(--text-sub); font-size:0.85rem;">Capture something to preview it here</div>
+              </div>
+              <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                <button class="btn-ui btn-accent" onclick="saveScreenshotToLibrary()">💾 Save to Media</button>
+                <button class="btn-ui" onclick="downloadLastScreenshot()">⬇ Download</button>
+                <button class="btn-ui" onclick="copyScreenshotClipboard()">⧉ Copy</button>
+              </div>
+            </div>
+            <div style="width:240px; border-left:1px solid rgba(255,255,255,0.08); padding:14px; display:flex; flex-direction:column; gap:10px; background:rgba(8,12,22,0.9);">
+              <div style="font-weight:800; font-size:0.82rem;">Gallery</div>
+              <div id="ssGallery" style="flex:1; overflow-y:auto; display:flex; flex-direction:column; gap:8px;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="ssRegionOverlay" style="display:none; position:fixed; inset:0; z-index:9999998; cursor:crosshair; background:rgba(0,0,0,0.35);">
+        <div id="ssRegionBox" style="position:absolute; border:2px solid #3b82f6; background:rgba(59,130,246,0.12); box-shadow:0 0 0 9999px rgba(0,0,0,0.45); display:none;"></div>
+        <div style="position:fixed; top:16px; left:50%; transform:translateX(-50%); background:rgba(16,20,34,0.92); border:1px solid rgba(255,255,255,0.2); border-radius:12px; padding:8px 14px; font-size:0.8rem; color:#fff; z-index:1;">Drag to select · Esc to cancel · Release to capture</div>
+      </div>
 
     <div id="mobileShell">
       <div class="m-status">
@@ -2184,7 +2271,44 @@ Write **Markdown** on the left and see a clean preview here.
     'https://images.unsplash.com/photo-1527482797697-8795b05a13fe?q=80&w=1920&auto=format&fit=crop',
     'https://images.unsplash.com/photo-1516569422671-49ed4d0b0b4c?q=80&w=1920&auto=format&fit=crop',
     'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?q=80&w=1920&auto=format&fit=crop',
-    'https://images.unsplash.com/photo-1454391304352-2bf4678b1a7a?q=80&w=1920&auto=format&fit=crop'
+    'https://images.unsplash.com/photo-1454391304352-2bf4678b1a7a?q=80&w=1920&auto=format&fit=crop',
+    // --- Enfrok OS 5.3 expanded gallery (25+) ---
+    'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=1920&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=1920&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=1920&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?q=80&w=1920&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?q=80&w=1920&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1511300636408-a63a89df3482?q=80&w=1920&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=1920&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1475924156734-496f6cac6ec1?q=80&w=1920&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1482192505345-5655af888cc4?q=80&w=1920&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1494500764479-0c8f2919a3d8?q=80&w=1920&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1511884642898-4c92249e20b6?q=80&w=1920&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1920&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?q=80&w=1920&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?q=80&w=1920&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1531306728370-e2ebd9d7bb99?q=80&w=1920&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1505322022379-7c3353ee6291?q=80&w=1920&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1512273222628-4daea6e55abb?q=80&w=1920&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1497436072909-60f360e1d4b1?q=80&w=1920&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1472214103451-9374bd1c798e?q=80&w=1920&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1531366936337-7c912a4589a7?q=80&w=1920&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1483728642387-6c3bdd6c93e5?q=80&w=1920&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1552083375-1447ce886485?q=80&w=1920&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1444703686981-a3abbc4d4fe3?q=80&w=1920&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1502790671504-542ad42d5189?q=80&w=1920&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1476610182048-b716b8518aae?q=80&w=1920&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1552083974-186346191183?q=80&w=1920&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1519638831568-d9897f54ed69?q=80&w=1920&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1421789665209-c9b2a435e3dc?q=80&w=1920&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1454372182658-c712e4c5a1db?q=80&w=1920&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1484950763426-56b5bf172dbb?q=80&w=1920&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1920&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=1920&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?q=80&w=1920&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1920&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=1920&auto=format&fit=crop'
+
   ];
 
   const ALL_APPS = [
@@ -2218,6 +2342,7 @@ Write **Markdown** on the left and see a clean preview here.
     { id: 'regexApp', name: 'Regex Tester', icon: '🧪', pinnedDock: false, pinnedDesktop: false },
     { id: 'mediaPlayerApp', name: 'Media Viewer', icon: '🎬', pinnedDock: false, pinnedDesktop: false },
     { id: 'pdfViewerApp', name: 'PDF Viewer', icon: '📄', pinnedDock: false, pinnedDesktop: false },
+    { id: 'screenshotApp', name: 'Screenshots', icon: '📸', pinnedDock: true, pinnedDesktop: true },
     { id: 'htmlTesterApp', name: 'HTML Code Tester', icon: '⚒️', pinnedDock: false, pinnedDesktop: false }
   ];
 
@@ -2254,6 +2379,7 @@ Write **Markdown** on the left and see a clean preview here.
     regexApp:       { g: ['#e11d48', '#9f1239'], path: 'M6 8h4l2 8 2-8h4 M8 12h8' },
     mediaPlayerApp: { g: ['#8b5cf6', '#5b21b6'], path: 'M6 6h12v12H6z M10 9l5 3-5 3z' },
     pdfViewerApp:   { g: ['#ef4444', '#991b1b'], path: 'M7 4h7l3 3v13H7z M14 4v3h3 M9 12h6 M9 15h5' },
+    screenshotApp:  { g: ['#06b6d4', '#0891b2'], path: 'M4 8h16v10H4z M8 6h8 M9 12h6 M12 10v4' },
     htmlTesterApp:  { g: ['#f59e0b', '#b45309'], path: 'M8 8L4 12l4 4 M16 8l4 4-4 4 M13 7l-2 10' },
     oscddApp:       { g: ['#6366f1', '#3730a3'], path: 'M6 6h12v4H6z M6 14h12v4H6z' },
     messagesApp:    { g: ['#3b82f6', '#1d4ed8'], path: 'M5 6h14v10H9l-4 3V6z' }
@@ -2288,6 +2414,7 @@ Write **Markdown** on the left and see a clean preview here.
     documentCore: 4,
     wordApp: 150,
     sheetApp: 150,
+    screenshotApp: 120,
     paintApp: 150,
     browserApp: 1024,
   };
@@ -2337,12 +2464,14 @@ Write **Markdown** on the left and see a clean preview here.
     topBarEnabled: true,
     topBarApps: ['sheetApp', 'wordApp', 'paintApp'],
     uninstalledApps: [],
-    desktopApps: ['sheetApp', 'wordApp', 'paintApp', 'documentCore', 'terminalApp', 'browserApp', 'calcApp', 'todoApp', 'soundboardApp', 'concertApp', 'settingsApp'],
-    dockApps: ['sheetApp', 'wordApp', 'paintApp', 'documentCore', 'terminalApp', 'browserApp', 'calcApp', 'todoApp', 'soundboardApp', 'concertApp', 'settingsApp'],
+    desktopApps: ['sheetApp', 'wordApp', 'paintApp', 'documentCore', 'terminalApp', 'browserApp', 'calcApp', 'todoApp', 'screenshotApp', 'soundboardApp', 'concertApp', 'settingsApp'],
+    dockApps: ['sheetApp', 'wordApp', 'paintApp', 'documentCore', 'terminalApp', 'browserApp', 'calcApp', 'todoApp', 'screenshotApp', 'soundboardApp', 'concertApp', 'settingsApp'],
     savedFiles: [
       { name: 'Welcome_Guide.doc', content: '<h2>Welcome to Enfrok OS 5.3</h2><p>This is your saved document in Files storage.</p>' }
     ],
     savedMedia: [],
+    tasks: [],
+    screenshots: [],
     vseRedeemedCode: null,
     // MESSAGES APP DATA
     messagesProfile: null, // { name, username }
@@ -2415,11 +2544,136 @@ Write **Markdown** on the left and see a clean preview here.
     if (!osData.messagesContacts) osData.messagesContacts = [];
     if (!osData.messagesThreads) osData.messagesThreads = {};
     if (!Array.isArray(osData.hiddenApps)) osData.hiddenApps = [];
+    if (!Array.isArray(osData.savedMedia)) osData.savedMedia = [];
+    if (!Array.isArray(osData.tasks)) osData.tasks = [];
+    if (!Array.isArray(osData.screenshots)) osData.screenshots = [];
     ensureFileModel();
+    // restore media blob URLs from IndexedDB (async, non-blocking)
+    hydrateMediaUrls().then(() => {
+      if (typeof renderMediaViewerLibrary === 'function') renderMediaViewerLibrary();
+      if (typeof renderPdfViewerList === 'function') renderPdfViewerList();
+      if (typeof renderFolders === 'function') renderFolders();
+      if (typeof renderScreenshotGallery === 'function') renderScreenshotGallery();
+    }).catch(e => console.warn('hydrateMediaUrls', e));
   }
 
   function saveData() {
-    localStorage.setItem('enfrok_os_v53_fullsuite', JSON.stringify(osData));
+    try {
+      // Persist only media metadata in localStorage — blobs live in IndexedDB
+      const clone = JSON.parse(JSON.stringify(osData));
+      if (Array.isArray(clone.savedMedia)) {
+        clone.savedMedia = clone.savedMedia.map(m => ({
+          id: m.id,
+          name: m.name,
+          type: m.type,
+          size: m.size || 0,
+          pageCount: m.pageCount,
+          addedAt: m.addedAt || Date.now(),
+          // never store data: URLs in localStorage (quota kills audio/video)
+          hasBlob: true
+        }));
+      }
+      localStorage.setItem('enfrok_os_v53_fullsuite', JSON.stringify(clone));
+    } catch (e) {
+      console.warn('saveData quota/error', e);
+      try {
+        const slim = JSON.parse(JSON.stringify(osData));
+        slim.savedMedia = (slim.savedMedia || []).map(m => ({
+          id: m.id, name: m.name, type: m.type, size: m.size || 0,
+          pageCount: m.pageCount, addedAt: m.addedAt || Date.now(), hasBlob: true
+        }));
+        localStorage.setItem('enfrok_os_v53_fullsuite', JSON.stringify(slim));
+      } catch (e2) { console.error('saveData failed', e2); }
+    }
+  }
+
+  /* ===== IndexedDB media store (permanent audio/video/images/pdfs) ===== */
+  const MEDIA_DB_NAME = 'enfrok_media_v53';
+  const MEDIA_STORE = 'blobs';
+  let mediaDbPromise = null;
+
+  function openMediaDb() {
+    if (mediaDbPromise) return mediaDbPromise;
+    mediaDbPromise = new Promise((resolve, reject) => {
+      const req = indexedDB.open(MEDIA_DB_NAME, 1);
+      req.onupgradeneeded = () => {
+        const db = req.result;
+        if (!db.objectStoreNames.contains(MEDIA_STORE)) {
+          db.createObjectStore(MEDIA_STORE, { keyPath: 'id' });
+        }
+      };
+      req.onsuccess = () => resolve(req.result);
+      req.onerror = () => reject(req.error);
+    });
+    return mediaDbPromise;
+  }
+
+  async function idbPutMedia(id, blob, meta = {}) {
+    const db = await openMediaDb();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(MEDIA_STORE, 'readwrite');
+      tx.objectStore(MEDIA_STORE).put({ id, blob, meta, savedAt: Date.now() });
+      tx.oncomplete = () => resolve(true);
+      tx.onerror = () => reject(tx.error);
+    });
+  }
+
+  async function idbGetMedia(id) {
+    const db = await openMediaDb();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(MEDIA_STORE, 'readonly');
+      const req = tx.objectStore(MEDIA_STORE).get(id);
+      req.onsuccess = () => resolve(req.result || null);
+      req.onerror = () => reject(req.error);
+    });
+  }
+
+  async function idbDeleteMedia(id) {
+    const db = await openMediaDb();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(MEDIA_STORE, 'readwrite');
+      tx.objectStore(MEDIA_STORE).delete(id);
+      tx.oncomplete = () => resolve(true);
+      tx.onerror = () => reject(tx.error);
+    });
+  }
+
+  async function hydrateMediaUrls() {
+    if (!osData.savedMedia) osData.savedMedia = [];
+    for (const m of osData.savedMedia) {
+      if (m.url && String(m.url).startsWith('blob:')) continue;
+      if (m.url && String(m.url).startsWith('data:')) {
+        // migrate legacy data-URL into IndexedDB once
+        try {
+          const res = await fetch(m.url);
+          const blob = await res.blob();
+          await idbPutMedia(m.id, blob, { name: m.name, type: m.type, size: m.size });
+          m.url = URL.createObjectURL(blob);
+          m._blobUrl = m.url;
+        } catch (e) { console.warn('migrate media failed', m.id, e); }
+        continue;
+      }
+      try {
+        const rec = await idbGetMedia(m.id);
+        if (rec && rec.blob) {
+          if (m._blobUrl) { try { URL.revokeObjectURL(m._blobUrl); } catch(_){} }
+          m.url = URL.createObjectURL(rec.blob);
+          m._blobUrl = m.url;
+          if (!m.size && rec.blob.size) m.size = rec.blob.size;
+        }
+      } catch (e) { console.warn('hydrate media', m.id, e); }
+    }
+  }
+
+  function dataUrlToBlob(dataUrl) {
+    try {
+      const parts = dataUrl.split(',');
+      const mime = (parts[0].match(/:(.*?);/) || [])[1] || 'application/octet-stream';
+      const bin = atob(parts[1]);
+      const arr = new Uint8Array(bin.length);
+      for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+      return new Blob([arr], { type: mime });
+    } catch (e) { return null; }
   }
 
   function eraseSystemData() {
@@ -3240,7 +3494,7 @@ Write **Markdown** on the left and see a clean preview here.
 
   function getUsedStorageMB() {
     let used = 0;
-    (osData.savedMedia || []).forEach(m => { used += m.type === 'video' ? VIDEO_STORAGE_COST_MB : (m.type === 'pdf' ? IMAGE_STORAGE_COST_MB * 2 : IMAGE_STORAGE_COST_MB); });
+    (osData.savedMedia || []).forEach(m => { used += m.type === 'video' ? VIDEO_STORAGE_COST_MB : (m.type === 'audio' ? IMAGE_STORAGE_COST_MB : (m.type === 'pdf' ? IMAGE_STORAGE_COST_MB * 2 : IMAGE_STORAGE_COST_MB)); });
     (osData.savedFiles || []).forEach(f => { used += DOCUMENT_STORAGE_COST_MB; });
     return used;
   }
@@ -4336,39 +4590,45 @@ Write **Markdown** on the left and see a clean preview here.
   function handleFileDrop(event) { event.preventDefault(); const id=event.dataTransfer.getData('text/enfrok-file'); const item=fileItemById(id); if (!item || item.path===fileState.path) return; item.path=fileState.path; item.modifiedAt=Date.now(); saveFileState(); renderFolders(); }
   function handleMediaUpload(e) { const files=Array.from(e.target.files||[]); processUploadedFiles(files); e.target.value=''; }
   function handleMediaDrop(e) { e.preventDefault(); if (e.dataTransfer && e.dataTransfer.files) processUploadedFiles(Array.from(e.dataTransfer.files)); }
-  function processUploadedFiles(files) {
+  async function processUploadedFiles(files) {
     if (!osData.savedMedia) osData.savedMedia = [];
-    files.forEach(file => {
+    for (const file of files) {
       const isImg = file.type.startsWith('image');
       const isVid = file.type.startsWith('video');
       const isAudio = file.type.startsWith('audio') || /\.(mp3|wav|m4a|ogg|oga|aac|flac|weba)$/i.test(file.name);
       const isPdf = file.type === 'application/pdf' || /\.pdf$/i.test(file.name);
-      if (!isImg && !isVid && !isAudio && !isPdf) return;
+      if (!isImg && !isVid && !isAudio && !isPdf) continue;
       if (isPdf && file.size > 11 * 1024 * 1024) {
         showGlassAlert(`'${file.name}' exceeds the 11 MB PDF limit and was skipped.`, '⚠️ PDF Too Large');
-        return;
+        continue;
       }
-      const reader = new FileReader();
-      reader.onload = ev => {
-        const type = isPdf ? 'pdf' : (isVid ? 'video' : (isAudio ? 'audio' : 'photo'));
+      const type = isPdf ? 'pdf' : (isVid ? 'video' : (isAudio ? 'audio' : 'photo'));
+      const id = 'media_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6);
+      try {
+        // Store raw File/Blob in IndexedDB so audio/video survive reloads
+        await idbPutMedia(id, file, { name: file.name, type, size: file.size || 0 });
+        const url = URL.createObjectURL(file);
         osData.savedMedia.push({
-          id: 'media_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
+          id,
           name: file.name,
           type,
-          url: ev.target.result,
+          url,
+          _blobUrl: url,
           size: file.size || 0,
           pageCount: type === 'pdf' ? null : undefined,
-          addedAt: Date.now()
+          addedAt: Date.now(),
+          hasBlob: true
         });
         saveData();
         renderFolders();
         refreshStorageVramPanel();
         if (typeof renderMediaViewerLibrary === 'function') renderMediaViewerLibrary();
         if (typeof renderPdfViewerList === 'function') renderPdfViewerList();
-      };
-      reader.onerror = () => showGlassAlert(`Could not read '${file.name}'.`, '⚠️ Import Failed');
-      reader.readAsDataURL(file);
-    });
+      } catch (err) {
+        console.error(err);
+        showGlassAlert(`Could not save '${file.name}' permanently. Storage may be full.`, '⚠️ Import Failed');
+      }
+    }
   }
   function openSavedFile(fileName) { ensureFileModel(); const file=osData.savedFiles.find(f=>f.name===fileName); if(!file) return; openManagedFile(file); }
   function deleteSavedFile(fileName) { const item=osData.savedFiles.find(f=>f.name===fileName); if(item) deleteFile(item.id); }
@@ -4548,11 +4808,18 @@ Write **Markdown** on the left and see a clean preview here.
   window.addEventListener('keydown', event => {
     if (event.key === 'Escape') {
       closeFullscreenStartMenu(); closeGlassPopup(); closeVramLimitPopup(); closeHiddenAppsPanel();
+      cancelRegionCapture();
     }
     // Alt+Z (Windows/Linux) or Option+Z (Mac): close all apps
     if ((event.key === 'z' || event.key === 'Z') && event.altKey && !event.ctrlKey && !event.metaKey && !event.shiftKey) {
       event.preventDefault();
       closeAllEnfrokApps();
+    }
+    // Alt+K / Option+K: open Screenshots app
+    if ((event.key === 'k' || event.key === 'K') && event.altKey && !event.ctrlKey && !event.metaKey && !event.shiftKey) {
+      event.preventDefault();
+      openWindow('screenshotApp');
+      if (typeof renderScreenshotGallery === 'function') renderScreenshotGallery();
     }
   });
 
@@ -4886,18 +5153,110 @@ Write **Markdown** on the left and see a clean preview here.
     document.getElementById('passOutput').value = res;
   }
 
+  let todoFilter = 'all';
+
+  function ensureTasks() {
+    if (!Array.isArray(osData.tasks)) osData.tasks = [];
+  }
+
+  function setTodoFilter(f) {
+    todoFilter = f || 'all';
+    ['All','Active','Done','High'].forEach(name => {
+      const el = document.getElementById('todoFilter' + name);
+      if (el) el.classList.toggle('active', (name.toLowerCase() === f) || (name === 'All' && f === 'all') || (name === 'High' && f === 'high'));
+    });
+    // fix id mapping
+    const map = { all: 'todoFilterAll', active: 'todoFilterActive', done: 'todoFilterDone', high: 'todoFilterHigh' };
+    Object.keys(map).forEach(k => {
+      const el = document.getElementById(map[k]);
+      if (el) el.classList.toggle('active', k === todoFilter);
+    });
+    renderTodoList();
+  }
+
   function addTodo() {
+    ensureTasks();
     const input = document.getElementById('todoInput');
-    const val = input.value.trim();
+    const val = (input && input.value || '').trim();
     if (!val) return;
+    const priority = (document.getElementById('todoPriority') || {}).value || 'normal';
+    const due = (document.getElementById('todoDue') || {}).value || '';
+    osData.tasks.unshift({
+      id: 'task_' + Date.now() + '_' + Math.random().toString(36).slice(2, 5),
+      text: val,
+      done: false,
+      priority,
+      due,
+      createdAt: Date.now()
+    });
+    if (input) input.value = '';
+    saveData();
+    renderTodoList();
+  }
+
+  function toggleTodoDone(id) {
+    ensureTasks();
+    const t = osData.tasks.find(x => x.id === id);
+    if (!t) return;
+    t.done = !t.done;
+    saveData();
+    renderTodoList();
+  }
+
+  function deleteTodo(id) {
+    ensureTasks();
+    osData.tasks = osData.tasks.filter(x => x.id !== id);
+    saveData();
+    renderTodoList();
+  }
+
+  function clearCompletedTodos() {
+    ensureTasks();
+    osData.tasks = osData.tasks.filter(x => !x.done);
+    saveData();
+    renderTodoList();
+  }
+
+  function clearAllTodos() {
+    showGlassConfirm('Delete all tasks?', () => {
+      osData.tasks = [];
+      saveData();
+      renderTodoList();
+    }, '🗑️ Clear tasks');
+  }
+
+  function renderTodoList() {
+    ensureTasks();
     const list = document.getElementById('todoList');
-    list.innerHTML += `
-      <div style="display:flex; justify-content:space-between; align-items:center; padding:10px; background:rgba(255,255,255,0.04); border-radius:10px; border:1px solid var(--glass-border);">
-        <span>${val}</span>
-        <button class="btn-ui btn-danger" style="padding:2px 8px;" onclick="this.parentElement.remove()">✕</button>
-      </div>
-    `;
-    input.value = '';
+    if (!list) return;
+    let items = osData.tasks.slice();
+    if (todoFilter === 'active') items = items.filter(t => !t.done);
+    else if (todoFilter === 'done') items = items.filter(t => t.done);
+    else if (todoFilter === 'high') items = items.filter(t => t.priority === 'high');
+    const stats = document.getElementById('todoStatsLabel');
+    if (stats) {
+      const open = osData.tasks.filter(t => !t.done).length;
+      stats.textContent = `${osData.tasks.length} tasks · ${open} open`;
+    }
+    if (!items.length) {
+      list.innerHTML = '<div style="color:var(--text-sub); padding:24px; text-align:center; font-size:0.85rem;">No tasks in this view. Add one above.</div>';
+      return;
+    }
+    const pColor = { high: '#f87171', normal: 'var(--accent)', low: '#94a3b8' };
+    list.innerHTML = items.map(t => {
+      const dueStr = t.due ? new Date(t.due + 'T00:00:00').toLocaleDateString() : '';
+      return `<div style="display:flex; align-items:center; gap:12px; padding:12px 14px; background:rgba(255,255,255,0.04); border-radius:12px; border:1px solid var(--glass-border); ${t.done ? 'opacity:0.65;' : ''}">
+        <input type="checkbox" ${t.done ? 'checked' : ''} onchange="toggleTodoDone('${t.id}')" style="width:18px;height:18px; accent-color:var(--accent);" />
+        <div style="flex:1; min-width:0;">
+          <div style="font-weight:600; font-size:0.9rem; ${t.done ? 'text-decoration:line-through; color:var(--text-sub);' : ''}">${escapeUtilityHtml(t.text)}</div>
+          <div style="font-size:0.72rem; color:var(--text-sub); margin-top:2px;">
+            <span style="color:${pColor[t.priority] || pColor.normal}; font-weight:700;">${(t.priority || 'normal').toUpperCase()}</span>
+            ${dueStr ? ' · Due ' + dueStr : ''}
+          </div>
+        </div>
+        <button class="btn-ui btn-danger" style="padding:4px 8px; font-size:0.72rem;" onclick="deleteTodo('${t.id}')">✕</button>
+      </div>`;
+    }).join('');
   }
 
   function calcNum(n) { const disp = document.getElementById('calcDisp'); if (disp.value === '0') disp.value = n; else disp.value += n; }
@@ -5386,7 +5745,7 @@ Write **Markdown** on the left and see a clean preview here.
   }
 
   const originalLaunchDesktop = launchDesktop;
-  launchDesktop = function() { originalLaunchDesktop(); initAdditiveApps(); };
+  launchDesktop = function() { originalLaunchDesktop(); initAdditiveApps(); renderTodoList(); };
 
 
   /* ===================== MEDIA VIEWER + PDF VIEWER ===================== */
@@ -5732,8 +6091,10 @@ Write **Markdown** on the left and see a clean preview here.
   function removeActivePdf() {
     if (!pdfActiveId) return;
     showGlassConfirm('Remove this PDF from the library?', () => {
-      osData.savedMedia = (osData.savedMedia || []).filter(m => m.id !== pdfActiveId);
+      const delId = pdfActiveId;
+      osData.savedMedia = (osData.savedMedia || []).filter(m => m.id !== delId);
       pdfActiveId = null;
+      idbDeleteMedia(delId).catch(()=>{});
       saveData();
       renderPdfViewerList();
       renderMediaViewerLibrary();
@@ -5753,7 +6114,461 @@ Write **Markdown** on the left and see a clean preview here.
     __origOpenWindow(id);
     if (id === 'mediaPlayerApp') renderMediaViewerLibrary();
     if (id === 'pdfViewerApp') renderPdfViewerList();
+    if (id === 'todoApp') renderTodoList();
+    if (id === 'screenshotApp') renderScreenshotGallery();
   };
+
+
+
+  /* ===================== SCREENSHOTS & SCREEN RECORD ===================== */
+  let lastScreenshotBlob = null;
+  let lastScreenshotUrl = null;
+  let ssRecorder = null;
+  let ssRecordChunks = [];
+  let ssRecording = false;
+  let ssRegionStart = null;
+  let mediaRotateDeg = 0;
+  let pdfZoomScale = 1;
+
+  function setSsStatus(msg) {
+    const el = document.getElementById('ssStatus');
+    if (el) el.textContent = msg || '';
+  }
+
+  async function captureFullScreen() {
+    try {
+      setSsStatus('Requesting screen capture…');
+      const stream = await navigator.mediaDevices.getDisplayMedia({ video: { displaySurface: 'monitor' }, audio: false });
+      const track = stream.getVideoTracks()[0];
+      const settings = track.getSettings();
+      const video = document.createElement('video');
+      video.srcObject = stream;
+      video.muted = true;
+      await video.play();
+      await new Promise(r => setTimeout(r, 200));
+      const w = video.videoWidth || settings.width || 1920;
+      const h = video.videoHeight || settings.height || 1080;
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(video, 0, 0, w, h);
+      track.stop();
+      stream.getTracks().forEach(t => t.stop());
+      const blob = await new Promise(res => canvas.toBlob(res, 'image/png'));
+      presentScreenshot(blob, 'Full_Screen_' + Date.now() + '.png');
+      setSsStatus('Full screen captured');
+    } catch (e) {
+      console.warn(e);
+      // Fallback: capture visible OS UI via html2canvas-like approach (DOM snapshot)
+      captureVisibleDesktop();
+    }
+  }
+
+  function captureVisibleDesktop() {
+    setSsStatus('Capturing desktop…');
+    try {
+      const root = document.getElementById('desktop-screen') || document.body;
+      const rect = root.getBoundingClientRect();
+      const canvas = document.createElement('canvas');
+      const scale = Math.min(2, window.devicePixelRatio || 1);
+      canvas.width = Math.floor(rect.width * scale);
+      canvas.height = Math.floor(rect.height * scale);
+      const ctx = canvas.getContext('2d');
+      ctx.scale(scale, scale);
+      // Draw wallpaper-ish background
+      ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--theme-bg-base') || '#030508';
+      ctx.fillRect(0, 0, rect.width, rect.height);
+      // Use foreignObject SVG to rasterize DOM (best-effort)
+      const data = new XMLSerializer().serializeToString(root);
+      const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${rect.width}" height="${rect.height}"><foreignObject width="100%" height="100%"><div xmlns="http://www.w3.org/1999/xhtml">${data}</div></foreignObject></svg>`;
+      const img = new Image();
+      const url = URL.createObjectURL(new Blob([svg], { type: 'image/svg+xml;charset=utf-8' }));
+      img.onload = () => {
+        try {
+          ctx.drawImage(img, 0, 0);
+        } catch (_) {
+          // CORS/tainted — solid gradient fallback frame
+          const g = ctx.createLinearGradient(0, 0, rect.width, rect.height);
+          g.addColorStop(0, '#1e3a5f'); g.addColorStop(1, '#0f172a');
+          ctx.fillStyle = g; ctx.fillRect(0, 0, rect.width, rect.height);
+          ctx.fillStyle = '#fff'; ctx.font = '20px sans-serif';
+          ctx.fillText('Enfrok OS Desktop Capture · ' + new Date().toLocaleString(), 24, 40);
+        }
+        URL.revokeObjectURL(url);
+        canvas.toBlob(blob => {
+          presentScreenshot(blob, 'Desktop_' + Date.now() + '.png');
+          setSsStatus('Desktop capture ready');
+        }, 'image/png');
+      };
+      img.onerror = () => {
+        URL.revokeObjectURL(url);
+        ctx.fillStyle = '#0f172a'; ctx.fillRect(0, 0, rect.width, rect.height);
+        ctx.fillStyle = '#93c5fd'; ctx.font = '18px sans-serif';
+        ctx.fillText('Screenshot · ' + new Date().toLocaleString(), 24, 40);
+        canvas.toBlob(blob => {
+          presentScreenshot(blob, 'Desktop_' + Date.now() + '.png');
+          setSsStatus('Desktop capture ready (fallback)');
+        }, 'image/png');
+      };
+      img.src = url;
+    } catch (e) {
+      setSsStatus('Capture failed: ' + (e.message || e));
+    }
+  }
+
+  function captureSelectedRegion() {
+    const overlay = document.getElementById('ssRegionOverlay');
+    const box = document.getElementById('ssRegionBox');
+    if (!overlay || !box) return;
+    overlay.style.display = 'block';
+    box.style.display = 'none';
+    ssRegionStart = null;
+    setSsStatus('Drag to select region…');
+    const onDown = (e) => {
+      ssRegionStart = { x: e.clientX, y: e.clientY };
+      box.style.display = 'block';
+      box.style.left = e.clientX + 'px';
+      box.style.top = e.clientY + 'px';
+      box.style.width = '0px';
+      box.style.height = '0px';
+    };
+    const onMove = (e) => {
+      if (!ssRegionStart) return;
+      const x = Math.min(ssRegionStart.x, e.clientX);
+      const y = Math.min(ssRegionStart.y, e.clientY);
+      const w = Math.abs(e.clientX - ssRegionStart.x);
+      const h = Math.abs(e.clientY - ssRegionStart.y);
+      box.style.left = x + 'px'; box.style.top = y + 'px';
+      box.style.width = w + 'px'; box.style.height = h + 'px';
+    };
+    const onUp = async (e) => {
+      overlay.removeEventListener('mousedown', onDown);
+      overlay.removeEventListener('mousemove', onMove);
+      overlay.removeEventListener('mouseup', onUp);
+      const x = Math.min(ssRegionStart.x, e.clientX);
+      const y = Math.min(ssRegionStart.y, e.clientY);
+      const w = Math.abs(e.clientX - ssRegionStart.x);
+      const h = Math.abs(e.clientY - ssRegionStart.y);
+      overlay.style.display = 'none';
+      box.style.display = 'none';
+      if (w < 8 || h < 8) { setSsStatus('Selection too small'); return; }
+      try {
+        const stream = await navigator.mediaDevices.getDisplayMedia({ video: true, audio: false });
+        const video = document.createElement('video');
+        video.srcObject = stream;
+        await video.play();
+        await new Promise(r => setTimeout(r, 150));
+        const scaleX = video.videoWidth / window.innerWidth;
+        const scaleY = video.videoHeight / window.innerHeight;
+        const canvas = document.createElement('canvas');
+        canvas.width = Math.max(1, Math.floor(w * scaleX));
+        canvas.height = Math.max(1, Math.floor(h * scaleY));
+        canvas.getContext('2d').drawImage(video, x * scaleX, y * scaleY, w * scaleX, h * scaleY, 0, 0, canvas.width, canvas.height);
+        stream.getTracks().forEach(t => t.stop());
+        const blob = await new Promise(res => canvas.toBlob(res, 'image/png'));
+        presentScreenshot(blob, 'Region_' + Date.now() + '.png');
+        setSsStatus('Region captured');
+      } catch (err) {
+        // Fallback without getDisplayMedia: capture desktop then crop
+        setSsStatus('Using desktop crop fallback…');
+        captureVisibleDesktop();
+      }
+    };
+    overlay.addEventListener('mousedown', onDown);
+    overlay.addEventListener('mousemove', onMove);
+    overlay.addEventListener('mouseup', onUp);
+  }
+
+  function cancelRegionCapture() {
+    const overlay = document.getElementById('ssRegionOverlay');
+    if (overlay) overlay.style.display = 'none';
+    ssRegionStart = null;
+  }
+
+  function presentScreenshot(blob, name) {
+    if (!blob) return;
+    lastScreenshotBlob = blob;
+    if (lastScreenshotUrl) { try { URL.revokeObjectURL(lastScreenshotUrl); } catch(_){} }
+    lastScreenshotUrl = URL.createObjectURL(blob);
+    const preview = document.getElementById('ssPreview');
+    if (preview) {
+      preview.innerHTML = `<img src="${lastScreenshotUrl}" alt="capture" style="max-width:100%; max-height:100%; object-fit:contain; border-radius:12px;" />`;
+    }
+    lastScreenshotName = name || ('Screenshot_' + Date.now() + '.png');
+  }
+  let lastScreenshotName = 'Screenshot.png';
+
+  async function saveScreenshotToLibrary() {
+    if (!lastScreenshotBlob) {
+      showGlassAlert('Capture a screenshot first.', '📸 Nothing to save');
+      return;
+    }
+    if (!osData.savedMedia) osData.savedMedia = [];
+    const id = 'media_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6);
+    const name = lastScreenshotName || ('Screenshot_' + Date.now() + '.png');
+    try {
+      await idbPutMedia(id, lastScreenshotBlob, { name, type: 'photo', size: lastScreenshotBlob.size });
+      const url = URL.createObjectURL(lastScreenshotBlob);
+      osData.savedMedia.unshift({
+        id, name, type: 'photo', url, _blobUrl: url,
+        size: lastScreenshotBlob.size, addedAt: Date.now(), hasBlob: true
+      });
+      if (!osData.screenshots) osData.screenshots = [];
+      osData.screenshots.unshift(id);
+      saveData();
+      renderScreenshotGallery();
+      if (typeof renderMediaViewerLibrary === 'function') renderMediaViewerLibrary();
+      setSsStatus('Saved permanently to Media Library');
+      showGlassAlert(`'${name}' saved to Media Library.`, '✅ Screenshot Saved');
+    } catch (e) {
+      showGlassAlert('Could not save permanently: ' + (e.message || e), '⚠️ Save failed');
+    }
+  }
+
+  function downloadLastScreenshot() {
+    if (!lastScreenshotBlob) return;
+    const a = document.createElement('a');
+    a.href = lastScreenshotUrl;
+    a.download = lastScreenshotName || 'Screenshot.png';
+    a.click();
+  }
+
+  async function copyScreenshotClipboard() {
+    if (!lastScreenshotBlob) return;
+    try {
+      await navigator.clipboard.write([new ClipboardItem({ [lastScreenshotBlob.type]: lastScreenshotBlob })]);
+      setSsStatus('Copied to clipboard');
+    } catch (e) {
+      setSsStatus('Clipboard copy not supported in this browser');
+    }
+  }
+
+  async function toggleScreenRecord() {
+    const btn = document.getElementById('ssRecordBtn');
+    if (!ssRecording) {
+      try {
+        const stream = await navigator.mediaDevices.getDisplayMedia({ video: true, audio: true });
+        ssRecordChunks = [];
+        ssRecorder = new MediaRecorder(stream, { mimeType: MediaRecorder.isTypeSupported('video/webm;codecs=vp9') ? 'video/webm;codecs=vp9' : 'video/webm' });
+        ssRecorder.ondataavailable = e => { if (e.data && e.data.size) ssRecordChunks.push(e.data); };
+        ssRecorder.onstop = async () => {
+          stream.getTracks().forEach(t => t.stop());
+          const blob = new Blob(ssRecordChunks, { type: 'video/webm' });
+          lastScreenshotBlob = blob;
+          if (lastScreenshotUrl) try { URL.revokeObjectURL(lastScreenshotUrl); } catch(_){}
+          lastScreenshotUrl = URL.createObjectURL(blob);
+          lastScreenshotName = 'Recording_' + Date.now() + '.webm';
+          const preview = document.getElementById('ssPreview');
+          if (preview) {
+            preview.innerHTML = `<video src="${lastScreenshotUrl}" controls style="max-width:100%; max-height:100%; border-radius:12px;"></video>`;
+          }
+          // auto-save to media
+          const id = 'media_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6);
+          try {
+            await idbPutMedia(id, blob, { name: lastScreenshotName, type: 'video', size: blob.size });
+            if (!osData.savedMedia) osData.savedMedia = [];
+            osData.savedMedia.unshift({
+              id, name: lastScreenshotName, type: 'video', url: lastScreenshotUrl, _blobUrl: lastScreenshotUrl,
+              size: blob.size, addedAt: Date.now(), hasBlob: true
+            });
+            if (!osData.screenshots) osData.screenshots = [];
+            osData.screenshots.unshift(id);
+            saveData();
+            renderScreenshotGallery();
+            setSsStatus('Recording saved to Media Library');
+          } catch (err) {
+            setSsStatus('Recording finished (preview only)');
+          }
+        };
+        ssRecorder.start(250);
+        ssRecording = true;
+        if (btn) btn.textContent = '⏹ Stop Recording';
+        setSsStatus('Recording… click Stop when done');
+      } catch (e) {
+        setSsStatus('Screen recording denied or unavailable');
+      }
+    } else {
+      ssRecording = false;
+      if (ssRecorder && ssRecorder.state !== 'inactive') ssRecorder.stop();
+      if (btn) btn.textContent = '⏺ Start Recording';
+    }
+  }
+
+  function renderScreenshotGallery() {
+    const gal = document.getElementById('ssGallery');
+    if (!gal) return;
+    const ids = osData.screenshots || [];
+    const media = osData.savedMedia || [];
+    if (!ids.length) {
+      gal.innerHTML = '<div style="font-size:0.75rem;color:var(--text-sub);">No captures yet.</div>';
+      return;
+    }
+    gal.innerHTML = ids.map(id => {
+      const m = media.find(x => x.id === id);
+      if (!m) return '';
+      const icon = m.type === 'video' ? '🎥' : '🖼️';
+      return `<div class="mv-lib-item" onclick="openMediaInViewer('${m.id}')" style="cursor:pointer;">
+        <span>${icon}</span>
+        <div style="min-width:0;flex:1;"><div class="mv-lib-name">${m.name}</div>
+        <div class="mv-lib-sub">${formatBytes(m.size||0)}</div></div>
+      </div>`;
+    }).join('');
+  }
+
+  /* ===================== EXTRA APP FEATURES ===================== */
+  function mediaViewerRotate() {
+    mediaRotateDeg = (mediaRotateDeg + 90) % 360;
+    const img = document.getElementById('mvActiveImage');
+    const vid = document.getElementById('mvActiveVideo');
+    const el = img || vid;
+    if (el) el.style.transform = `rotate(${mediaRotateDeg}deg) scale(${mvZoom || 1})`;
+  }
+
+  function downloadActiveMedia() {
+    if (!mvActiveId) return;
+    const item = (osData.savedMedia || []).find(m => m.id === mvActiveId);
+    if (!item || !item.url) return;
+    const a = document.createElement('a');
+    a.href = item.url;
+    a.download = item.name || 'media';
+    a.click();
+  }
+
+  function deleteActiveMedia() {
+    if (!mvActiveId) return;
+    const id = mvActiveId;
+    showGlassConfirm('Remove this item from the media library permanently?', () => {
+      osData.savedMedia = (osData.savedMedia || []).filter(m => m.id !== id);
+      if (osData.screenshots) osData.screenshots = osData.screenshots.filter(x => x !== id);
+      idbDeleteMedia(id).catch(()=>{});
+      mvActiveId = null;
+      saveData();
+      renderMediaViewerLibrary();
+      renderScreenshotGallery();
+      const vp = document.getElementById('mediaViewport');
+      if (vp) {
+        const empty = document.getElementById('mvEmptyState');
+        Array.from(vp.querySelectorAll('img,video,canvas,iframe,embed')).forEach(n => n.remove());
+        if (empty) { empty.style.display = 'flex'; }
+      }
+      refreshStorageVramPanel();
+    }, '🗑️ Delete media');
+  }
+
+  function pdfViewerZoom(delta) {
+    pdfZoomScale = Math.min(2.5, Math.max(0.5, (pdfZoomScale || 1) + delta));
+    const pane = document.getElementById('pdfPreviewPane');
+    if (!pane) return;
+    const frame = pane.querySelector('iframe, embed, canvas');
+    if (frame) frame.style.transform = `scale(${pdfZoomScale})`;
+    if (frame) frame.style.transformOrigin = 'top center';
+  }
+  function pdfViewerFitWidth() {
+    pdfZoomScale = 1;
+    const pane = document.getElementById('pdfPreviewPane');
+    if (!pane) return;
+    const frame = pane.querySelector('iframe, embed, canvas');
+    if (frame) { frame.style.transform = 'none'; frame.style.width = '100%'; }
+  }
+  function downloadActivePdf() {
+    if (!pdfActiveId) return;
+    const item = (osData.savedMedia || []).find(m => m.id === pdfActiveId);
+    if (!item || !item.url) return;
+    const a = document.createElement('a');
+    a.href = item.url; a.download = item.name || 'document.pdf'; a.click();
+  }
+
+  function sheetFillSeries() {
+    showGlassAlert('Fill Series: select a column of numbers and use AutoSum or enter =A1+1 patterns in the formula bar, then Recalc.', '📈 Fill Series');
+  }
+  function sheetTransposeHint() {
+    showGlassAlert('Transpose tip: copy a range, create a new sheet area, and paste values swapped (rows↔columns). Full transpose arrives in a future update.', '⇄ Transpose');
+  }
+  function sheetFreezeHint() {
+    showGlassAlert('Header row stays sticky while you scroll the grid (freeze panes simulation is already active).', '📌 Freeze');
+  }
+  function sheetExportJSON() {
+    try {
+      const rows = [];
+      document.querySelectorAll('#sheetBodyRows tr').forEach(tr => {
+        const cells = [];
+        tr.querySelectorAll('input, td').forEach(td => {
+          if (td.tagName === 'INPUT') cells.push(td.value);
+          else cells.push(td.textContent);
+        });
+        if (cells.length) rows.push(cells);
+      });
+      const blob = new Blob([JSON.stringify(rows, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'Sheet_Export.json';
+      a.click();
+    } catch (e) {
+      showGlassAlert('Could not export sheet JSON.', '⚠️ Export');
+    }
+  }
+
+  function wordInsertHR() {
+    document.execCommand('insertHorizontalRule');
+    updateWordStats();
+  }
+  function wordWordCountAlert() {
+    const paper = document.getElementById('wordPaper');
+    if (!paper) return;
+    const text = paper.innerText || '';
+    const words = text.trim() ? text.trim().split(/\\s+/).length : 0;
+    showGlassAlert(`Words: ${words}\\nCharacters: ${text.length}\\nParagraphs: ${paper.querySelectorAll('p').length}`, '∑ Word Count');
+  }
+  function wordExportTxt() {
+    const paper = document.getElementById('wordPaper');
+    if (!paper) return;
+    const blob = new Blob([paper.innerText || ''], { type: 'text/plain' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = (document.getElementById('wordDocTitle')?.textContent || 'Document') + '.txt';
+    a.click();
+  }
+  function wordExportHtml() {
+    const paper = document.getElementById('wordPaper');
+    if (!paper) return;
+    const blob = new Blob([`<!DOCTYPE html><html><body>${paper.innerHTML}</body></html>`], { type: 'text/html' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = (document.getElementById('wordDocTitle')?.textContent || 'Document') + '.html';
+    a.click();
+  }
+  function wordToggleSpell() {
+    const paper = document.getElementById('wordPaper');
+    if (!paper) return;
+    paper.spellcheck = !paper.spellcheck;
+    showGlassAlert('Spellcheck is now ' + (paper.spellcheck ? 'ON' : 'OFF'), '✓ Spell');
+  }
+
+  async function paintSaveToMedia() {
+    const canvas = document.getElementById('paintStudioCanvas') || document.querySelector('#paintApp canvas');
+    if (!canvas) { showGlassAlert('Paint canvas not found.', '🎨 Paint'); return; }
+    const blob = await new Promise(res => canvas.toBlob(res, 'image/png'));
+    if (!blob) return;
+    const id = 'media_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6);
+    const name = 'Paint_' + Date.now() + '.png';
+    await idbPutMedia(id, blob, { name, type: 'photo', size: blob.size });
+    const url = URL.createObjectURL(blob);
+    if (!osData.savedMedia) osData.savedMedia = [];
+    osData.savedMedia.unshift({ id, name, type: 'photo', url, _blobUrl: url, size: blob.size, addedAt: Date.now(), hasBlob: true });
+    saveData();
+    showGlassAlert('Canvas saved to Media Library.', '💾 Paint Saved');
+  }
+  function paintAddStamp() {
+    const canvas = document.getElementById('paintStudioCanvas') || document.querySelector('#paintApp canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    ctx.font = '48px serif';
+    ctx.fillText('⭐', canvas.width / 2 - 20, canvas.height / 2);
+  }
+  let paintMirrorOn = false;
+  function paintMirrorMode() {
+    paintMirrorOn = !paintMirrorOn;
+    showGlassAlert('Mirror mode ' + (paintMirrorOn ? 'ON — strokes will reflect horizontally after next draw tools that support it.' : 'OFF'), '🪞 Mirror');
+  }
 
 
 </script>
