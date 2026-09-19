@@ -159,16 +159,6 @@
   .lock-back-btn:hover { color: #fff; }
   #login-screen { background: var(--bg-wallpaper) center/cover no-repeat; z-index: 9000; }
   #login-screen::before { content: ''; position: absolute; inset: 0; background: rgba(3, 5, 8, 0.7); backdrop-filter: var(--glass-blur); z-index: -1; }
-  #shuttingDownScreen { background: #000000; z-index: 10600; gap: 22px; }
-  .shutdown-spinner-ring { width: 46px; height: 46px; border-radius: 50%; border: 3px solid rgba(255,255,255,0.14); border-top-color: rgba(255,255,255,0.85); animation: shutdownSpin 0.9s linear infinite; }
-  @keyframes shutdownSpin { to { transform: rotate(360deg); } }
-  .shutdown-text { font-family: var(--font-code); font-size: 1.05rem; letter-spacing: 0.05em; color: #f1f5f9; }
-  #noBootScreen { background: #000000; z-index: 10600; gap: 10px; text-align: center; font-family: var(--font-code); }
-  .noboot-brand { font-size: 0.95rem; letter-spacing: 0.16em; color: #cbd5e1; text-transform: uppercase; font-weight: 600; }
-  .noboot-msg { font-size: 0.85rem; color: #64748b; letter-spacing: 0.02em; }
-  .noboot-boot-btn { margin-top: 30px; font-family: var(--font-code); letter-spacing: 0.04em; }
-  .noboot-boot-btn::before { content: '['; margin-right: 6px; opacity: 0.7; }
-  .noboot-boot-btn::after { content: ']'; margin-left: 6px; opacity: 0.7; }
   .top-bar { width: calc(100% - 24px); height: 42px; margin: 12px 12px 0; background: var(--glass-topbar); backdrop-filter: var(--glass-blur); border: 1px solid var(--glass-border); border-radius: 16px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; z-index: 8000; box-shadow: 0 12px 30px rgba(0,0,0,0.24); transition: transform 0.3s var(--anim-curve), opacity 0.3s var(--anim-curve); will-change: transform, opacity; }
   .top-bar.hidden-menu { display: none !important; }
   .top-bar-section { display: flex; align-items: center; gap: 18px; }
@@ -848,17 +838,6 @@
     <div id="bootLog" style="display:none;" aria-hidden="true"></div>
   </div>
 
-  <div id="shuttingDownScreen" class="os-screen hidden">
-    <div class="shutdown-spinner-ring"></div>
-    <div class="shutdown-text">Shutting Down...</div>
-  </div>
-
-  <div id="noBootScreen" class="os-screen hidden">
-    <div class="noboot-brand">Umbrella Viewer Handler</div>
-    <div class="noboot-msg">No Booting Up Devices Selected.</div>
-    <button class="btn-ui btn-accent noboot-boot-btn" onclick="rebootFromNoBoot()">Enfrok OS 5.3</button>
-  </div>
-
   <div id="setup-screen" class="os-screen hidden">
     <div class="setup-card">
       <div class="setup-sidebar">
@@ -947,7 +926,6 @@
         <div class="lock-auth-sub">Enter your password to continue</div>
         <input type="password" class="input-ui" id="lockAuthPasswordInput" placeholder="Password..." onkeydown="if(event.key==='Enter') verifyLockPassword()" />
         <button class="btn-ui btn-accent" style="width:100%; justify-content:center; padding:12px;" onclick="verifyLockPassword()">Unlock →</button>
-        <div class="lock-back-btn" style="margin-top:-4px;" onclick="event.stopPropagation(); recoverLocalAccess()">Forgot password? Reset local profile</div>
       </div>
       <div class="lock-back-btn" onclick="event.stopPropagation(); hideLockAuth()">← Back to clock</div>
     </div>
@@ -961,7 +939,7 @@
         <div id="topBarAppsContainer" style="display:flex; align-items:center; gap:18px;"></div>
       </div>
       <div class="top-bar-section">
-        <div class="top-item" id="powerMenuBtn" onclick="openPowerMenu(event)" title="Power" style="font-size:1.15rem; font-weight:800; justify-content:center;">⋮</div>
+        <div class="top-item" onclick="lockSystemScreen()">🔒 Lock</div>
         <div class="top-item" id="sysAudioMute" onclick="toggleMuteAudio()">🔊 Audio</div>
         <div class="top-item"><span id="sysClock">12:00 PM</span></div>
       </div>
@@ -1271,50 +1249,19 @@ Type 'help' or 'bringback reinstall /appnameApp' to manage apps.</div>
         </div>
         <div class="window-body">
           <div class="oscdd-editor">
-            <label class="oscdd-pane"><span class="oscdd-pane-title">HTML workspace</span><textarea class="oscdd-input" id="htmlTesterInput" spellcheck="false" oninput="handleHtmlTesterInput()"><!doctype html>
+            <label class="oscdd-pane"><span class="oscdd-pane-title">HTML workspace</span><textarea class="oscdd-input" id="htmlTesterInput" spellcheck="false"><!doctype html>
 <html>
   <body>
     <h1>Hello, Enfrok</h1>
     <p>Build something here, then press Debug.</p>
   </body>
 </html></textarea></label>
-            <div class="oscdd-pane" style="display:flex; flex-direction:column;">
-              <span class="oscdd-pane-title" style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
-                <span>Debug preview</span>
-                <select id="htmlTesterViewport" class="input-ui" style="width:auto; padding:3px 8px; font-size:0.7rem;" onchange="setHtmlTesterViewport(this.value)">
-                  <option value="100%">🖥️ Desktop</option>
-                  <option value="768px">📟 Tablet</option>
-                  <option value="390px">📱 Mobile</option>
-                </select>
-              </span>
-              <div id="htmlTesterPreviewWrap" style="flex:1; display:flex; justify-content:center; overflow:auto; background:rgba(0,0,0,0.15); min-height:0;">
-                <iframe class="oscdd-preview" id="htmlTesterPreview" title="HTML Code Tester preview" sandbox="allow-scripts" style="width:100%; transition:width 0.2s var(--anim-curve); flex-shrink:0;"></iframe>
-              </div>
-              <div id="htmlTesterConsole" style="display:none; max-height:120px; overflow-y:auto; font-family:var(--font-code); font-size:0.7rem; line-height:1.5; border-top:1px solid var(--glass-border); padding:6px 10px; flex-shrink:0;"></div>
-            </div>
+            <div class="oscdd-pane"><span class="oscdd-pane-title">Debug preview</span><iframe class="oscdd-preview" id="htmlTesterPreview" title="HTML Code Tester preview" sandbox="allow-scripts"></iframe></div>
           </div>
-          <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; padding:0 16px 16px; flex-wrap:wrap;">
-            <div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap;">
-              <label style="display:flex; align-items:center; gap:6px; font-size:0.76rem; color:var(--text-sub); cursor:pointer;">
-                <input type="checkbox" id="htmlTesterAutoRun" onchange="toggleHtmlTesterAutoRun()" style="width:auto;" /> Auto-run
-              </label>
-              <span id="htmlTesterStats" style="font-size:0.72rem; color:var(--text-sub); font-family:var(--font-code);">0 lines · 0 chars</span>
-            </div>
-            <div style="display:flex; gap:8px; flex-wrap:wrap;">
-              <select class="input-ui" style="width:auto; padding:6px 10px; font-size:0.78rem;" onchange="insertHtmlTesterSnippet(this.value); this.value='';">
-                <option value="">➕ Insert snippet...</option>
-                <option value="blank">Blank page</option>
-                <option value="flexLayout">Flex layout</option>
-                <option value="form">Form</option>
-                <option value="card">Card component</option>
-              </select>
-              <button class="btn-ui" onclick="formatHtmlTester()">🧹 Format</button>
-              <button class="btn-ui" onclick="copyHtmlTesterCode()">📋 Copy</button>
-              <button class="btn-ui" onclick="downloadHtmlTesterCode()">⬇️ Download</button>
-              <button class="btn-ui" onclick="clearHtmlTester()">Clear</button>
-              <button class="btn-ui btn-accent" onclick="debugHtmlTester()">▶ Debug</button>
-              <button class="btn-ui" onclick="testHtmlInBrowser()">🌐 Test in Browser</button>
-            </div>
+          <div style="display:flex; justify-content:flex-end; gap:8px; padding:0 16px 16px;">
+            <button class="btn-ui" onclick="clearHtmlTester()">Clear</button>
+            <button class="btn-ui btn-accent" onclick="debugHtmlTester()">▶ Debug</button>
+            <button class="btn-ui" onclick="testHtmlInBrowser()">🌐 Test in Browser</button>
           </div>
         </div>
       </div>
@@ -2798,38 +2745,6 @@ Write **Markdown** on the left and see a clean preview here.
     lockClockTimer = setInterval(updateLockClock, 1000);
   }
 
-  function openPowerMenu(e) {
-    e.stopPropagation();
-    closeContextMenus();
-    const menu = document.getElementById('desktopContextMenu');
-    const rect = e.currentTarget.getBoundingClientRect();
-    menu.innerHTML = `
-      <div class="context-item" onclick="closeContextMenus(); lockSystemScreen()">🔒 Lock</div>
-      <div class="context-item danger" onclick="closeContextMenus(); initiateShutdown()">⏻ Shut Down</div>
-    `;
-    positionContextMenu(menu, rect.right - 180, rect.bottom + 8);
-  }
-
-  function initiateShutdown() {
-    ['desktop-screen', 'lockScreen', 'login-screen', 'setup-screen', 'noBootScreen'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.classList.add('hidden');
-    });
-    if (lockClockTimer) { clearInterval(lockClockTimer); lockClockTimer = null; }
-    const sd = document.getElementById('shuttingDownScreen');
-    sd.classList.remove('hidden');
-    setTimeout(() => {
-      sd.classList.add('hidden');
-      document.getElementById('noBootScreen').classList.remove('hidden');
-    }, 6000);
-  }
-
-  function rebootFromNoBoot() {
-    document.getElementById('noBootScreen').classList.add('hidden');
-    document.getElementById('boot-screen').classList.remove('hidden');
-    runBootSequence();
-  }
-
   function updateLockClock() {
     const now = new Date();
     const timeEl = document.getElementById('lockClockTime');
@@ -3031,19 +2946,17 @@ Write **Markdown** on the left and see a clean preview here.
     updateHiddenAppsBadge();
     setStartMenuMode(osData.startMenuMode || 'normal', false);
 
-    runBootSequence();
-  });
-
-  function runBootSequence() {
     setTimeout(() => {
       document.getElementById('boot-screen').classList.add('hidden');
       if (!osData.installed) {
         document.getElementById('setup-screen').classList.remove('hidden');
       } else {
-        lockSystemScreen();
+        document.getElementById('login-screen').classList.remove('hidden');
+        document.getElementById('loginAvatarLetter').textContent = (osData.username || 'D').charAt(0).toUpperCase();
+        document.getElementById('loginTitleName').textContent = `Welcome Back, ${osData.username || 'Developer'}`;
       }
     }, 800);
-  }
+  });
 
   function goToStyleStep() {
     const username = document.getElementById('setupUsername').value.trim();
