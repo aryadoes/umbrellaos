@@ -157,8 +157,14 @@
   .lock-auth-card .input-ui { text-align: center; }
   .lock-back-btn { font-size: 0.78rem; color: rgba(255,255,255,0.75); font-weight: 600; cursor: pointer; padding: 8px 4px; transition: color 0.15s; }
   .lock-back-btn:hover { color: #fff; }
-  #login-screen { background: var(--bg-wallpaper) center/cover no-repeat; z-index: 9000; }
-  #login-screen::before { content: ''; position: absolute; inset: 0; background: rgba(3, 5, 8, 0.7); backdrop-filter: var(--glass-blur); z-index: -1; }
+  .lock-forgot-btn { font-size: 0.72rem; color: rgba(255,255,255,0.55); font-weight: 600; cursor: pointer; padding: 2px 4px; transition: color 0.15s; }
+  .lock-forgot-btn:hover { color: rgba(255,255,255,0.9); }
+  .lock-welcome-panel { position: absolute; right: 68px; top: 50%; transform: translateY(-50%); z-index: 2; display: flex; flex-direction: column; align-items: flex-end; gap: 3px; text-align: right; transition: opacity 0.35s var(--anim-curve), transform 0.45s var(--anim-curve); }
+  .lock-welcome-sub { font-size: 0.92rem; font-weight: 500; letter-spacing: 0.03em; color: rgba(255,255,255,0.72); text-shadow: 0 4px 16px rgba(0,0,0,0.5); }
+  .lock-welcome-name { font-size: 1.85rem; font-weight: 700; color: #fff; letter-spacing: -0.01em; text-shadow: 0 8px 28px rgba(0,0,0,0.55); }
+  #lockScreen.unlocking .lock-welcome-panel { opacity: 0; transform: translateY(-50%) translateX(16px) scale(0.94); pointer-events: none; }
+  body.mobile-mode .lock-welcome-panel { position: static; align-items: center; text-align: center; transform: none; margin-top: 22px; }
+  body.mobile-mode #lockScreen.unlocking .lock-welcome-panel { opacity: 0; transform: translateY(-14px) scale(0.94); }
   .top-bar { width: calc(100% - 24px); height: 42px; margin: 12px 12px 0; background: var(--glass-topbar); backdrop-filter: var(--glass-blur); border: 1px solid var(--glass-border); border-radius: 16px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; z-index: 8000; box-shadow: 0 12px 30px rgba(0,0,0,0.24); transition: transform 0.3s var(--anim-curve), opacity 0.3s var(--anim-curve); will-change: transform, opacity; }
   .top-bar.hidden-menu { display: none !important; }
   .top-bar-section { display: flex; align-items: center; gap: 18px; }
@@ -528,6 +534,36 @@
   .oscdd-input { resize: none; padding: 14px; font-family: var(--font-code); font-size: 0.8rem; line-height: 1.5; user-select: text !important; -webkit-user-select: text !important; }
   .oscdd-preview { background: #fff; }
   @media (max-width: 700px) { .oscdd-editor { grid-template-columns: 1fr; grid-template-rows: 1fr 1fr; } }
+  .ht-toolbar { display: flex; align-items: center; gap: 10px; padding: 12px 16px 0; flex-wrap: wrap; }
+  .ht-select { width: auto; padding: 6px 10px; font-size: 0.78rem; }
+  .ht-toggle { display: flex; align-items: center; gap: 6px; font-size: 0.78rem; color: var(--text-sub); font-weight: 600; cursor: pointer; user-select: none; }
+  .ht-toggle input { cursor: pointer; }
+  .ht-device-group { display: flex; gap: 4px; }
+  .ht-device-btn { padding: 5px 9px; font-size: 0.85rem; }
+  .ht-device-btn.active { background: rgba(59, 130, 246, 0.25); border-color: var(--accent); }
+  .ht-stats { margin-left: auto; font-size: 0.72rem; color: var(--text-sub); font-family: var(--font-code); }
+  .ht-preview-frame-wrap { flex: 1; min-height: 0; height: 100%; display: flex; align-items: stretch; justify-content: center; background: rgba(0,0,0,0.15); border-radius: 14px; overflow: auto; }
+  .ht-preview-frame-wrap .oscdd-preview { border-radius: 14px; transition: width 0.25s var(--anim-curve); flex: 1; height: 100%; }
+  .ht-preview-frame-wrap.device-tablet .oscdd-preview { flex: none; width: 768px; max-width: 100%; }
+  .ht-preview-frame-wrap.device-mobile .oscdd-preview { flex: none; width: 390px; max-width: 100%; }
+  .ht-console { margin: 10px 16px 0; border: 1px solid var(--glass-border); border-radius: 12px; background: rgba(0,0,0,0.35); max-height: 108px; display: flex; flex-direction: column; overflow: hidden; flex-shrink: 0; }
+  .ht-console-header { display: flex; justify-content: space-between; padding: 6px 12px; font-size: 0.7rem; font-weight: 700; color: var(--text-sub); text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid var(--glass-border); flex-shrink: 0; }
+  .ht-console-clear { cursor: pointer; text-transform: none; }
+  .ht-console-clear:hover { color: var(--text-main); }
+  .ht-console-body { flex: 1; overflow-y: auto; padding: 6px 12px; font-family: var(--font-code); font-size: 0.75rem; display: flex; flex-direction: column; gap: 3px; }
+  .ht-console-line { color: var(--text-main); word-break: break-word; }
+  .ht-console-line.log { color: var(--text-sub); }
+  .ht-console-line.warn { color: #facc15; }
+  .ht-console-line.error { color: #f87171; }
+  .mem-grid { flex: 1; display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; perspective: 800px; }
+  .mem-card { position: relative; aspect-ratio: 1/1; cursor: pointer; }
+  .mem-card-inner { position: absolute; inset: 0; transform-style: preserve-3d; transition: transform 0.4s var(--anim-curve); }
+  .mem-card.flipped .mem-card-inner, .mem-card.matched .mem-card-inner { transform: rotateY(180deg); }
+  .mem-card-face { position: absolute; inset: 0; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.9rem; backface-visibility: hidden; border: 1px solid var(--glass-border); }
+  .mem-card-back { background: linear-gradient(145deg, #4338ca, #6366f1); }
+  .mem-card-front { background: rgba(255,255,255,0.08); transform: rotateY(180deg); }
+  .mem-card.matched .mem-card-front { background: rgba(34,197,94,0.22); border-color: rgba(34,197,94,0.5); }
+  .snake-dpad { display: flex; flex-direction: column; align-items: center; gap: 6px; }
   .wp-gallery { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 10px; }
   .wp-thumb { height: 85px; border-radius: 12px; border: 2px solid transparent; cursor: pointer; background-size: cover; background-position: center; }
   .wp-thumb:hover, .wp-thumb.active { border-color: var(--accent); }
@@ -801,7 +837,7 @@
   body.mobile-mode table { display: block; overflow-x: auto; max-width: 100%; }
   body.mobile-mode img, body.mobile-mode video, body.mobile-mode canvas, body.mobile-mode iframe { max-width: 100%; }
   body.mobile-mode .glass-dialog, body.mobile-mode .dialog-card { max-width: calc(100vw - 28px) !important; }
-  body.mobile-mode #boot-screen, body.mobile-mode #lockScreen, body.mobile-mode #login-screen, body.mobile-mode #desktop-screen { height: 100dvh; }
+  body.mobile-mode #boot-screen, body.mobile-mode #lockScreen, body.mobile-mode #desktop-screen { height: 100dvh; }
   @media (max-width: 420px) {
     body.mobile-mode .m-app-icon { width: min(56px, 16vw); height: min(56px, 16vw); }
     body.mobile-mode .m-header h1 { font-size: 1.35rem; }
@@ -899,25 +935,15 @@
     </div>
   </div>
 
-  <div id="login-screen" class="os-screen hidden">
-    <div class="setup-card" style="width:440px; min-height:auto; padding:40px; display:flex; flex-direction:column; gap:20px; align-items:center; text-align:center;">
-      <div class="boot-logo-orb" style="width:64px; height:64px; font-size:2rem;" id="loginAvatarLetter">D</div>
-      <div>
-        <h2 id="loginTitleName" style="font-size:1.4rem; font-weight:800;">Welcome Back</h2>
-        <p style="font-size:0.85rem; color:var(--text-sub);" id="loginSubText">Enter password to unlock Enfrok OS</p>
-      </div>
-      <input type="password" class="input-ui" id="loginPasswordInput" placeholder="Enter password..." style="text-align:center;" onkeydown="if(event.key==='Enter') verifyLoginPassword()" />
-      <button class="btn-ui btn-accent" style="width:100%; justify-content:center; padding:12px;" onclick="verifyLoginPassword()">Continue →</button>
-      <button class="btn-ui" id="forgotPassBtn" style="width:100%; justify-content:center; font-size:0.78rem;" onclick="recoverLocalAccess()">Forgot password? Reset local profile</button>
-      <p style="font-size:0.7rem; color:var(--text-sub);">This clears only this browser's saved Enfrok OS profile.</p>
-    </div>
-  </div>
-
   <div id="lockScreen" class="os-screen hidden" onclick="revealLockAuth(event)">
     <div class="lock-clock-layer" id="lockClockLayer">
       <div class="lock-clock-time" id="lockClockTime">12:00</div>
       <div class="lock-clock-date" id="lockClockDate">Sunday, January 1</div>
       <div class="lock-clock-hint">Tap anywhere to unlock</div>
+    </div>
+    <div class="lock-welcome-panel" id="lockWelcomePanel">
+      <div class="lock-welcome-sub">Welcome Back,</div>
+      <div class="lock-welcome-name" id="lockWelcomeName">Developer</div>
     </div>
     <div class="lock-auth-layer" id="lockAuthLayer">
       <div class="lock-auth-card" onclick="event.stopPropagation()">
@@ -926,8 +952,9 @@
         <div class="lock-auth-sub">Enter your password to continue</div>
         <input type="password" class="input-ui" id="lockAuthPasswordInput" placeholder="Password..." onkeydown="if(event.key==='Enter') verifyLockPassword()" />
         <button class="btn-ui btn-accent" style="width:100%; justify-content:center; padding:12px;" onclick="verifyLockPassword()">Unlock →</button>
+        <div class="lock-forgot-btn" onclick="event.stopPropagation(); recoverLocalAccess()">Forgot password? Reset local profile</div>
       </div>
-      <div class="lock-back-btn" onclick="event.stopPropagation(); hideLockAuth()">← Back to clock</div>
+      <div class="lock-back-btn" id="lockBackBtn" onclick="event.stopPropagation(); hideLockAuth()">← Back to clock</div>
     </div>
   </div>
 
@@ -1238,7 +1265,7 @@ Type 'help' or 'bringback reinstall /appnameApp' to manage apps.</div>
         </div>
       </div>
 
-      <div class="os-window" id="htmlTesterApp" style="width: 960px; height: 620px; top: 34px; left: 100px;">
+      <div class="os-window" id="htmlTesterApp" style="width: 1000px; height: 660px; top: 34px; left: 100px;">
         <div class="window-topbar" onmousedown="dragWindow(event, 'htmlTesterApp')">
           <div class="window-title">⚒️ HTML Code Tester</div>
           <div class="win-controls-pills">
@@ -1248,21 +1275,98 @@ Type 'help' or 'bringback reinstall /appnameApp' to manage apps.</div>
           </div>
         </div>
         <div class="window-body">
+          <div class="ht-toolbar">
+            <select class="input-ui ht-select" id="htmlTesterTemplate" onchange="loadHtmlTesterTemplate(this.value)">
+              <option value="">📄 Load Template…</option>
+              <option value="blank">Blank Page</option>
+              <option value="card">Profile Card</option>
+              <option value="form">Contact Form</option>
+              <option value="landing">Landing Hero</option>
+            </select>
+            <label class="ht-toggle"><input type="checkbox" id="htmlTesterAutoRun" onchange="toggleHtmlTesterAutoRun()" /> Auto-run</label>
+            <div class="ht-device-group">
+              <button class="btn-ui ht-device-btn active" data-device="full" onclick="setHtmlTesterDevice('full', this)" title="Desktop width">🖥️</button>
+              <button class="btn-ui ht-device-btn" data-device="tablet" onclick="setHtmlTesterDevice('tablet', this)" title="Tablet width">📱</button>
+              <button class="btn-ui ht-device-btn" data-device="mobile" onclick="setHtmlTesterDevice('mobile', this)" title="Mobile width">📲</button>
+            </div>
+            <span class="ht-stats" id="htmlTesterStats">0 lines · 0 chars</span>
+          </div>
           <div class="oscdd-editor">
-            <label class="oscdd-pane"><span class="oscdd-pane-title">HTML workspace</span><textarea class="oscdd-input" id="htmlTesterInput" spellcheck="false"><!doctype html>
+            <label class="oscdd-pane"><span class="oscdd-pane-title">HTML workspace</span><textarea class="oscdd-input" id="htmlTesterInput" spellcheck="false" oninput="onHtmlTesterInputChange()"><!doctype html>
 <html>
   <body>
     <h1>Hello, Enfrok</h1>
     <p>Build something here, then press Debug.</p>
   </body>
 </html></textarea></label>
-            <div class="oscdd-pane"><span class="oscdd-pane-title">Debug preview</span><iframe class="oscdd-preview" id="htmlTesterPreview" title="HTML Code Tester preview" sandbox="allow-scripts"></iframe></div>
+            <div class="oscdd-pane">
+              <span class="oscdd-pane-title">Debug preview</span>
+              <div class="ht-preview-frame-wrap" id="htmlTesterPreviewWrap">
+                <iframe class="oscdd-preview" id="htmlTesterPreview" title="HTML Code Tester preview" sandbox="allow-scripts"></iframe>
+              </div>
+            </div>
           </div>
-          <div style="display:flex; justify-content:flex-end; gap:8px; padding:0 16px 16px;">
+          <div class="ht-console" id="htmlTesterConsole">
+            <div class="ht-console-header"><span>🖥️ Console</span><span class="ht-console-clear" onclick="clearHtmlTesterConsole()">Clear</span></div>
+            <div class="ht-console-body" id="htmlTesterConsoleBody"></div>
+          </div>
+          <div style="display:flex; justify-content:flex-end; gap:8px; padding:0 16px 16px; flex-wrap:wrap;">
             <button class="btn-ui" onclick="clearHtmlTester()">Clear</button>
+            <button class="btn-ui" onclick="formatHtmlTesterCode()">🧹 Format</button>
+            <button class="btn-ui" onclick="copyHtmlTesterCode()">📋 Copy</button>
+            <button class="btn-ui" onclick="downloadHtmlTesterCode()">⬇️ Download</button>
             <button class="btn-ui btn-accent" onclick="debugHtmlTester()">▶ Debug</button>
             <button class="btn-ui" onclick="testHtmlInBrowser()">🌐 Test in Browser</button>
           </div>
+        </div>
+      </div>
+
+      <div class="os-window" id="memoryGameApp" style="width: 560px; height: 640px; top: 46px; left: 160px;">
+        <div class="window-topbar" onmousedown="dragWindow(event, 'memoryGameApp')">
+          <div class="window-title">🧠 Memory Match</div>
+          <div class="win-controls-pills">
+            <span class="win-pill-btn" onclick="minimizeWindow('memoryGameApp')">─</span>
+            <span class="win-pill-btn" onclick="toggleFullscreen('memoryGameApp')">▢</span>
+            <span class="win-pill-btn pill-close" onclick="closeWindow('memoryGameApp')">✕</span>
+          </div>
+        </div>
+        <div class="window-body" style="padding:18px; display:flex; flex-direction:column; gap:14px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+            <div style="display:flex; gap:16px; font-size:0.82rem; color:var(--text-sub); font-weight:600;">
+              <span>🕹️ Moves: <span id="memGameMoves" style="color:var(--text-main);">0</span></span>
+              <span>⏱️ <span id="memGameTimer" style="color:var(--text-main);">00:00</span></span>
+            </div>
+            <button class="btn-ui btn-accent" onclick="startMemoryGame()">🔄 New Game</button>
+          </div>
+          <div class="mem-grid" id="memGameGrid"></div>
+        </div>
+      </div>
+
+      <div class="os-window" id="snakeGameApp" style="width: 460px; height: 600px; top: 60px; left: 220px;">
+        <div class="window-topbar" onmousedown="dragWindow(event, 'snakeGameApp')">
+          <div class="window-title">🐍 Snake</div>
+          <div class="win-controls-pills">
+            <span class="win-pill-btn" onclick="minimizeWindow('snakeGameApp')">─</span>
+            <span class="win-pill-btn" onclick="toggleFullscreen('snakeGameApp')">▢</span>
+            <span class="win-pill-btn pill-close" onclick="closeWindow('snakeGameApp')">✕</span>
+          </div>
+        </div>
+        <div class="window-body" style="padding:18px; display:flex; flex-direction:column; align-items:center; gap:12px;">
+          <div style="display:flex; justify-content:space-between; width:100%; font-size:0.82rem; color:var(--text-sub); font-weight:600;">
+            <span>🏆 Score: <span id="snakeScore" style="color:var(--text-main);">0</span></span>
+            <span>⭐ Best: <span id="snakeBest" style="color:var(--text-main);">0</span></span>
+          </div>
+          <canvas id="snakeCanvas" width="380" height="380" style="border-radius:16px; border:1px solid var(--glass-border); background:rgba(0,0,0,0.35);"></canvas>
+          <button class="btn-ui btn-accent" onclick="startSnakeGame()">▶ Start / Restart</button>
+          <div class="snake-dpad">
+            <button class="btn-ui" onclick="setSnakeDir(0,-1)">⬆️</button>
+            <div style="display:flex; gap:6px;">
+              <button class="btn-ui" onclick="setSnakeDir(-1,0)">⬅️</button>
+              <button class="btn-ui" onclick="setSnakeDir(0,1)">⬇️</button>
+              <button class="btn-ui" onclick="setSnakeDir(1,0)">➡️</button>
+            </div>
+          </div>
+          <div style="font-size:0.72rem; color:var(--text-sub); text-align:center;">Use arrow keys or the buttons above. Click the window first to focus it.</div>
         </div>
       </div>
 
@@ -2272,6 +2376,22 @@ Write **Markdown** on the left and see a clean preview here.
     'https://images.unsplash.com/photo-1516569422671-49ed4d0b0b4c?q=80&w=1920&auto=format&fit=crop',
     'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?q=80&w=1920&auto=format&fit=crop',
     'https://images.unsplash.com/photo-1454391304352-2bf4678b1a7a?q=80&w=1920&auto=format&fit=crop',
+    // --- Enfrok OS 5.4 new wallpapers (15) ---
+    'https://images.unsplash.com/photo-1470813740244-df37b8c1edcb?q=80&w=1920&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1542831371-29b0f74f9713?q=80&w=1920&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1465101162946-4377e57745c3?q=80&w=1920&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1500673922987-e212871fec22?q=80&w=1920&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1439066615861-d1af74d74000?q=80&w=1920&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1495954380655-14bdc36e6c8f?q=80&w=1920&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1470240731273-7821a6eeb6bd?q=80&w=1920&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1502691876148-a84978e59af8?q=80&w=1920&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1447069387593-a5de0862481e?q=80&w=1920&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1518495973542-4542c06a5843?q=80&w=1920&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1439405326854-014607f694d7?q=80&w=1920&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1476611317561-f26e5efdd0f9?q=80&w=1920&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1440342359743-84fcb8c21f21?q=80&w=1920&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1500835556837-99ac94a94552?q=80&w=1920&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1504893524553-b855bce32c67?q=80&w=1920&auto=format&fit=crop',
     // --- Enfrok OS 5.3 expanded gallery (25+) ---
     'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=1920&auto=format&fit=crop',
     'https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=1920&auto=format&fit=crop',
@@ -2343,7 +2463,9 @@ Write **Markdown** on the left and see a clean preview here.
     { id: 'mediaPlayerApp', name: 'Media Viewer', icon: '🎬', pinnedDock: false, pinnedDesktop: false },
     { id: 'pdfViewerApp', name: 'PDF Viewer', icon: '📄', pinnedDock: false, pinnedDesktop: false },
     { id: 'screenshotApp', name: 'Screenshots', icon: '📸', pinnedDock: true, pinnedDesktop: true },
-    { id: 'htmlTesterApp', name: 'HTML Code Tester', icon: '⚒️', pinnedDock: false, pinnedDesktop: false }
+    { id: 'htmlTesterApp', name: 'HTML Code Tester', icon: '⚒️', pinnedDock: false, pinnedDesktop: false },
+    { id: 'memoryGameApp', name: 'Memory Match', icon: '🧠', pinnedDock: false, pinnedDesktop: true },
+    { id: 'snakeGameApp', name: 'Snake', icon: '🐍', pinnedDock: false, pinnedDesktop: true }
   ];
 
 
@@ -2381,6 +2503,8 @@ Write **Markdown** on the left and see a clean preview here.
     pdfViewerApp:   { g: ['#ef4444', '#991b1b'], path: 'M7 4h7l3 3v13H7z M14 4v3h3 M9 12h6 M9 15h5' },
     screenshotApp:  { g: ['#06b6d4', '#0891b2'], path: 'M4 8h16v10H4z M8 6h8 M9 12h6 M12 10v4' },
     htmlTesterApp:  { g: ['#f59e0b', '#b45309'], path: 'M8 8L4 12l4 4 M16 8l4 4-4 4 M13 7l-2 10' },
+    memoryGameApp:  { g: ['#8b5cf6', '#6d28d9'], path: 'M5 5h7v7H5z M12 12h7v7h-7z M8 8h1 M15 15h1' },
+    snakeGameApp:   { g: ['#22c55e', '#15803d'], path: 'M4 8h8v4H8v4h9' },
     oscddApp:       { g: ['#6366f1', '#3730a3'], path: 'M6 6h12v4H6z M6 14h12v4H6z' },
     messagesApp:    { g: ['#3b82f6', '#1d4ed8'], path: 'M5 6h14v10H9l-4 3V6z' }
   };
@@ -2731,8 +2855,15 @@ Write **Markdown** on the left and see a clean preview here.
   }
 
   let lockClockTimer = null;
+  let isBootUnlock = false;
+
+  function setLockWelcomeName(name) {
+    const el = document.getElementById('lockWelcomeName');
+    if (el) el.textContent = name || 'Developer';
+  }
 
   function lockSystemScreen() {
+    isBootUnlock = false;
     document.getElementById('desktop-screen').classList.add('hidden');
     const lock = document.getElementById('lockScreen');
     lock.classList.remove('hidden');
@@ -2740,6 +2871,23 @@ Write **Markdown** on the left and see a clean preview here.
     document.getElementById('lockAuthPasswordInput').value = '';
     document.getElementById('lockAuthName').textContent = osData.username || 'Developer';
     document.getElementById('lockAuthAvatar').textContent = (osData.username || 'D').charAt(0).toUpperCase();
+    setLockWelcomeName(osData.username);
+    updateLockClock();
+    if (lockClockTimer) clearInterval(lockClockTimer);
+    lockClockTimer = setInterval(updateLockClock, 1000);
+  }
+
+  // Shown at boot for a returning user, instead of the old separate login screen —
+  // it's the same premium clock lock screen used when pressing "Lock" in the top menu.
+  function showBootLockScreen() {
+    isBootUnlock = true;
+    const lock = document.getElementById('lockScreen');
+    lock.classList.remove('hidden');
+    lock.classList.remove('unlocking');
+    document.getElementById('lockAuthPasswordInput').value = '';
+    document.getElementById('lockAuthName').textContent = osData.username || 'Developer';
+    document.getElementById('lockAuthAvatar').textContent = (osData.username || 'D').charAt(0).toUpperCase();
+    setLockWelcomeName(osData.username);
     updateLockClock();
     if (lockClockTimer) clearInterval(lockClockTimer);
     lockClockTimer = setInterval(updateLockClock, 1000);
@@ -2775,7 +2923,12 @@ Write **Markdown** on the left and see a clean preview here.
       if (lockClockTimer) { clearInterval(lockClockTimer); lockClockTimer = null; }
       document.getElementById('lockScreen').classList.add('hidden');
       document.getElementById('lockScreen').classList.remove('unlocking');
-      document.getElementById('desktop-screen').classList.remove('hidden');
+      if (isBootUnlock) {
+        isBootUnlock = false;
+        launchDesktop();
+      } else {
+        document.getElementById('desktop-screen').classList.remove('hidden');
+      }
     } else {
       showGlassAlert("Incorrect Password! Please try again.", "⚠️ Access Denied");
     }
@@ -2951,9 +3104,7 @@ Write **Markdown** on the left and see a clean preview here.
       if (!osData.installed) {
         document.getElementById('setup-screen').classList.remove('hidden');
       } else {
-        document.getElementById('login-screen').classList.remove('hidden');
-        document.getElementById('loginAvatarLetter').textContent = (osData.username || 'D').charAt(0).toUpperCase();
-        document.getElementById('loginTitleName').textContent = `Welcome Back, ${osData.username || 'Developer'}`;
+        showBootLockScreen();
       }
     }, 800);
   });
@@ -3005,22 +3156,13 @@ Write **Markdown** on the left and see a clean preview here.
     }, 80);
   }
 
-  function verifyLoginPassword() {
-    const inputPass = document.getElementById('loginPasswordInput').value;
-    if (inputPass === osData.password) {
-      launchDesktop();
-    } else {
-      showGlassAlert("Incorrect Password! Please try again.", "⚠️ Access Denied");
-    }
-  }
-
   function launchDesktop() {
     setWallpaper(osData.wallpaper);
     applyGlassSettings();
     renderTopBar();
     document.getElementById('setup-screen').classList.add('hidden');
-    document.getElementById('login-screen').classList.add('hidden');
     document.getElementById('lockScreen').classList.add('hidden');
+    document.getElementById('lockScreen').classList.remove('unlocking');
     document.getElementById('desktop-screen').classList.remove('hidden');
     initDesktop();
     initPaintStudio();
